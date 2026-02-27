@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce - V.3.2 Swipe Pro</title>
+    <title>5 Dakikada İngilizce - V.3.3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -25,24 +25,32 @@
             user-select: none; -webkit-user-select: none;
         }
 
+        /* VERSİYON ETİKETİ */
+        .version-tag {
+            position: fixed; bottom: 10px; right: 15px; font-size: 10px;
+            color: rgba(255,255,255,0.3); font-weight: 700; font-family: 'Poppins';
+            letter-spacing: 1px; z-index: 100; pointer-events: none;
+        }
+
         /* GİRİŞ SAYFASI */
         #entry-page { display: flex; flex-direction: column; align-items: center; width: 100%; max-height: 95vh; overflow-y: auto; }
-        .main-title-white { font-family: 'Poppins'; font-size: 24px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+        .main-title-brand { font-family: 'Poppins'; font-size: 24px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
         .select-lesson-title { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; margin-bottom: 20px; font-weight: 900; font-family: 'Poppins'; }
-        #lesson-list-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 500px; }
-        .lesson-card { background: var(--card-bg); backdrop-filter: blur(15px); padding: 20px 10px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); text-align: center; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; justify-content: center; min-height: 100px; }
+        
+        #lesson-list-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 500px; padding-bottom: 30px; }
+        .lesson-card { background: var(--card-bg); backdrop-filter: blur(15px); padding: 20px 10px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); text-align: center; cursor: pointer; transition: 0.3s; min-height: 100px; display: flex; align-items: center; justify-content: center; }
         .lesson-card h3 { margin: 0; font-family: 'Poppins'; font-size: 1.1rem; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* UYGULAMA EKRANI ÜST LOGO ALANI */
-        .app-header-brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; pointer-events: none; }
-        .app-header-brand img { width: 45px; height: 45px; object-fit: contain; margin-bottom: 2px; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4)); }
-        .app-header-brand span { font-family: 'Poppins'; font-size: 12px; font-weight: 900; letter-spacing: 1px; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
+        /* HEADER BRAND (DERS EKRANI) */
+        .app-header-brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; }
+        .app-header-brand img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px; }
+        .app-header-brand span { font-family: 'Poppins'; font-size: 13px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
 
         /* UYGULAMA EKRANI */
         #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; }
         .app-box { width: 100%; background: var(--card-bg); backdrop-filter: blur(20px); padding: 20px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); text-align: center; position: relative; overflow: hidden; box-sizing: border-box; }
 
-        /* KART VE SWIPE ALANI */
+        /* KART VE SWIPE */
         .card-container { perspective: 1000px; width: 100%; height: 280px; margin: 10px 0; cursor: pointer; position: relative; touch-action: none; z-index: 2; }
         .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.4s, top 0.3s, opacity 0.3s; }
         .card.flipped { transform: rotateY(180deg); }
@@ -50,44 +58,56 @@
         .front { background: #1e293b; color: var(--secondary); font-size: 26px; font-weight: 800; }
         .back { background: rgba(30, 41, 59, 1); color: var(--text-main); transform: rotateY(180deg); font-size: 22px; font-weight: 700; border-color: var(--primary); }
 
-        /* SWIPE NOTLARI (OVERLAY) */
+        /* OVERLAY NOTLAR */
         .swipe-note { position: absolute; left: 50%; transform: translateX(-50%); padding: 10px 30px; border-radius: 50px; font-family: 'Poppins'; font-weight: 900; font-size: 18px; opacity: 0; transition: opacity 0.2s; z-index: 10; pointer-events: none; }
-        #note-know { top: 40px; background: var(--secondary); color: #0f172a; border: 3px solid white; box-shadow: 0 0 20px var(--secondary); }
-        #note-dont { bottom: 40px; background: var(--accent); color: white; border: 3px solid white; box-shadow: 0 0 20px var(--accent); }
+        #note-know { top: 40px; background: var(--secondary); color: #0f172a; border: 3px solid white; }
+        #note-dont { bottom: 40px; background: var(--accent); color: white; border: 3px solid white; }
 
-        .btn-main { background: var(--primary); color: #0f172a; width: 100%; padding: 15px; border-radius: 18px; font-size: 16px; font-weight: 900; border: none; font-family: 'Poppins'; cursor: pointer; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        /* BUTTONS */
+        .nav-row { display: flex; justify-content: space-between; width: 100%; margin-bottom: 12px; }
+        .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 18px; color: white; cursor: pointer; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px; font-family: 'Poppins'; }
         
-        .stats { display: flex; justify-content: space-between; background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 18px; }
-        .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .stat-label { font-size: 8px; color: #94a3b8; font-weight: 800; margin-bottom: 4px; }
-        .stat-val { font-weight: 800; font-size: 16px; }
+        .btn-main { background: var(--primary); color: #0f172a; width: 100%; padding: 16px; border-radius: 18px; font-size: 18px; font-weight: 900; border: none; font-family: 'Poppins'; cursor: pointer; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-        .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 8px 15px; color: white; cursor: pointer; font-size: 11px; font-weight: bold; }
+        /* STATS (INGILIZCE) */
+        .stats { display: flex; justify-content: space-between; background: rgba(15, 23, 42, 0.6); padding: 15px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .stat-icon { font-size: 18px; margin-bottom: 4px; }
+        .stat-label { font-size: 8px; color: #94a3b8; font-weight: 800; margin-bottom: 2px; text-transform: uppercase; }
+        .stat-val { font-weight: 900; font-size: 16px; }
+
+        .hint-text { font-size: 10px; color: #64748b; margin-bottom: 12px; font-weight: 600; }
     </style>
 </head>
 <body>
 
+<div class="version-tag">VERSION 3.3</div>
+
 <div id="entry-page">
     <img src="logo.png" style="width: 70px; margin-bottom: 10px;">
-    <div class="main-title-white">5 Dakikada İngilizce</div>
+    <div class="main-title-brand">5 Dakikada İngilizce</div>
     <div class="select-lesson-title">Select Lesson</div>
     <div id="lesson-list-container"></div>
 </div>
 
 <div id="app-screen">
     <div class="app-header-brand">
-        <img src="logo.png" alt="Logo">
+        <img src="logo.png">
         <span>5 Dakikada İngilizce</span>
     </div>
 
-    <div style="display:flex; justify-content:space-between; margin-bottom:12px; width: 100%;">
-        <button class="nav-btn" onclick="goHome()">HOME</button>
-        <button class="nav-btn" onclick="resetLesson()">RESTART</button>
+    <div class="nav-row">
+        <button class="nav-btn" onclick="goHome()">
+            <span class="material-symbols-rounded">home</span> HOME
+        </button>
+        <button class="nav-btn" onclick="resetLesson()">
+            <span class="material-symbols-rounded">restart_alt</span> RESTART
+        </button>
     </div>
 
     <div class="app-box">
-        <div id="note-know" class="swipe-note">BİLİYORUM ✅</div>
-        <div id="note-dont" class="swipe-note">BİLMİYORUM ❌</div>
+        <div id="note-know" class="swipe-note">I KNOW ✅</div>
+        <div id="note-dont" class="swipe-note">I DON'T KNOW ❌</div>
 
         <div id="lessonTitle" style="background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 18px; font-family: 'Poppins';">#Lesson</div>
         
@@ -102,21 +122,24 @@
             <span class="material-symbols-rounded">volume_up</span> LISTEN
         </button>
 
-        <div style="font-size: 10px; color: #64748b; margin-bottom: 10px; font-weight: 600;">
-            Yukarı: Biliyorum | Aşağı: Bilmiyorum | Tıkla: Çevir
+        <div class="hint-text">
+            Up: I Know | Down: I Don't Know | Tap: Flip
         </div>
 
         <div class="stats">
             <div class="stat-item">
-                <span class="stat-label">BİLMİYORUM</span>
+                <span class="material-symbols-rounded stat-icon" style="color:var(--accent)">cancel</span>
+                <span class="stat-label">UNKNOWN</span>
                 <span id="wrongCount" class="stat-val" style="color:var(--accent)">0</span>
             </div>
             <div class="stat-item" style="border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1);">
-                <span class="stat-label">KALAN</span>
+                <span class="material-symbols-rounded stat-icon" style="color:var(--primary)">pending_actions</span>
+                <span class="stat-label">REMAINING</span>
                 <span id="remainCount" class="stat-val" style="color:var(--primary)">0</span>
             </div>
             <div class="stat-item">
-                <span class="stat-label">BİLİYORUM</span>
+                <span class="material-symbols-rounded stat-icon" style="color:var(--secondary)">check_circle</span>
+                <span class="stat-label">LEARNED</span>
                 <span id="correctCount" class="stat-val" style="color:var(--secondary)">0</span>
             </div>
         </div>
@@ -127,7 +150,7 @@
 let cards = [], learned = 0, wrong = 0, startY = 0, currentY = 0, startTime = 0;
 let activeLesson = null;
 
-// Ders listesini çekme
+// Ders listesini yükle
 fetch('data.json').then(res => res.json()).then(data => {
     const container = document.getElementById('lesson-list-container');
     data.forEach(lesson => {
@@ -142,7 +165,19 @@ fetch('data.json').then(res => res.json()).then(data => {
 function loadLesson(lesson) {
     activeLesson = lesson;
     fetch(lesson.file).then(res => res.json()).then(data => {
-        cards = [...data]; learned = 0; wrong = 0;
+        // LocalStorage'dan ders ilerlemesini kontrol et
+        const savedData = localStorage.getItem(`lesson_progress_${lesson.name}`);
+        if (savedData) {
+            const progress = JSON.parse(savedData);
+            cards = progress.cards;
+            learned = progress.learned;
+            wrong = progress.wrong;
+        } else {
+            cards = [...data];
+            learned = 0;
+            wrong = 0;
+        }
+        
         document.getElementById('lessonTitle').innerText = lesson.name;
         document.getElementById('entry-page').style.display = 'none';
         document.getElementById('app-screen').style.display = 'flex';
@@ -150,8 +185,19 @@ function loadLesson(lesson) {
     });
 }
 
+function saveProgress() {
+    if (!activeLesson) return;
+    const progress = { cards: cards, learned: learned, wrong: wrong };
+    localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify(progress));
+}
+
 function show() {
-    if(cards.length === 0) { alert("Ders Bitti! Harikasın."); goHome(); return; }
+    if(cards.length === 0) { 
+        alert("Awesome! Lesson completed."); 
+        localStorage.removeItem(`lesson_progress_${activeLesson.name}`);
+        goHome(); 
+        return; 
+    }
     const card = document.getElementById('mainCard');
     card.classList.remove('flipped');
     card.style.transition = "none";
@@ -164,9 +210,6 @@ function show() {
     document.getElementById('remainCount').innerText = cards.length;
     document.getElementById('correctCount').innerText = learned;
     document.getElementById('wrongCount').innerText = wrong;
-    
-    document.getElementById('note-know').style.opacity = "0";
-    document.getElementById('note-dont').style.opacity = "0";
 }
 
 const area = document.getElementById('swipeArea');
@@ -181,7 +224,6 @@ area.ontouchstart = e => {
 area.ontouchmove = e => {
     currentY = e.touches[0].clientY - startY;
     let rotationY = mainCard.classList.contains('flipped') ? 180 : 0;
-    
     mainCard.style.top = currentY + "px";
     mainCard.style.transform = `rotateY(${rotationY}deg) rotateX(${-currentY/20}deg)`;
 
@@ -191,9 +233,6 @@ area.ontouchmove = e => {
     } else if(currentY > 50) { 
         document.getElementById('note-dont').style.opacity = Math.min(currentY/150, 1);
         document.getElementById('note-know').style.opacity = "0";
-    } else {
-        document.getElementById('note-know').style.opacity = "0";
-        document.getElementById('note-dont').style.opacity = "0";
     }
 };
 
@@ -201,15 +240,15 @@ area.ontouchend = () => {
     mainCard.style.transition = "0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
     let duration = Date.now() - startTime;
 
-    if(currentY < -120) { 
+    if(currentY < -120) { // I KNOW (Up)
         mainCard.style.top = "-1000px";
         mainCard.style.opacity = "0";
-        setTimeout(() => { learned++; cards.shift(); show(); }, 250);
-    } else if(currentY > 120) { 
+        setTimeout(() => { learned++; cards.shift(); saveProgress(); show(); }, 250);
+    } else if(currentY > 120) { // I DON'T KNOW (Down)
         mainCard.style.top = "1000px";
         mainCard.style.opacity = "0";
-        setTimeout(() => { wrong++; cards.push(cards.shift()); show(); }, 250);
-    } else if (Math.abs(currentY) < 15 && duration < 250) { 
+        setTimeout(() => { wrong++; cards.push(cards.shift()); saveProgress(); show(); }, 250);
+    } else if (Math.abs(currentY) < 15 && duration < 250) { // FLIP
         mainCard.style.top = "0";
         mainCard.classList.toggle('flipped');
         let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
@@ -219,10 +258,8 @@ area.ontouchend = () => {
         let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
         mainCard.style.transform = `rotateY(${rotY}deg)`;
     }
-    
     document.getElementById('note-know').style.opacity = "0";
     document.getElementById('note-dont').style.opacity = "0";
-    currentY = 0;
 };
 
 function speak() {
@@ -233,8 +270,18 @@ function speak() {
     window.speechSynthesis.speak(u);
 }
 
-function goHome() { document.getElementById('app-screen').style.display = 'none'; document.getElementById('entry-page').style.display = 'flex'; }
-function resetLesson() { if(confirm("Dersi sıfırlamak istiyor musun?")) loadLesson(activeLesson); }
+function goHome() { 
+    saveProgress();
+    document.getElementById('app-screen').style.display = 'none'; 
+    document.getElementById('entry-page').style.display = 'flex'; 
+}
+
+function resetLesson() { 
+    if(confirm("Reset all progress for this lesson?")) {
+        localStorage.removeItem(`lesson_progress_${activeLesson.name}`);
+        loadLesson(activeLesson);
+    }
+}
 </script>
 </body>
 </html>
