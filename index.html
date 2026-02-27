@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce - V.3.7 Navigation</title>
+    <title>5 Dakikada İngilizce - V.3.8 Legend</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -49,6 +49,7 @@
         .front { background: #1e293b; color: var(--secondary); font-size: 24px; font-weight: 800; }
         .back { background: rgba(30, 41, 59, 1); color: var(--text-main); transform: rotateY(180deg); font-size: 20px; font-weight: 700; border-color: var(--primary); }
 
+        /* Eski Düzen: Swipe Yazıları */
         .swipe-note { position: absolute; left: 50%; transform: translateX(-50%); padding: 10px 30px; border-radius: 50px; font-family: 'Poppins'; font-weight: 900; font-size: 18px; opacity: 0; transition: opacity 0.2s; z-index: 10; pointer-events: none; }
         #note-know { top: 40px; background: var(--secondary); color: #0f172a; border: 3px solid white; }
         #note-dont { bottom: 40px; background: var(--accent); color: white; border: 3px solid white; }
@@ -56,11 +57,8 @@
         .nav-row { display: flex; justify-content: space-between; width: 100%; margin-bottom: 12px; }
         .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 18px; color: white; cursor: pointer; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px; font-family: 'Poppins'; }
         
-        /* Navigation Buttons Style */
         .controls-row { display: flex; gap: 10px; margin-bottom: 15px; }
         .control-btn { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 15px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .control-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.15); }
-        .control-btn .material-symbols-rounded { font-size: 24px; }
 
         .btn-main { background: var(--primary); color: #0f172a; width: 100%; padding: 16px; border-radius: 18px; font-size: 18px; font-weight: 900; border: none; font-family: 'Poppins'; cursor: pointer; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
@@ -74,7 +72,7 @@
 </head>
 <body>
 
-<div class="version-tag">VERSION 3.7</div>
+<div class="version-tag">VERSION 3.8</div>
 
 <div id="entry-page">
     <div class="main-title-brand">5 Dakikada İngilizce</div>
@@ -106,22 +104,16 @@
         </div>
 
         <div class="controls-row">
-            <button class="control-btn" onclick="goBack()" title="Previous Card">
-                <span class="material-symbols-rounded">arrow_back_ios_new</span>
-            </button>
-            <button class="control-btn" onclick="flipCard()" title="Flip Card">
-                <span class="material-symbols-rounded">flip_camera_android</span>
-            </button>
-            <button class="control-btn" onclick="goNext()" title="Next Card">
-                <span class="material-symbols-rounded">arrow_forward_ios</span>
-            </button>
+            <button class="control-btn" onclick="goBack()"><span class="material-symbols-rounded">arrow_back_ios_new</span></button>
+            <button class="control-btn" onclick="flipCard()"><span class="material-symbols-rounded">flip_camera_android</span></button>
+            <button class="control-btn" onclick="goNext()"><span class="material-symbols-rounded">arrow_forward_ios</span></button>
         </div>
 
         <button class="btn-main" onclick="speak()">
             <span class="material-symbols-rounded">volume_up</span> LISTEN
         </button>
 
-        <div class="hint-text">Use Arrows or Buttons to Navigate</div>
+        <div class="hint-text">Up: Know | Down: Don't Know | Arrows: Navigate</div>
 
         <div class="stats">
             <div class="stat-item">
@@ -157,7 +149,6 @@ function playFeedback(freq, type) {
     osc.start(); osc.stop(audioCtx.currentTime + 0.1);
 }
 
-// DATA LOAD
 fetch('data.json').then(res => res.json()).then(data => {
     const container = document.getElementById('lesson-list-container');
     data.forEach(lesson => {
@@ -187,10 +178,12 @@ function loadLesson(lesson) {
 }
 
 function show() {
+    // DÜZELTME: Ders bitince sıfırlama ve ana sayfaya dönme
     if(cards.length === 0) { 
-        alert("Lesson completed!"); 
+        alert("Lesson completed! Let's do it again."); 
         localStorage.removeItem(`lesson_progress_${activeLesson.name}`);
-        goHome(); return; 
+        goHome(); 
+        return; 
     }
     const card = document.getElementById('mainCard');
     card.classList.remove('flipped');
@@ -202,28 +195,15 @@ function show() {
     document.getElementById('wrongCount').innerText = wrong;
 }
 
-// NAVIGATION FUNCTIONS
-function goNext() {
-    if(cards.length < 2) return;
-    playFeedback(400, 'sine');
-    cards.push(cards.shift()); // Baştakini al sona at
-    show();
-}
-
-function goBack() {
-    if(cards.length < 2) return;
-    playFeedback(400, 'sine');
-    cards.unshift(cards.pop()); // Sondakini al başa at
-    show();
-}
-
+function goNext() { if(cards.length < 2) return; cards.push(cards.shift()); show(); }
+function goBack() { if(cards.length < 2) return; cards.unshift(cards.pop()); show(); }
 function flipCard() {
     mainCard.classList.toggle('flipped');
     let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
     mainCard.style.top = "0"; mainCard.style.transform = `rotateY(${rotY}deg)`;
 }
 
-// SWIPE LOGIC (Sürükleme hala çalışıyor!)
+// SWIPE + ESKİ RENKLİ YAZILAR
 const area = document.getElementById('swipeArea');
 const mainCard = document.getElementById('mainCard');
 
@@ -234,15 +214,25 @@ const moveAction = (y) => {
     let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
     mainCard.style.top = currentY + "px";
     mainCard.style.transform = `rotateY(${rotY}deg) rotateX(${-currentY/20}deg)`;
+    
+    // RENKLİ YAZILAR BURADA (ESKİ KOD)
+    if(currentY < -50) document.getElementById('note-know').style.opacity = "1";
+    else if(currentY > 50) document.getElementById('note-dont').style.opacity = "1";
+    else { document.getElementById('note-know').style.opacity = "0"; document.getElementById('note-dont').style.opacity = "0"; }
 };
+
 const endAction = () => {
     if (!isDragging) return;
     isDragging = false;
     mainCard.style.transition = "0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+    
     if(currentY < -120) handleChoice(true);
     else if(currentY > 120) handleChoice(false);
     else if (Math.abs(currentY) < 10) flipCard();
     else resetCard();
+
+    document.getElementById('note-know').style.opacity = "0";
+    document.getElementById('note-dont').style.opacity = "0";
 };
 
 function handleChoice(isCorrect) {
@@ -262,7 +252,7 @@ function resetCard() {
     mainCard.style.top = "0"; mainCard.style.transform = `rotateY(${rotY}deg)`;
 }
 
-// KEYBOARD SUPPORT
+// KEYBOARD
 window.onkeydown = (e) => {
     if(document.getElementById('app-screen').style.display !== 'flex') return;
     if(e.code === 'ArrowUp') handleChoice(true);
@@ -272,7 +262,6 @@ window.onkeydown = (e) => {
     if(e.code === 'Space') flipCard();
 };
 
-// LISTENERS
 area.ontouchstart = e => startAction(e.touches[0].clientY);
 area.ontouchmove = e => moveAction(e.touches[0].clientY);
 area.ontouchend = () => endAction();
@@ -289,7 +278,7 @@ function speak() {
 }
 
 function goHome() { saveProgress(); document.getElementById('app-screen').style.display = 'none'; document.getElementById('entry-page').style.display = 'flex'; }
-function saveProgress() { if (activeLesson) localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify({cards, learned, wrong})); }
+function saveProgress() { if (activeLesson && cards.length > 0) localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify({cards, learned, wrong})); }
 function resetLesson() { if(confirm("Reset progress?")) { localStorage.removeItem(`lesson_progress_${activeLesson.name}`); loadLesson(activeLesson); } }
 </script>
 </body>
