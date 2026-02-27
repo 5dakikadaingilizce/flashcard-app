@@ -2,117 +2,222 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <title>5 Dakikada İngilizce - Flashcard V3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>5 Dakikada İngilizce - Flashcard App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     <style>
-        :root { --bg: #0f172a; --card-front: #1e293b; --accent: #2dd4bf; --text: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        :root { 
+            --bg-dark: #0f172a; 
+            --card-bg: rgba(30, 41, 59, 0.7); 
+            --primary: #38bdf8; 
+            --secondary: #2dd4bf; 
+            --accent: #fb7185; 
+            --text-main: #f8fafc; 
+            --logo-grad: linear-gradient(90deg, #ff4d4d, #f97316); 
+            --white-grad: linear-gradient(180deg, #ffffff, #94a3b8);
+        }
+
+        body { 
+            margin: 0; font-family: 'Inter', sans-serif; 
+            background: radial-gradient(circle at top right, #1e293b, #0f172a); 
+            min-height: 100dvh; display: flex; justify-content: center; align-items: center; 
+            color: var(--text-main); overflow: hidden; padding: 10px; box-sizing: border-box;
+            user-select: none; -webkit-user-select: none;
+        }
+
+        /* GİRİŞ SAYFASI */
+        #entry-page { display: flex; flex-direction: column; align-items: center; width: 100%; max-height: 95vh; overflow-y: auto; }
+        .main-title-white { font-family: 'Poppins'; font-size: 22px; font-weight: 900; background: var(--white-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .select-lesson-title { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; margin: 5px 0 20px 0; font-weight: 900; font-family: 'Poppins'; }
         
-        /* Ders Seçme Menüsü */
-        .selector-container { margin-bottom: 20px; width: 100%; max-width: 380px; }
-        select { width: 100%; padding: 12px; border-radius: 12px; background: #334155; color: white; border: 1px solid var(--accent); font-size: 1rem; outline: none; }
+        #lesson-list-container { 
+            width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; max-width: 500px; padding: 10px; 
+        }
 
-        .card-container { perspective: 1000px; width: 100%; max-width: 380px; height: 300px; cursor: pointer; margin: 20px 0; }
-        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.4s; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .lesson-card { 
+            background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 20px 10px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); 
+            text-align: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; min-height: 100px; display: flex; flex-direction: column; justify-content: center;
+        }
+        .lesson-card:hover { border-color: #f97316; transform: translateY(-3px); }
+        .lesson-card h3 { margin: 0; font-family: 'Poppins'; font-size: 1.1rem; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .lesson-desc { font-size: 11px; color: #94a3b8; margin-top: 5px; }
+
+        /* UYGULAMA EKRANI */
+        #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
+        
+        /* FLASHCARD ANİMASYONU */
+        .card-container { perspective: 1000px; width: 100%; height: 300px; margin: 15px 0; cursor: pointer; }
+        .card { 
+            width: 100%; height: 100%; position: relative; transform-style: preserve-3d; 
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
         .card.flipped { transform: rotateY(180deg); }
-        .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 30px; border-radius: 25px; font-size: 1.3rem; font-weight: 700; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-        .front { background: var(--card-front); }
-        .back { background: #334155; transform: rotateY(180deg); color: var(--accent); }
+        .face { 
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; 
+            display: flex; align-items: center; justify-content: center; padding: 25px; 
+            border-radius: 30px; box-sizing: border-box; text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .front { background: var(--card-bg); color: var(--text-main); font-size: 24px; font-weight: 800; }
+        .back { 
+            background: #1e293b; color: var(--secondary); transform: rotateY(180deg); 
+            font-size: 22px; font-weight: 700; border-color: var(--secondary);
+        }
 
-        .controls { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 15px; width: 100%; max-width: 380px; }
-        button { padding: 15px; border: none; border-radius: 15px; background: #1e293b; color: white; font-size: 1.2rem; cursor: pointer; border: 1px solid #334155; }
-        .btn-speak { background: var(--accent); color: #0f172a; font-weight: 800; border: none; }
-        #progress { margin-bottom: 10px; font-weight: 600; color: #94a3b8; }
+        /* KONTROLLER */
+        .ctrl-container { display: flex; gap: 10px; margin-top: 15px; }
+        .ctrl-btn { 
+            flex: 1; padding: 15px; border-radius: 15px; border: none; 
+            background: rgba(51, 65, 85, 0.8); color: white; font-weight: bold; cursor: pointer;
+        }
+        .btn-speak { background: var(--primary); color: #0f172a; font-size: 18px; }
+        
+        .stats { 
+            margin-top: 20px; display: flex; justify-content: space-between; 
+            background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 20px;
+        }
+        .stat-val { color: var(--primary); font-weight: 800; display: block; font-size: 18px; }
+        .stat-label { font-size: 10px; color: #94a3b8; font-weight: bold; }
+
+        .nav-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 15px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <div class="selector-container">
-        <select id="lessonSelect" onchange="loadLesson(this.value)">
-            <option value="">Ders Seçiniz...</option>
-        </select>
+<div id="entry-page">
+    <img src="logo.png" style="width: 70px; margin-bottom: 10px;">
+    <div class="main-title-white">5 Dakikada İngilizce</div>
+    <div class="select-lesson-title">Flashcards</div>
+    <div id="lesson-list-container"></div>
+</div>
+
+<div id="app-screen">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <button class="nav-btn" onclick="goHome()"><span class="material-symbols-rounded">home</span> HOME</button>
+        <div id="lesson-info" style="text-align:right; font-size:12px; color:var(--primary); font-weight:bold;">Ders Yükleniyor...</div>
     </div>
 
-    <div id="progress">0 / 0</div>
-
-    <div class="card-container" id="cardBox">
+    <div class="card-container" onclick="flipCard()">
         <div class="card" id="mainCard">
-            <div class="face front" id="engDisplay">Önce Ders Seçin</div>
+            <div class="face front" id="engDisplay">...</div>
             <div class="face back" id="trDisplay">...</div>
         </div>
     </div>
 
-    <div class="controls">
-        <button onclick="change(-1)">⬅️</button>
-        <button class="btn-speak" onclick="speak(event)">🔊 DINLE</button>
-        <button onclick="change(1)">➡️</button>
+    <div style="text-align:center; color:#94a3b8; font-size:12px; margin-bottom:10px;">Kartı çevirmek için üzerine dokun</div>
+
+    <button class="ctrl-btn btn-speak" onclick="speak(event)">
+        <span class="material-symbols-rounded">volume_up</span> LISTEN
+    </button>
+
+    <div class="ctrl-container">
+        <button class="ctrl-btn" onclick="change(-1)">← BACK</button>
+        <button class="ctrl-btn" onclick="change(1)">NEXT →</button>
     </div>
 
-    <script>
-        let cards = [];
-        let i = 0;
-        let startX = 0;
+    <div class="stats">
+        <div style="text-align:center">
+            <span class="stat-label">CURRENT</span>
+            <span id="currentIdx" class="stat-val">0</span>
+        </div>
+        <div style="text-align:center">
+            <span class="stat-label">REMAINING</span>
+            <span id="remainIdx" class="stat-val">0</span>
+        </div>
+        <div style="text-align:center">
+            <span class="stat-label">TOTAL</span>
+            <span id="totalIdx" class="stat-val">0</span>
+        </div>
+    </div>
+</div>
 
-        // 1. Önce data.json'dan ders listesini çek
-        fetch('data.json')
+<script>
+    let cards = [];
+    let i = 0;
+    let allLessons = [];
+
+    // 1. DERS LİSTESİNİ ÇEK
+    fetch('data.json')
+        .then(res => res.json())
+        .then(data => {
+            allLessons = data;
+            renderMenu();
+        });
+
+    function renderMenu() {
+        const container = document.getElementById('lesson-list-container');
+        container.innerHTML = "";
+        allLessons.forEach(lesson => {
+            const card = document.createElement('div');
+            card.className = 'lesson-card';
+            card.onclick = () => loadLesson(lesson);
+            card.innerHTML = `<h3>${lesson.name || lesson.title}</h3><div class="lesson-desc">Hemen Çalışmaya Başla</div>`;
+            container.appendChild(card);
+        });
+    }
+
+    // 2. DERSİ YÜKLE
+    function loadLesson(lesson) {
+        fetch(lesson.file)
             .then(res => res.json())
-            .then(lessons => {
-                const select = document.getElementById('lessonSelect');
-                lessons.forEach(lesson => {
-                    let opt = document.createElement('option');
-                    opt.value = lesson.file;
-                    opt.innerHTML = lesson.name;
-                    select.appendChild(opt);
-                });
+            .then(data => {
+                cards = data;
+                i = 0;
+                document.getElementById('lesson-info').innerText = lesson.name || lesson.title;
+                document.getElementById('entry-page').style.display = 'none';
+                document.getElementById('app-screen').style.display = 'flex';
+                show();
             });
+    }
 
-        // 2. Seçilen dersin dosyasını yükle
-        function loadLesson(filePath) {
-            if(!filePath) return;
-            fetch(filePath)
-                .then(res => res.json())
-                .then(data => {
-                    cards = data;
-                    i = 0;
-                    show();
-                });
-        }
-
-        function show() {
-            if(!cards.length) return;
-            document.getElementById('mainCard').classList.remove('flipped');
-            setTimeout(() => {
-                document.getElementById('engDisplay').innerText = cards[i].en;
-                document.getElementById('trDisplay').innerText = cards[i].tr;
-                document.getElementById('progress').innerText = `${i + 1} / ${cards.length}`;
-            }, 100);
-        }
-
-        function change(n) {
-            if(!cards.length) return;
-            i = (i + n + cards.length) % cards.length;
-            show();
-        }
-
-        function speak(e) {
-            e.stopPropagation();
-            if(!cards.length) return;
-            const msg = new SpeechSynthesisUtterance(cards[i].en);
-            msg.lang = 'en-US';
-            window.speechSynthesis.speak(msg);
-        }
-
-        // Dokunma ve Çevirme
-        const box = document.getElementById('cardBox');
-        box.onclick = () => document.getElementById('mainCard').classList.toggle('flipped');
+    function show() {
+        if(cards.length === 0) return;
+        document.getElementById('mainCard').classList.remove('flipped');
         
-        box.ontouchstart = e => startX = e.touches[0].clientX;
-        box.ontouchend = e => {
-            let endX = e.changedTouches[0].clientX;
-            if (startX - endX > 60) change(1);
-            if (endX - startX > 60) change(-1);
-        };
-    </script>
+        // Küçük bir gecikme ile içeriği değiştir (akıcılık için)
+        setTimeout(() => {
+            document.getElementById('engDisplay').innerText = cards[i].en;
+            document.getElementById('trDisplay').innerText = cards[i].tr;
+            document.getElementById('currentIdx').innerText = i + 1;
+            document.getElementById('totalIdx').innerText = cards.length;
+            document.getElementById('remainIdx').innerText = cards.length - (i + 1);
+        }, 150);
+    }
+
+    function flipCard() {
+        document.getElementById('mainCard').classList.toggle('flipped');
+    }
+
+    function change(n) {
+        i = (i + n + cards.length) % cards.length;
+        show();
+    }
+
+    function speak(e) {
+        e.stopPropagation();
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(cards[i].en);
+        msg.lang = 'en-US';
+        msg.rate = 0.9;
+        window.speechSynthesis.speak(msg);
+    }
+
+    function goHome() {
+        document.getElementById('app-screen').style.display = 'none';
+        document.getElementById('entry-page').style.display = 'flex';
+    }
+
+    // Klavye desteği
+    document.addEventListener('keydown', (e) => {
+        if (e.code === "Space") flipCard();
+        if (e.code === "ArrowRight") change(1);
+        if (e.code === "ArrowLeft") change(-1);
+    });
+</script>
+
 </body>
 </html>
