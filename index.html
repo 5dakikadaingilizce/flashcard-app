@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce - V.3.4 Audio</title>
+    <title>5 Dakikada İngilizce - V.3.5 Sound Fix</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -27,7 +27,7 @@
 
         .version-tag {
             position: fixed; bottom: 10px; right: 15px; font-size: 10px;
-            color: rgba(255,255,255,0.3); font-weight: 700; font-family: 'Poppins';
+            color: rgba(255,255,255,0.2); font-weight: 700; font-family: 'Poppins';
             letter-spacing: 1px; z-index: 100; pointer-events: none;
         }
 
@@ -35,13 +35,9 @@
         .main-title-brand { font-family: 'Poppins'; font-size: 24px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
         .select-lesson-title { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; margin-bottom: 20px; font-weight: 900; font-family: 'Poppins'; }
         
-        #lesson-list-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 500px; padding-bottom: 30px; }
+        #lesson-list-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 500px; padding-bottom: 40px; }
         .lesson-card { background: var(--card-bg); backdrop-filter: blur(15px); padding: 20px 10px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); text-align: center; cursor: pointer; transition: 0.3s; min-height: 100px; display: flex; align-items: center; justify-content: center; }
         .lesson-card h3 { margin: 0; font-family: 'Poppins'; font-size: 1.1rem; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .app-header-brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; }
-        .app-header-brand img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px; }
-        .app-header-brand span { font-family: 'Poppins'; font-size: 13px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
 
         #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; }
         .app-box { width: 100%; background: var(--card-bg); backdrop-filter: blur(20px); padding: 20px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); text-align: center; position: relative; overflow: hidden; box-sizing: border-box; }
@@ -59,7 +55,6 @@
 
         .nav-row { display: flex; justify-content: space-between; width: 100%; margin-bottom: 12px; }
         .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 18px; color: white; cursor: pointer; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px; font-family: 'Poppins'; }
-        
         .btn-main { background: var(--primary); color: #0f172a; width: 100%; padding: 16px; border-radius: 18px; font-size: 18px; font-weight: 900; border: none; font-family: 'Poppins'; cursor: pointer; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
         .stats { display: flex; justify-content: space-between; background: rgba(15, 23, 42, 0.6); padding: 15px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
@@ -73,10 +68,7 @@
 </head>
 <body>
 
-<div class="version-tag">VERSION 3.3</div>
-
-<audio id="snd-know" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
-<audio id="snd-dont" src="https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3"></audio>
+<div class="version-tag">VERSION 3.5</div>
 
 <div id="entry-page">
     <img src="logo.png" style="width: 70px; margin-bottom: 10px;">
@@ -86,11 +78,6 @@
 </div>
 
 <div id="app-screen">
-    <div class="app-header-brand">
-        <img src="logo.png">
-        <span>5 Dakikada İngilizce</span>
-    </div>
-
     <div class="nav-row">
         <button class="nav-btn" onclick="goHome()">
             <span class="material-symbols-rounded">home</span> HOME
@@ -117,9 +104,7 @@
             <span class="material-symbols-rounded">volume_up</span> LISTEN
         </button>
 
-        <div class="hint-text">
-            Up: I Know | Down: I Don't Know | Tap: Flip
-        </div>
+        <div class="hint-text">Up: I Know | Down: I Don't Know | Tap: Flip</div>
 
         <div class="stats">
             <div class="stat-item">
@@ -144,12 +129,21 @@
 <script>
 let cards = [], learned = 0, wrong = 0, startY = 0, currentY = 0, startTime = 0;
 let activeLesson = null;
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// Ses çalma fonksiyonu
-function playSound(type) {
-    const snd = document.getElementById(type === 'know' ? 'snd-know' : 'snd-dont');
-    snd.currentTime = 0;
-    snd.play().catch(e => console.log("Audio play blocked by browser"));
+// SENTETİK BİP SESİ ÜRETİCİ (Dosya gerektirmez)
+function playFeedback(freq, type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.1);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
 }
 
 fetch('data.json').then(res => res.json()).then(data => {
@@ -166,16 +160,12 @@ fetch('data.json').then(res => res.json()).then(data => {
 function loadLesson(lesson) {
     activeLesson = lesson;
     fetch(lesson.file).then(res => res.json()).then(data => {
-        const savedData = localStorage.getItem(`lesson_progress_${lesson.name}`);
-        if (savedData) {
-            const progress = JSON.parse(savedData);
-            cards = progress.cards;
-            learned = progress.learned;
-            wrong = progress.wrong;
+        const saved = localStorage.getItem(`lesson_progress_${lesson.name}`);
+        if (saved) {
+            const p = JSON.parse(saved);
+            cards = p.cards; learned = p.learned; wrong = p.wrong;
         } else {
-            cards = [...data];
-            learned = 0;
-            wrong = 0;
+            cards = [...data]; learned = 0; wrong = 0;
         }
         document.getElementById('lessonTitle').innerText = lesson.name;
         document.getElementById('entry-page').style.display = 'none';
@@ -186,24 +176,19 @@ function loadLesson(lesson) {
 
 function saveProgress() {
     if (!activeLesson) return;
-    const progress = { cards: cards, learned: learned, wrong: wrong };
-    localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify(progress));
+    localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify({cards, learned, wrong}));
 }
 
 function show() {
     if(cards.length === 0) { 
-        alert("Awesome! Lesson completed."); 
+        alert("Lesson completed!"); 
         localStorage.removeItem(`lesson_progress_${activeLesson.name}`);
-        goHome(); 
-        return; 
+        goHome(); return; 
     }
+    currentY = 0; startY = 0;
     const card = document.getElementById('mainCard');
     card.classList.remove('flipped');
-    card.style.transition = "none";
-    card.style.top = "0";
-    card.style.opacity = "1";
-    card.style.transform = "rotateY(0deg)";
-    
+    card.style.cssText = "transition: none; top: 0; opacity: 1; transform: rotateY(0deg);";
     document.getElementById('trDisplay').innerText = cards[0].tr;
     document.getElementById('engDisplay').innerText = cards[0].en;
     document.getElementById('remainCount').innerText = cards.length;
@@ -222,38 +207,29 @@ area.ontouchstart = e => {
 
 area.ontouchmove = e => {
     currentY = e.touches[0].clientY - startY;
-    let rotationY = mainCard.classList.contains('flipped') ? 180 : 0;
+    let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
     mainCard.style.top = currentY + "px";
-    mainCard.style.transform = `rotateY(${rotationY}deg) rotateX(${-currentY/20}deg)`;
+    mainCard.style.transform = `rotateY(${rotY}deg) rotateX(${-currentY/20}deg)`;
 
-    if(currentY < -50) { 
-        document.getElementById('note-know').style.opacity = Math.min(Math.abs(currentY)/150, 1);
-        document.getElementById('note-dont').style.opacity = "0";
-    } else if(currentY > 50) { 
-        document.getElementById('note-dont').style.opacity = Math.min(currentY/150, 1);
-        document.getElementById('note-know').style.opacity = "0";
-    }
+    if(currentY < -50) document.getElementById('note-know').style.opacity = "1";
+    else if(currentY > 50) document.getElementById('note-dont').style.opacity = "1";
+    else { document.getElementById('note-know').style.opacity = "0"; document.getElementById('note-dont').style.opacity = "0"; }
 };
 
 area.ontouchend = () => {
     mainCard.style.transition = "0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-    let duration = Date.now() - startTime;
-
-    if(currentY < -120) { // I KNOW (Yukarı)
-        playSound('know');
-        mainCard.style.top = "-1000px";
-        mainCard.style.opacity = "0";
-        setTimeout(() => { learned++; cards.shift(); saveProgress(); show(); }, 250);
-    } else if(currentY > 120) { // I DON'T KNOW (Aşağı)
-        playSound('dont');
-        mainCard.style.top = "1000px";
-        mainCard.style.opacity = "0";
-        setTimeout(() => { wrong++; cards.push(cards.shift()); saveProgress(); show(); }, 250);
-    } else if (Math.abs(currentY) < 15 && duration < 250) { 
-        mainCard.style.top = "0";
+    if(currentY < -120) { 
+        playFeedback(800, 'sine'); // Yüksek bip (Başarı)
+        mainCard.style.top = "-1000px"; mainCard.style.opacity = "0";
+        setTimeout(() => { learned++; cards.shift(); saveProgress(); show(); }, 200);
+    } else if(currentY > 120) { 
+        playFeedback(300, 'triangle'); // Alçak bip (Hata)
+        mainCard.style.top = "1000px"; mainCard.style.opacity = "0";
+        setTimeout(() => { wrong++; cards.push(cards.shift()); saveProgress(); show(); }, 200);
+    } else if (Math.abs(currentY) < 20) { 
         mainCard.classList.toggle('flipped');
         let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
-        mainCard.style.transform = `rotateY(${rotY}deg)`;
+        mainCard.style.top = "0"; mainCard.style.transform = `rotateY(${rotY}deg)`;
     } else { 
         mainCard.style.top = "0";
         let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
@@ -264,7 +240,7 @@ area.ontouchend = () => {
 };
 
 function speak() {
-    if(cards.length === 0) return;
+    if(!cards.length) return;
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(cards[0].en);
     u.lang = 'en-US';
@@ -278,7 +254,7 @@ function goHome() {
 }
 
 function resetLesson() { 
-    if(confirm("Reset all progress for this lesson?")) {
+    if(confirm("Reset progress?")) {
         localStorage.removeItem(`lesson_progress_${activeLesson.name}`);
         loadLesson(activeLesson);
     }
