@@ -1,7 +1,12 @@
 [
   {
     "id": 1,
-    "name": "Ders 1: go / went / gone Tüm Kullanımlar",
+    "name": "Ders 1: Go / Went / Gone",
     "file": "lessons/lesson1.json"
+  },
+  {
+    "id": 2,
+    "name": "Ders 2: Past Simple V2 kullanımı",
+    "file": "lessons/lesson2.json"
   }
 ]
