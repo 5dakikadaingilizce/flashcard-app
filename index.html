@@ -2,18 +2,19 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce - Swipe Flashcard</title>
+    <title>5 Dakikada İngilizce - V.3.1 Flash</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     <style>
         :root { 
             --bg-dark: #0f172a; 
-            --card-bg: rgba(30, 41, 59, 0.7); 
+            --card-bg: rgba(30, 41, 59, 0.6); 
             --primary: #38bdf8; 
             --secondary: #2dd4bf; 
             --accent: #fb7185; 
             --text-main: #f8fafc; 
+            --logo-grad: linear-gradient(90deg, #ff4d4d, #f97316); 
         }
 
         body { 
@@ -24,204 +25,198 @@
             user-select: none; -webkit-user-select: none;
         }
 
+        /* GİRİŞ SAYFASI */
         #entry-page { display: flex; flex-direction: column; align-items: center; width: 100%; max-height: 95vh; overflow-y: auto; }
-        .main-title-white { font-family: 'Poppins'; font-size: 22px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .main-title-white { font-family: 'Poppins'; font-size: 24px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+        .select-lesson-title { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; margin-bottom: 20px; font-weight: 900; font-family: 'Poppins'; }
         
-        #lesson-list-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 500px; padding: 20px 10px; }
-        .lesson-card { background: var(--card-bg); padding: 20px 10px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); text-align: center; cursor: pointer; transition: 0.3s; }
+        #lesson-list-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 500px; padding: 10px; }
+        .lesson-card { background: var(--card-bg); backdrop-filter: blur(15px); padding: 20px 10px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); text-align: center; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; justify-content: center; min-height: 100px; position: relative; }
+        .lesson-card h3 { margin: 0; font-family: 'Poppins'; font-size: 1.1rem; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; position: relative; }
-        
-        /* KART ALANI VE SWIPE */
-        .card-container { 
-            perspective: 1000px; width: 100%; height: 350px; margin: 10px 0; cursor: pointer; 
-            position: relative; touch-action: none;
-        }
-        .card { 
-            width: 100%; height: 100%; position: relative; transform-style: preserve-3d; 
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), left 0.3s ease-out, opacity 0.3s; 
-        }
+        /* UYGULAMA EKRANI */
+        #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
+        .app-box { background: var(--card-bg); backdrop-filter: blur(20px); padding: 25px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); text-align: center; position: relative; }
+
+        /* KART VE SWIPE */
+        .card-container { perspective: 1000px; width: 100%; height: 260px; margin: 15px 0; cursor: pointer; position: relative; touch-action: none; }
+        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.4s, left 0.3s; }
         .card.flipped { transform: rotateY(180deg); }
-        .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 30px; border-radius: 35px; box-sizing: border-box; text-align: center; border: 2px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
-        .front { background: #1e293b; color: var(--secondary); font-size: 26px; font-weight: 800; }
-        .back { background: var(--card-bg); color: var(--text-main); transform: rotateY(180deg); font-size: 24px; font-weight: 700; }
+        .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); box-sizing: border-box; }
+        .front { background: #1e293b; color: var(--secondary); font-size: 24px; font-weight: 800; }
+        .back { background: rgba(30, 41, 59, 1); color: var(--text-main); transform: rotateY(180deg); font-size: 20px; font-weight: 700; border-color: var(--primary); }
 
-        /* DURUM GÖSTERGELERİ (KAYDIRIRKEN ÇIKAN) */
-        .swipe-status {
-            position: absolute; top: 20px; padding: 10px 20px; border-radius: 15px; font-weight: 900; font-size: 20px; opacity: 0; pointer-events: none; z-index: 10;
-        }
-        #status-know { right: 20px; border: 4px solid var(--secondary); color: var(--secondary); transform: rotate(15deg); }
-        #status-dont { left: 20px; border: 4px solid var(--accent); color: var(--accent); transform: rotate(-15deg); }
-
-        .stats { display: flex; justify-content: space-between; background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 20px; margin-top: 10px; }
-        .stat-item { text-align: center; flex: 1; }
-        .stat-val { color: var(--primary); font-weight: 800; font-size: 20px; display: block; }
-        .stat-label { font-size: 10px; color: #94a3b8; font-weight: bold; }
+        /* BUTONLAR */
+        .btn-main { background: var(--primary); color: #0f172a; width: 100%; padding: 15px; border-radius: 18px; font-size: 16px; font-weight: 900; border: none; font-family: 'Poppins'; cursor: pointer; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); }
         
-        .hint { text-align: center; font-size: 12px; color: #64748b; margin-top: 5px; }
+        /* SAYAÇLAR */
+        .stats { margin-top: 5px; display: flex; justify-content: space-between; background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); }
+        .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .stat-label { font-size: 8px; color: #94a3b8; font-weight: 800; margin-bottom: 4px; letter-spacing: 1px; }
+        .stat-val { font-weight: 800; font-size: 16px; }
+
+        .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 8px 15px; color: white; cursor: pointer; font-size: 11px; font-weight: bold; font-family: 'Poppins'; }
     </style>
 </head>
 <body>
 
 <div id="entry-page">
+    <img src="logo.png" style="width: 70px; margin-bottom: 10px;">
     <div class="main-title-white">5 Dakikada İngilizce</div>
+    <div class="select-lesson-title">Select Lesson</div>
     <div id="lesson-list-container"></div>
 </div>
 
 <div id="app-screen">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <button onclick="goHome()" style="background:none; border:none; color:white; cursor:pointer;"><span class="material-symbols-rounded">arrow_back_ios</span></button>
-        <div id="lesson-info" style="font-size:14px; color:var(--primary); font-weight:900;">Ders Adı</div>
-        <button onclick="speak()" style="background:none; border:none; color:var(--primary); cursor:pointer;"><span class="material-symbols-rounded">volume_up</span></button>
+    <div style="display:flex; justify-content:space-between; margin-bottom:12px; width: 100%;">
+        <button class="nav-btn" onclick="goHome()">HOME</button>
+        <button class="nav-btn" onclick="resetLesson()">RESTART</button>
     </div>
 
-    <div class="card-container" id="swipeArea">
-        <div id="status-know" class="swipe-status">BİLİYORUM</div>
-        <div id="status-dont" class="swipe-status">BİLMİYORUM</div>
+    <div class="app-box">
+        <div id="lessonTitle" style="background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 20px; font-family: 'Poppins';">#Lesson</div>
         
-        <div class="card" id="mainCard">
-            <div class="face front" id="trDisplay">...</div>
-            <div class="face back" id="engDisplay">...</div>
+        <div class="card-container" id="swipeArea">
+            <div class="card" id="mainCard">
+                <div class="face front" id="trDisplay">Yükleniyor...</div>
+                <div class="face back" id="engDisplay">Loading...</div>
+            </div>
         </div>
-    </div>
 
-    <div class="hint">Sola: Bilmiyorum | Sağa: Biliyorum<br>Tıkla: Çevir</div>
+        <button class="btn-main" onclick="speak()">
+            <span class="material-symbols-rounded">volume_up</span> LISTEN
+        </button>
 
-    <div class="stats">
-        <div class="stat-item">
-            <span class="stat-label">KALAN</span>
-            <span id="remainIdx" class="stat-val">0</span>
+        <div style="font-size: 10px; color: #64748b; margin-bottom: 12px; font-weight: 600;">
+            Sola: Bilmiyorum | Sağa: Biliyorum | Tıkla: Çevir
         </div>
-        <div class="stat-item">
-            <span class="stat-label">BİLİNEN</span>
-            <span id="learnedIdx" class="stat-val" style="color:var(--secondary)">0</span>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">BİLMİYORUM</span>
+                <span id="wrongCount" class="stat-val" style="color:var(--accent)">0</span>
+            </div>
+            <div class="stat-item" style="border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1);">
+                <span class="stat-label">KALAN</span>
+                <span id="remainCount" class="stat-val" style="color:var(--primary)">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">BİLİYORUM</span>
+                <span id="correctCount" class="stat-val" style="color:var(--secondary)">0</span>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    let activeCards = [];
-    let learnedCount = 0;
-    let startX = 0;
-    let currentX = 0;
-    let isDragging = false;
+let cards = [], learned = 0, wrong = 0, startX = 0, currentX = 0, startTime = 0;
+let activeLesson = null;
 
-    // DATA ÇEKME
-    fetch('data.json').then(res => res.json()).then(data => {
-        const container = document.getElementById('lesson-list-container');
-        data.forEach(lesson => {
-            const card = document.createElement('div');
-            card.className = 'lesson-card';
-            card.onclick = () => loadLesson(lesson);
-            card.innerHTML = `<h3 style="color:var(--primary); margin:0;">${lesson.name}</h3>`;
-            container.appendChild(card);
-        });
+// ANA SAYFA DERS LİSTESİ
+fetch('data.json').then(res => res.json()).then(data => {
+    const container = document.getElementById('lesson-list-container');
+    data.forEach(lesson => {
+        const div = document.createElement('div');
+        div.className = 'lesson-card';
+        div.onclick = () => loadLesson(lesson);
+        div.innerHTML = `<h3>${lesson.name}</h3>`;
+        container.appendChild(div);
     });
+});
 
-    function loadLesson(lesson) {
-        fetch(lesson.file).then(res => res.json()).then(data => {
-            activeCards = data;
-            learnedCount = 0;
-            document.getElementById('lesson-info').innerText = lesson.name;
-            document.getElementById('entry-page').style.display = 'none';
-            document.getElementById('app-screen').style.display = 'flex';
-            show();
-        });
-    }
-
-    function show() {
-        if (activeCards.length === 0) {
-            alert("Harika! Hepsini öğrendin.");
-            goHome();
-            return;
-        }
-        const card = document.getElementById('mainCard');
-        card.style.transition = 'none';
-        card.style.left = '0';
-        card.style.opacity = '1';
-        card.classList.remove('flipped');
-        
-        document.getElementById('trDisplay').innerText = activeCards[0].tr;
-        document.getElementById('engDisplay').innerText = activeCards[0].en;
-        document.getElementById('remainIdx').innerText = activeCards.length;
-        document.getElementById('learnedIdx').innerText = learnedCount;
-    }
-
-    // SWIPE MEKANİZMASI
-    const swipeArea = document.getElementById('swipeArea');
-    const mainCard = document.getElementById('mainCard');
-
-    swipeArea.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-        isDragging = true;
-        mainCard.style.transition = 'none';
-    });
-
-    swipeArea.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        currentX = e.touches[0].clientX - startX;
-        
-        // Kartı hareket ettir ve biraz döndür
-        mainCard.style.left = currentX + 'px';
-        mainCard.style.transform = `rotate(${currentX / 20}deg)`;
-
-        // Durum yazılarını göster
-        if (currentX > 50) {
-            document.getElementById('status-know').style.opacity = Math.min(currentX / 100, 1);
-            document.getElementById('status-dont').style.opacity = 0;
-        } else if (currentX < -50) {
-            document.getElementById('status-dont').style.opacity = Math.min(Math.abs(currentX) / 100, 1);
-            document.getElementById('status-know').style.opacity = 0;
-        } else {
-            document.getElementById('status-know').style.opacity = 0;
-            document.getElementById('status-dont').style.opacity = 0;
-        }
-    });
-
-    swipeArea.addEventListener('touchend', (e) => {
-        isDragging = false;
-        document.getElementById('status-know').style.opacity = 0;
-        document.getElementById('status-dont').style.opacity = 0;
-
-        if (currentX > 120) { // SAĞA - BİLİYORUM
-            mainCard.style.transition = '0.3s';
-            mainCard.style.left = '1000px';
-            setTimeout(() => answer(true), 200);
-        } else if (currentX < -120) { // SOLA - BİLMİYORUM
-            mainCard.style.transition = '0.3s';
-            mainCard.style.left = '-1000px';
-            setTimeout(() => answer(false), 200);
-        } else { // GERİ BIRAK
-            mainCard.style.transition = '0.3s';
-            mainCard.style.left = '0';
-            mainCard.style.transform = 'rotate(0deg)';
-            // Eğer çok az hareket ettiyse çevir (Flip)
-            if (Math.abs(currentX) < 10) mainCard.classList.toggle('flipped');
-        }
-        currentX = 0;
-    });
-
-    function answer(known) {
-        const currentCard = activeCards.shift();
-        if (known) learnedCount++;
-        else activeCards.push(currentCard);
-        
-        mainCard.style.transform = 'rotate(0deg)';
+// DERS YÜKLEME
+function loadLesson(lesson) {
+    activeLesson = lesson;
+    fetch(lesson.file).then(res => res.json()).then(data => {
+        cards = [...data]; // Veriyi kopyala
+        learned = 0; wrong = 0;
+        document.getElementById('lessonTitle').innerText = lesson.name;
+        document.getElementById('entry-page').style.display = 'none';
+        document.getElementById('app-screen').style.display = 'flex';
         show();
-    }
+    });
+}
 
-    function speak() {
-        window.speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance(activeCards[0].en);
-        msg.lang = 'en-US';
-        window.speechSynthesis.speak(msg);
+// KART GÖSTERME
+function show() {
+    if(cards.length === 0) { 
+        alert("Harika! Bu dersi tamamladın."); 
+        goHome(); 
+        return; 
     }
+    const card = document.getElementById('mainCard');
+    card.classList.remove('flipped');
+    card.style.transition = "none";
+    card.style.left = "0";
+    card.style.transform = "rotateY(0deg)";
+    
+    document.getElementById('trDisplay').innerText = cards[0].tr;
+    document.getElementById('engDisplay').innerText = cards[0].en;
+    document.getElementById('remainCount').innerText = cards.length;
+    document.getElementById('correctCount').innerText = learned;
+    document.getElementById('wrongCount').innerText = wrong;
+}
 
-    function goHome() {
-        document.getElementById('app-screen').style.display = 'none';
-        document.getElementById('entry-page').style.display = 'flex';
+// SWIPE VE DOKUNMA MANTIĞI
+const area = document.getElementById('swipeArea');
+const mainCard = document.getElementById('mainCard');
+
+area.ontouchstart = e => { 
+    startX = e.touches[0].clientX; 
+    startTime = Date.now();
+    mainCard.style.transition = "none"; 
+};
+
+area.ontouchmove = e => {
+    currentX = e.touches[0].clientX - startX;
+    let rotationZ = currentX / 15;
+    let rotationY = mainCard.classList.contains('flipped') ? 180 : 0;
+    mainCard.style.left = currentX + "px";
+    mainCard.style.transform = `rotateY(${rotationY}deg) rotateZ(${rotationZ}deg)`;
+};
+
+area.ontouchend = () => {
+    mainCard.style.transition = "0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+    let duration = Date.now() - startTime;
+
+    if(currentX > 100) { // Biliyorum (Sağa)
+        mainCard.style.left = "1000px";
+        setTimeout(() => { learned++; cards.shift(); show(); }, 200);
+    } else if(currentX < -100) { // Bilmiyorum (Sola)
+        mainCard.style.left = "-1000px";
+        setTimeout(() => { wrong++; cards.push(cards.shift()); show(); }, 200);
+    } else if (Math.abs(currentX) < 10 && duration < 250) { // Sadece Dokunma
+        mainCard.style.left = "0";
+        mainCard.classList.toggle('flipped');
+        let newRot = mainCard.classList.contains('flipped') ? 180 : 0;
+        mainCard.style.transform = `rotateY(${newRot}deg)`;
+    } else { // İptal
+        mainCard.style.left = "0";
+        let resetRot = mainCard.classList.contains('flipped') ? 180 : 0;
+        mainCard.style.transform = `rotateY(${resetRot}deg)`;
     }
+    currentX = 0;
+};
+
+// SESLENDİRME
+function speak() {
+    if(cards.length === 0) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(cards[0].en);
+    u.lang = 'en-US';
+    u.rate = 0.85;
+    window.speechSynthesis.speak(u);
+}
+
+// NAVİGASYON
+function goHome() { 
+    document.getElementById('app-screen').style.display = 'none'; 
+    document.getElementById('entry-page').style.display = 'flex'; 
+}
+
+function resetLesson() { 
+    if(confirm("Dersi sıfırlamak istiyor musun?")) loadLesson(activeLesson); 
+}
 </script>
-
 </body>
 </html>
