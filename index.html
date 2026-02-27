@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce - V.3.3</title>
+    <title>5 Dakikada İngilizce - V.3.4 Audio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -25,14 +25,12 @@
             user-select: none; -webkit-user-select: none;
         }
 
-        /* VERSİYON ETİKETİ */
         .version-tag {
             position: fixed; bottom: 10px; right: 15px; font-size: 10px;
             color: rgba(255,255,255,0.3); font-weight: 700; font-family: 'Poppins';
             letter-spacing: 1px; z-index: 100; pointer-events: none;
         }
 
-        /* GİRİŞ SAYFASI */
         #entry-page { display: flex; flex-direction: column; align-items: center; width: 100%; max-height: 95vh; overflow-y: auto; }
         .main-title-brand { font-family: 'Poppins'; font-size: 24px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
         .select-lesson-title { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; margin-bottom: 20px; font-weight: 900; font-family: 'Poppins'; }
@@ -41,16 +39,13 @@
         .lesson-card { background: var(--card-bg); backdrop-filter: blur(15px); padding: 20px 10px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); text-align: center; cursor: pointer; transition: 0.3s; min-height: 100px; display: flex; align-items: center; justify-content: center; }
         .lesson-card h3 { margin: 0; font-family: 'Poppins'; font-size: 1.1rem; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* HEADER BRAND (DERS EKRANI) */
         .app-header-brand { display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; }
         .app-header-brand img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px; }
         .app-header-brand span { font-family: 'Poppins'; font-size: 13px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
 
-        /* UYGULAMA EKRANI */
         #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; }
         .app-box { width: 100%; background: var(--card-bg); backdrop-filter: blur(20px); padding: 20px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); text-align: center; position: relative; overflow: hidden; box-sizing: border-box; }
 
-        /* KART VE SWIPE */
         .card-container { perspective: 1000px; width: 100%; height: 280px; margin: 10px 0; cursor: pointer; position: relative; touch-action: none; z-index: 2; }
         .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.4s, top 0.3s, opacity 0.3s; }
         .card.flipped { transform: rotateY(180deg); }
@@ -58,18 +53,15 @@
         .front { background: #1e293b; color: var(--secondary); font-size: 26px; font-weight: 800; }
         .back { background: rgba(30, 41, 59, 1); color: var(--text-main); transform: rotateY(180deg); font-size: 22px; font-weight: 700; border-color: var(--primary); }
 
-        /* OVERLAY NOTLAR */
         .swipe-note { position: absolute; left: 50%; transform: translateX(-50%); padding: 10px 30px; border-radius: 50px; font-family: 'Poppins'; font-weight: 900; font-size: 18px; opacity: 0; transition: opacity 0.2s; z-index: 10; pointer-events: none; }
         #note-know { top: 40px; background: var(--secondary); color: #0f172a; border: 3px solid white; }
         #note-dont { bottom: 40px; background: var(--accent); color: white; border: 3px solid white; }
 
-        /* BUTTONS */
         .nav-row { display: flex; justify-content: space-between; width: 100%; margin-bottom: 12px; }
         .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 18px; color: white; cursor: pointer; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px; font-family: 'Poppins'; }
         
         .btn-main { background: var(--primary); color: #0f172a; width: 100%; padding: 16px; border-radius: 18px; font-size: 18px; font-weight: 900; border: none; font-family: 'Poppins'; cursor: pointer; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-        /* STATS (INGILIZCE) */
         .stats { display: flex; justify-content: space-between; background: rgba(15, 23, 42, 0.6); padding: 15px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; }
         .stat-icon { font-size: 18px; margin-bottom: 4px; }
@@ -82,6 +74,9 @@
 <body>
 
 <div class="version-tag">VERSION 3.3</div>
+
+<audio id="snd-know" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+<audio id="snd-dont" src="https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3"></audio>
 
 <div id="entry-page">
     <img src="logo.png" style="width: 70px; margin-bottom: 10px;">
@@ -150,7 +145,13 @@
 let cards = [], learned = 0, wrong = 0, startY = 0, currentY = 0, startTime = 0;
 let activeLesson = null;
 
-// Ders listesini yükle
+// Ses çalma fonksiyonu
+function playSound(type) {
+    const snd = document.getElementById(type === 'know' ? 'snd-know' : 'snd-dont');
+    snd.currentTime = 0;
+    snd.play().catch(e => console.log("Audio play blocked by browser"));
+}
+
 fetch('data.json').then(res => res.json()).then(data => {
     const container = document.getElementById('lesson-list-container');
     data.forEach(lesson => {
@@ -165,7 +166,6 @@ fetch('data.json').then(res => res.json()).then(data => {
 function loadLesson(lesson) {
     activeLesson = lesson;
     fetch(lesson.file).then(res => res.json()).then(data => {
-        // LocalStorage'dan ders ilerlemesini kontrol et
         const savedData = localStorage.getItem(`lesson_progress_${lesson.name}`);
         if (savedData) {
             const progress = JSON.parse(savedData);
@@ -177,7 +177,6 @@ function loadLesson(lesson) {
             learned = 0;
             wrong = 0;
         }
-        
         document.getElementById('lessonTitle').innerText = lesson.name;
         document.getElementById('entry-page').style.display = 'none';
         document.getElementById('app-screen').style.display = 'flex';
@@ -240,15 +239,17 @@ area.ontouchend = () => {
     mainCard.style.transition = "0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
     let duration = Date.now() - startTime;
 
-    if(currentY < -120) { // I KNOW (Up)
+    if(currentY < -120) { // I KNOW (Yukarı)
+        playSound('know');
         mainCard.style.top = "-1000px";
         mainCard.style.opacity = "0";
         setTimeout(() => { learned++; cards.shift(); saveProgress(); show(); }, 250);
-    } else if(currentY > 120) { // I DON'T KNOW (Down)
+    } else if(currentY > 120) { // I DON'T KNOW (Aşağı)
+        playSound('dont');
         mainCard.style.top = "1000px";
         mainCard.style.opacity = "0";
         setTimeout(() => { wrong++; cards.push(cards.shift()); saveProgress(); show(); }, 250);
-    } else if (Math.abs(currentY) < 15 && duration < 250) { // FLIP
+    } else if (Math.abs(currentY) < 15 && duration < 250) { 
         mainCard.style.top = "0";
         mainCard.classList.toggle('flipped');
         let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
