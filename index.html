@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce - V.4.1 Flash Card</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>5 Dakikada İngilizce - V.4.2 Final</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     <style>
@@ -23,6 +23,8 @@
             min-height: 100dvh; display: flex; justify-content: center; align-items: center; 
             color: var(--text-main); overflow: hidden; padding: 10px; box-sizing: border-box;
             user-select: none; -webkit-user-select: none;
+            /* Çift tıklama yakınlaştırmasını CSS ile de engelle */
+            touch-action: manipulation;
         }
 
         .version-tag {
@@ -35,13 +37,12 @@
         
         .logo-container { margin-bottom: 15px; text-align: center; }
         .main-logo { width: 70px; height: 70px; margin-bottom: 10px; filter: none; }
-        
         .main-title-brand { font-family: 'Poppins'; font-size: 26px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
         .flash-card-subtitle { font-family: 'Poppins'; font-size: 14px; font-weight: 700; color: var(--primary); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 25px; opacity: 0.8; }
         
         #lesson-list-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 500px; padding-bottom: 40px; }
-        .lesson-card { background: var(--card-bg); backdrop-filter: blur(15px); padding: 20px 10px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); text-align: center; cursor: pointer; transition: 0.3s; min-height: 100px; display: flex; align-items: center; justify-content: center; }
-        .lesson-card h3 { margin: 0; font-family: 'Poppins'; font-size: 1.1rem; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .lesson-card { background: var(--card-bg); backdrop-filter: blur(15px); padding: 20px 10px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); text-align: center; cursor: pointer; min-height: 100px; display: flex; align-items: center; justify-content: center; }
+        .lesson-card h3 { margin: 0; font-family: 'Poppins'; font-size: 1.1rem; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; pointer-events: none; }
 
         #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; }
         
@@ -51,8 +52,9 @@
 
         .app-box { width: 100%; background: var(--card-bg); backdrop-filter: blur(20px); padding: 20px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); text-align: center; position: relative; overflow: hidden; box-sizing: border-box; }
 
-        .card-container { perspective: 1000px; width: 100%; height: 260px; margin: 10px 0; position: relative; touch-action: none; z-index: 2; }
-        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.3s, opacity 0.3s; }
+        /* Kart Konteynırı - Mobilde dokunmatik aksiyonu sınırlıyoruz */
+        .card-container { perspective: 1000px; width: 100%; height: 260px; margin: 10px 0; position: relative; z-index: 2; touch-action: none; }
+        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.3s, opacity 0.3s; pointer-events: auto; cursor: pointer; }
         .card.flipped { transform: rotateY(180deg); }
         .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); box-sizing: border-box; pointer-events: none; }
         .front { background: #1e293b; color: var(--secondary); font-size: 24px; font-weight: 800; }
@@ -71,13 +73,11 @@
         .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; }
         .stat-label { font-size: 8px; color: #94a3b8; font-weight: 800; margin-bottom: 2px; text-transform: uppercase; }
         .stat-val { font-weight: 900; font-size: 16px; }
-
-        .hint-text { font-size: 10px; color: #64748b; margin-bottom: 12px; font-weight: 600; }
     </style>
 </head>
 <body>
 
-<div class="version-tag">VERSION 4.1</div>
+<div class="version-tag">VERSION 4.2</div>
 
 <div id="entry-page">
     <div class="logo-container">
@@ -114,15 +114,12 @@
 
         <div class="controls-row">
             <button class="control-btn" onclick="goBack()"><span class="material-symbols-rounded">arrow_back_ios_new</span></button>
-            <button class="control-btn" onclick="flipCard()"><span class="material-symbols-rounded">flip_camera_android</span></button>
             <button class="control-btn" onclick="goNext()"><span class="material-symbols-rounded">arrow_forward_ios</span></button>
         </div>
 
         <button class="btn-main" onclick="speak()">
             <span class="material-symbols-rounded">volume_up</span> LISTEN
         </button>
-
-        <div class="hint-text">Swipe Up/Down or Tap Card to Flip</div>
 
         <div class="stats">
             <div class="stat-item">
@@ -142,7 +139,8 @@
 </div>
 
 <script>
-let cards = [], learned = 0, wrong = 0, startY = 0, currentY = 0, isDragging = false, hasMoved = false;
+let cards = [], learned = 0, wrong = 0, startY = 0, currentY = 0, isDragging = false;
+let moveThreshold = 10; // Bu mesafeden az hareket varsa "tıklama" sayılacak
 let activeLesson = null;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -158,6 +156,7 @@ function playFeedback(freq, type) {
     osc.start(); osc.stop(audioCtx.currentTime + 0.1);
 }
 
+// DERSLER
 fetch('data.json').then(res => res.json()).then(data => {
     const container = document.getElementById('lesson-list-container');
     data.forEach(lesson => {
@@ -213,38 +212,40 @@ function flipCard() {
     mainCard.style.transform = `rotateY(${rotY}deg)`;
 }
 
-// SWIPE + INSTANT TAP LOGIC
+// GÜNCELLENMİŞ SWIPE VE CLICK MANTIĞI
 const area = document.getElementById('swipeArea');
 const mainCard = document.getElementById('mainCard');
 
 const startAction = (y) => { 
     startY = y; 
     isDragging = true; 
-    hasMoved = false;
     mainCard.style.transition = "none"; 
 };
 
 const moveAction = (y) => {
     if (!isDragging) return;
     currentY = y - startY;
-    if (Math.abs(currentY) > 5) hasMoved = true; // Hareket algılandıysa flip yapma
     
     let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
     mainCard.style.top = currentY + "px";
     mainCard.style.transform = `rotateY(${rotY}deg) rotateX(${-currentY/20}deg)`;
     
+    // Notları göster
     if(currentY < -50) document.getElementById('note-know').style.opacity = "1";
     else if(currentY > 50) document.getElementById('note-dont').style.opacity = "1";
-    else { document.getElementById('note-know').style.opacity = "0"; document.getElementById('note-dont').style.opacity = "0"; }
+    else { 
+        document.getElementById('note-know').style.opacity = "0"; 
+        document.getElementById('note-dont').style.opacity = "0"; 
+    }
 };
 
 const endAction = () => {
     if (!isDragging) return;
     isDragging = false;
     
-    // EĞER HAREKET EDİLMEDİYSE TIKLAMADIR -> HEMEN DÖNDÜR
-    if (!hasMoved) {
-        flipCard();
+    // TIKLAMA MI KAYDIRMA MI? (Hassas kontrol)
+    if (Math.abs(currentY) < moveThreshold) {
+        flipCard(); // Hareket çok azsa karta tıklanmış say ve döndür
     } else {
         mainCard.style.transition = "0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
         if(currentY < -120) handleChoice(true);
@@ -254,6 +255,7 @@ const endAction = () => {
 
     document.getElementById('note-know').style.opacity = "0";
     document.getElementById('note-dont').style.opacity = "0";
+    currentY = 0;
 };
 
 function handleChoice(isCorrect) {
@@ -283,12 +285,14 @@ window.onkeydown = (e) => {
     if(e.code === 'Space') flipCard();
 };
 
-area.ontouchstart = e => startAction(e.touches[0].clientY);
-area.ontouchmove = e => moveAction(e.touches[0].clientY);
-area.ontouchend = () => endAction();
-area.onmousedown = e => startAction(e.clientY);
-window.onmousemove = e => moveAction(e.clientY);
-window.onmouseup = () => endAction();
+// Hem dokunmatik hem mouse dinleyicileri
+area.addEventListener('touchstart', (e) => startAction(e.touches[0].clientY), {passive: true});
+area.addEventListener('touchmove', (e) => moveAction(e.touches[0].clientY), {passive: true});
+area.addEventListener('touchend', endAction);
+
+area.onmousedown = (e) => startAction(e.clientY);
+window.onmousemove = (e) => moveAction(e.clientY);
+window.onmouseup = endAction;
 
 function speak() {
     if(!cards.length) return;
