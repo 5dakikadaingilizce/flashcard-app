@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce - V.4.0 Flash Card</title>
+    <title>5 Dakikada İngilizce - V.4.1 Flash Card</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -33,14 +33,11 @@
 
         #entry-page { display: flex; flex-direction: column; align-items: center; width: 100%; max-height: 95vh; overflow-y: auto; }
         
-        /* LOGO ALANI - SADE */
         .logo-container { margin-bottom: 15px; text-align: center; }
-        .main-logo { width: 70px; height: 70px; margin-bottom: 10px; filter: none; } /* Parıltı kaldırıldı */
+        .main-logo { width: 70px; height: 70px; margin-bottom: 10px; filter: none; }
         
         .main-title-brand { font-family: 'Poppins'; font-size: 26px; font-weight: 900; background: linear-gradient(180deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
         .flash-card-subtitle { font-family: 'Poppins'; font-size: 14px; font-weight: 700; color: var(--primary); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 25px; opacity: 0.8; }
-        
-        .select-lesson-title { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 22px; margin-bottom: 20px; font-weight: 900; font-family: 'Poppins'; }
         
         #lesson-list-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 500px; padding-bottom: 40px; }
         .lesson-card { background: var(--card-bg); backdrop-filter: blur(15px); padding: 20px 10px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.12); text-align: center; cursor: pointer; transition: 0.3s; min-height: 100px; display: flex; align-items: center; justify-content: center; }
@@ -48,17 +45,16 @@
 
         #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; }
         
-        /* DERS İÇİ ÜST PANEL */
         .nav-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 12px; }
         .nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; cursor: pointer; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 4px; font-family: 'Poppins'; }
-        .header-logo { width: 45px; height: 45px; object-fit: contain; } /* İşaretlediğin yerdeki logo */
+        .header-logo { width: 45px; height: 45px; object-fit: contain; }
 
         .app-box { width: 100%; background: var(--card-bg); backdrop-filter: blur(20px); padding: 20px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); text-align: center; position: relative; overflow: hidden; box-sizing: border-box; }
 
-        .card-container { perspective: 1000px; width: 100%; height: 260px; margin: 10px 0; cursor: pointer; position: relative; touch-action: none; z-index: 2; }
-        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.4s, top 0.3s, opacity 0.3s; pointer-events: none; } /* Kartın kendisi tıklamayı engellemez */
+        .card-container { perspective: 1000px; width: 100%; height: 260px; margin: 10px 0; position: relative; touch-action: none; z-index: 2; }
+        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.3s, opacity 0.3s; }
         .card.flipped { transform: rotateY(180deg); }
-        .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); box-sizing: border-box; }
+        .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); box-sizing: border-box; pointer-events: none; }
         .front { background: #1e293b; color: var(--secondary); font-size: 24px; font-weight: 800; }
         .back { background: rgba(30, 41, 59, 1); color: var(--text-main); transform: rotateY(180deg); font-size: 20px; font-weight: 700; border-color: var(--primary); }
 
@@ -81,7 +77,7 @@
 </head>
 <body>
 
-<div class="version-tag">VERSION 4.0</div>
+<div class="version-tag">VERSION 4.1</div>
 
 <div id="entry-page">
     <div class="logo-container">
@@ -89,7 +85,6 @@
         <div class="main-title-brand">5 Dakikada İngilizce</div>
         <div class="flash-card-subtitle">Flash Card</div>
     </div>
-    <div class="select-lesson-title">Select Lesson</div>
     <div id="lesson-list-container"></div>
 </div>
 
@@ -100,7 +95,7 @@
         </button>
         <img src="logo.png" class="header-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
         <button class="nav-btn" onclick="resetLesson()">
-            <span class="material-symbols-rounded">restart_alt</span> RESTART
+            <span class="material-symbols-rounded">restart_alt</span> RESET
         </button>
     </div>
 
@@ -127,7 +122,7 @@
             <span class="material-symbols-rounded">volume_up</span> LISTEN
         </button>
 
-        <div class="hint-text">Up: Know | Down: Don't Know | Tap to Flip</div>
+        <div class="hint-text">Swipe Up/Down or Tap Card to Flip</div>
 
         <div class="stats">
             <div class="stat-item">
@@ -147,7 +142,7 @@
 </div>
 
 <script>
-let cards = [], learned = 0, wrong = 0, startY = 0, currentY = 0, isDragging = false, startTime = 0;
+let cards = [], learned = 0, wrong = 0, startY = 0, currentY = 0, isDragging = false, hasMoved = false;
 let activeLesson = null;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -193,14 +188,13 @@ function loadLesson(lesson) {
 
 function show() {
     if(cards.length === 0) { 
-        alert("Lesson completed! Let's do it again."); 
+        alert("Lesson completed!"); 
         localStorage.removeItem(`lesson_progress_${activeLesson.name}`);
-        goHome(); 
-        return; 
+        goHome(); return; 
     }
     const card = document.getElementById('mainCard');
     card.classList.remove('flipped');
-    card.style.cssText = "transition: none; top: 0; opacity: 1; transform: rotateY(0deg);";
+    card.style.cssText = "top: 0; opacity: 1; transform: rotateY(0deg);";
     document.getElementById('trDisplay').innerText = cards[0].tr;
     document.getElementById('engDisplay').innerText = cards[0].en;
     document.getElementById('remainCount').innerText = cards.length;
@@ -210,6 +204,7 @@ function show() {
 
 function goNext() { if(cards.length < 2) return; cards.push(cards.shift()); show(); }
 function goBack() { if(cards.length < 2) return; cards.unshift(cards.pop()); show(); }
+
 function flipCard() {
     const mainCard = document.getElementById('mainCard');
     mainCard.classList.toggle('flipped');
@@ -218,20 +213,22 @@ function flipCard() {
     mainCard.style.transform = `rotateY(${rotY}deg)`;
 }
 
-// SWIPE + TOUCH LOGIC (MOBİL DÜZELTME)
+// SWIPE + INSTANT TAP LOGIC
 const area = document.getElementById('swipeArea');
 const mainCard = document.getElementById('mainCard');
 
 const startAction = (y) => { 
     startY = y; 
     isDragging = true; 
-    startTime = Date.now(); // Dokunma başlangıç zamanı
+    hasMoved = false;
     mainCard.style.transition = "none"; 
 };
 
 const moveAction = (y) => {
     if (!isDragging) return;
     currentY = y - startY;
+    if (Math.abs(currentY) > 5) hasMoved = true; // Hareket algılandıysa flip yapma
+    
     let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
     mainCard.style.top = currentY + "px";
     mainCard.style.transform = `rotateY(${rotY}deg) rotateX(${-currentY/20}deg)`;
@@ -244,10 +241,9 @@ const moveAction = (y) => {
 const endAction = () => {
     if (!isDragging) return;
     isDragging = false;
-    const duration = Date.now() - startTime;
     
-    // Eğer kaydırma çok azsa ve süre kısaysa bu bir TIKLAMADIR (MOBİL İÇİN)
-    if (Math.abs(currentY) < 15 && duration < 300) {
+    // EĞER HAREKET EDİLMEDİYSE TIKLAMADIR -> HEMEN DÖNDÜR
+    if (!hasMoved) {
         flipCard();
     } else {
         mainCard.style.transition = "0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
@@ -258,7 +254,6 @@ const endAction = () => {
 
     document.getElementById('note-know').style.opacity = "0";
     document.getElementById('note-dont').style.opacity = "0";
-    currentY = 0; // Sıfırla
 };
 
 function handleChoice(isCorrect) {
