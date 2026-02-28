@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce - V.4.3 Fix</title>
+    <title>5 Dakikada İngilizce - V.4.4 Counter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -26,6 +26,9 @@
 
         .app-box { width: 100%; background: var(--card-bg); backdrop-filter: blur(20px); padding: 20px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); text-align: center; position: relative; overflow: hidden; box-sizing: border-box; }
         
+        /* SIRA SAYACI STİLİ */
+        .card-counter { font-family: 'Poppins'; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 5px; letter-spacing: 1px; }
+
         .card-container { perspective: 1000px; width: 100%; height: 260px; margin: 10px 0; position: relative; z-index: 2; }
         .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.3s, opacity 0.3s; pointer-events: auto; }
         .card.flipped { transform: rotateY(180deg); }
@@ -67,7 +70,11 @@
     <div class="app-box">
         <div id="note-know" class="swipe-note">I KNOW ✅</div>
         <div id="note-dont" class="swipe-note">I DON'T KNOW ❌</div>
-        <div id="lessonTitle" style="color:var(--primary); font-weight:900; margin-bottom:5px;">#Lesson</div>
+        
+        <div id="lessonTitle" style="color:var(--primary); font-weight:900; margin-bottom:2px;">#Lesson</div>
+        
+        <div class="card-counter" id="cardCounter">0 / 0</div>
+
         <div class="card-container" id="swipeArea">
             <div class="card" id="mainCard" onclick="handleFlip(event)">
                 <div class="face front" id="trDisplay">...</div>
@@ -88,7 +95,7 @@
 </div>
 
 <script>
-let cards = [], learned = 0, wrong = 0, startY = 0, currentY = 0, isDragging = false, hasMoved = false;
+let cards = [], totalInLesson = 0, learned = 0, wrong = 0, startY = 0, currentY = 0, isDragging = false, hasMoved = false;
 let activeLesson = null;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -104,16 +111,14 @@ function playFeedback(freq, type) {
     osc.start(); osc.stop(audioCtx.currentTime + 0.1);
 }
 
-// Kartı Döndürme Fonksiyonu (Sadece Click ile çalışır)
 function handleFlip(e) {
-    if (hasMoved) return; // Eğer parmak kaymışsa döndürme
+    if (hasMoved) return;
     const card = document.getElementById('mainCard');
     card.classList.toggle('flipped');
     let rotY = card.classList.contains('flipped') ? 180 : 0;
     card.style.transform = `rotateY(${rotY}deg)`;
 }
 
-// Sürükleme Mantığı
 const area = document.getElementById('swipeArea');
 const mainCard = document.getElementById('mainCard');
 
@@ -127,7 +132,7 @@ const startAction = (y) => {
 const moveAction = (y) => {
     if (!isDragging) return;
     currentY = y - startY;
-    if (Math.abs(currentY) > 10) hasMoved = true; // 10px'den fazla hareket varsa click iptal
+    if (Math.abs(currentY) > 10) hasMoved = true;
     
     let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
     mainCard.style.top = currentY + "px";
@@ -141,7 +146,7 @@ const moveAction = (y) => {
 const endAction = () => {
     if (!isDragging) return;
     isDragging = false;
-    if (hasMoved) { // Sadece kaydırma varsa işlemi bitir
+    if (hasMoved) {
         mainCard.style.transition = "0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
         if(currentY < -120) handleChoice(true);
         else if(currentY > 120) handleChoice(false);
@@ -152,7 +157,6 @@ const endAction = () => {
     currentY = 0;
 };
 
-// Event Listeners (Mobil Çakışmaları Önlemek İçin)
 area.addEventListener('touchstart', (e) => startAction(e.touches[0].clientY), {passive: true});
 area.addEventListener('touchmove', (e) => moveAction(e.touches[0].clientY), {passive: true});
 area.addEventListener('touchend', endAction);
@@ -160,10 +164,10 @@ area.addEventListener('mousedown', (e) => startAction(e.clientY));
 window.addEventListener('mousemove', (e) => moveAction(e.clientY));
 window.addEventListener('mouseup', endAction);
 
-// --- Standart Fonksiyonlar ---
 function loadLesson(lesson) {
     activeLesson = lesson;
     fetch(lesson.file).then(res => res.json()).then(data => {
+        totalInLesson = data.length; // Toplam kelime sayısını al
         const saved = localStorage.getItem(`lesson_progress_${lesson.name}`);
         if (saved) { const p = JSON.parse(saved); cards = p.cards; learned = p.learned; wrong = p.wrong; }
         else { cards = [...data]; learned = 0; wrong = 0; }
@@ -180,9 +184,16 @@ function show() {
     mainCard.style.cssText = "top: 0; opacity: 1; transform: rotateY(0deg);";
     document.getElementById('trDisplay').innerText = cards[0].tr;
     document.getElementById('engDisplay').innerText = cards[0].en;
+    
+    // İstatistikler
     document.getElementById('remainCount').innerText = cards.length;
     document.getElementById('correctCount').innerText = learned;
     document.getElementById('wrongCount').innerText = wrong;
+
+    // SAYAÇ GÜNCELLEME (Kaçıncıdayız / Toplam)
+    // Öğrenilen + Yanlış + Mevcut Mantığına Göre:
+    let currentPos = totalInLesson - cards.length + 1;
+    document.getElementById('cardCounter').innerText = `${currentPos} / ${totalInLesson}`;
 }
 
 function handleChoice(isCorrect) {
