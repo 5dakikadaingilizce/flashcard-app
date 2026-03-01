@@ -7,6 +7,11 @@
   {
     "id": 2,
     "name": "Ders 6: Past Simple V2 kullanımı",
-    "file": "lessons/lesson2.json"
+    "file": "lessons/lesson6.json"
+  },
+  {
+    "id": 3,
+    "name": "Ders 7 : V3 kullanımı",
+    "file": "lessons/lesson7.json"
   }
 ]
