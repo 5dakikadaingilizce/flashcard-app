@@ -1,4 +1,4 @@
-const currentList = [
+[
     {tr: "Gitmişlerdi", en: "They had gone"},
     {tr: "Yapmıştık", en: "We had done / We had made"},
     {tr: "Dünden beri yapmadık", en: "We haven't done it since yesterday"},
@@ -227,4 +227,4 @@ const currentList = [
     {tr: "Daha önce hiçkimsenin hayatını kurtarmamıştım", en: "I had never saved anyone's life before"},
     {tr: "Hayatımda hiç para biriktirmedim", en: "I have never saved money in my life"},
     {tr: "Sorunları bizden önce çözmüşlerdi", en: "They had solved the problems before us"}
-];
+]
