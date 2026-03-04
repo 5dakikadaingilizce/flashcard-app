@@ -90,12 +90,21 @@
         .app-logo-small { width: 50px; margin-bottom: 5px; }
         .app-brand-text { font-size: 11px; font-weight: 700; color: white; margin-bottom: 2px; }
         
-        /* DERS İÇİ BAŞLIK REZİVESİ - REVİZE EDİLDİ */
+        /* DERS İÇİ BAŞLIK REZİVESİ */
         .lesson-title-grad { 
             background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
             font-weight: 900; font-size: 26px; font-family: 'Poppins'; margin: 0;
+            display: block; /* Alt satıra geçmesi için block yapıldı */
         }
-        .lesson-content-desc { color: #94a3b8; font-size: 14px; font-weight: 600; margin-top: 4px; margin-bottom: 10px; }
+        /* DERS İÇERİĞİ STİLİ - BEYAZIMSI GRİ VE ALT SATIR */
+        .lesson-content-desc { 
+            color: #cbd5e1; /* Daha belirgin, beyazımsı gri */
+            font-size: 14px; 
+            font-weight: 600; 
+            margin-top: 5px; 
+            margin-bottom: 15px; 
+            display: block; /* Her zaman alt satırda kalması için */
+        }
 
         /* --- FLASH CARD TASARIMI --- */
         .card-container { perspective: 1000px; width: 100%; height: 210px; margin: 10px 0; position: relative; z-index: 2; }
@@ -154,7 +163,7 @@
 </head>
 <body>
 
-<div class="v-tag">V.5.0 PRO</div>
+<div class="v-tag">V.5.1 PRO</div>
 
 <div id="entry-page">
     <img src="logo.png" style="width: 80px; margin-bottom: 10px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
@@ -224,7 +233,6 @@ let activeLesson = null;
 let originalData = [];
 let autoTRVoice = localStorage.getItem('auto_tr_voice') === 'true';
 
-// --- SES EFEKTİ SİSTEMİ (GLOBAL CONTEXT İLE REVİZE EDİLDİ) ---
 let audioCtx = null;
 function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
 
@@ -235,15 +243,13 @@ function playSwipeSound(type) {
         const gain = audioCtx.createGain();
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-        
-        if(type === 'up') { // BİLDİM (İnce Ses)
+        if(type === 'up') { 
             osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-        } else { // BİLEMEDİM (Kalın Ses)
+        } else { 
             osc.frequency.setValueAtTime(220, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
         }
-        
         osc.start();
         osc.stop(audioCtx.currentTime + 0.2);
     } catch(e) { console.log("Ses çalınamadı."); }
@@ -292,18 +298,13 @@ function show() {
     mainCard.style.cssText = "top: 0; opacity: 1; transform: rotateY(0deg);";
     document.getElementById('trDisplay').innerText = cards[0].tr;
     document.getElementById('engDisplay').innerText = cards[0].en;
-    
     document.getElementById('remainCount').innerText = cards.length;
     document.getElementById('correctCount').innerText = learned;
     document.getElementById('wrongCount').innerText = wrong;
-
     const currentCardTr = cards[0].tr;
     const originalIndex = originalData.findIndex(c => c.tr === currentCardTr);
     document.getElementById('orderCount').innerText = (originalIndex + 1);
-
-    if(autoTRVoice) {
-        setTimeout(speakTR, 300);
-    }
+    if(autoTRVoice) { setTimeout(speakTR, 300); }
 }
 
 function handleFlip(event) {
@@ -318,7 +319,7 @@ const area = document.getElementById('swipeArea');
 const mainCard = document.getElementById('mainCard');
 
 const startAction = (y) => { 
-    initAudio(); // Ses motorunu uyandır
+    initAudio(); 
     startY = y; 
     isDragging = true; 
     hasMoved = false; 
@@ -332,7 +333,6 @@ const moveAction = (y) => {
     let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
     mainCard.style.top = currentY + "px";
     mainCard.style.transform = `rotateY(${rotY}deg) rotateX(${-currentY/20}deg)`;
-    
     if(currentY < -50) document.getElementById('note-know').style.opacity = "1";
     else if(currentY > 50) document.getElementById('note-dont').style.opacity = "1";
     else { 
@@ -405,7 +405,7 @@ function resetLesson() {
 }
 
 function loadLesson(lesson) {
-    initAudio(); // Derse girerken ses motorunu uyandır
+    initAudio(); 
     activeLesson = lesson;
     fetch(lesson.file).then(res => res.json()).then(data => {
         originalData = data;
@@ -418,10 +418,8 @@ function loadLesson(lesson) {
             wrong = p.wrong; 
         }
         else { cards = [...data]; learned = 0; wrong = 0; }
-        
         document.getElementById('lessonTitle').innerText = lesson.name;
         document.getElementById('lessonContent').innerText = lesson.subTitle || "";
-
         document.getElementById('entry-page').style.display = 'none';
         document.getElementById('app-screen').style.display = 'flex';
         show();
