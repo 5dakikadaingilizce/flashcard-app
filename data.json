@@ -1,6 +1,6 @@
 [
-  { "id": 1,"name": "Lesson #1: Go / Went / Gone", "file": "lessons/lesson1.json"},
-  { "id": 2,"name": "Lesson #6: Past Simple V2 kullanımı","file": "lessons/lesson6.json"},
-  { "id": 3,"name": "Lesson #7 : V3 kullanımı","file": "lessons/lesson7.json"},
-  { "id": 4,"name": "Lesson #8 : V2-V3 kullanımı","file": "lessons/lesson8.json"}
+  { "id": 1, "name": "Lesson #1", "subTitle": "Go / Went / Gone", "file": "lessons/lesson1.json" },
+  { "id": 2, "name": "Lesson #6", "subTitle": "Past Simple V2 kullanımı", "file": "lessons/lesson6.json" },
+  { "id": 3, "name": "Lesson #7", "subTitle": "V3 kullanımı", "file": "lessons/lesson7.json" },
+  { "id": 4, "name": "Lesson #8", "subTitle": "V2-V3 kullanımı", "file": "lessons/lesson8.json" }
 ]
