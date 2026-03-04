@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce - V.4.7 AI Sound</title>
+    <title>5 Dakikada İngilizce Flash Card- V.4.8 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -103,11 +103,11 @@
 <script>
 let cards = [], totalInLesson = 0, learned = 0, wrong = 0, startY = 0, currentY = 0, isDragging = false, hasMoved = false;
 let activeLesson = null;
-let autoTRVoice = localStorage.getItem('auto_tr_voice') === 'true'; // Ayarı hafızadan al
+let originalData = []; // Orijinal sıralama için eklendi
+let autoTRVoice = localStorage.getItem('auto_tr_voice') === 'true';
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// Başlangıçta butonun rengini ayarla
 if(autoTRVoice) document.getElementById('trVoiceToggle').classList.add('active');
 
 function toggleTRVoice() {
@@ -116,7 +116,7 @@ function toggleTRVoice() {
     const btn = document.getElementById('trVoiceToggle');
     if(autoTRVoice) {
         btn.classList.add('active');
-        speakTR(); // Açıldığı an ilk kartı seslendir
+        speakTR();
     } else {
         btn.classList.remove('active');
         window.speechSynthesis.cancel();
@@ -150,15 +150,17 @@ function show() {
     document.getElementById('remainCount').innerText = cards.length;
     document.getElementById('correctCount').innerText = learned;
     document.getElementById('wrongCount').innerText = wrong;
-    document.getElementById('orderCount').innerText = (totalInLesson - cards.length + 1);
 
-    // KART DEĞİŞTİĞİNDE OTOMATİK TÜRKÇE SESLENDİR
+    // HATANIN DÜZELTİLDİĞİ YER: Kartın orijinal listedeki sırasını bulup yazdırıyoruz
+    const currentCardTr = cards[0].tr;
+    const originalIndex = originalData.findIndex(c => c.tr === currentCardTr);
+    document.getElementById('orderCount').innerText = (originalIndex + 1);
+
     if(autoTRVoice) {
-        setTimeout(speakTR, 300); // Kartın animasyonu bitsin diye hafif bekleme
+        setTimeout(speakTR, 300);
     }
 }
 
-// --- Diğer Standart Fonksiyonlar ---
 function handleFlip(e) {
     if (hasMoved) return;
     const card = document.getElementById('mainCard');
@@ -218,6 +220,7 @@ function resetLesson() { if(confirm("Reset?")) { localStorage.removeItem(`lesson
 function loadLesson(lesson) {
     activeLesson = lesson;
     fetch(lesson.file).then(res => res.json()).then(data => {
+        originalData = data; // Orijinal sırayı burada saklıyoruz
         totalInLesson = data.length;
         const saved = localStorage.getItem(`lesson_progress_${lesson.name}`);
         if (saved) { const p = JSON.parse(saved); cards = p.cards; learned = p.learned; wrong = p.wrong; }
