@@ -170,6 +170,7 @@
     <div class="app-box">
         <img src="logo.png" class="app-logo-small" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
         <div class="app-brand-text">5 Dakikada İngilizce</div>
+        
         <div id="lessonTitle" class="lesson-title-grad">#Lesson</div>
         <div id="lessonContent" class="lesson-content-desc">Ders İçeriği</div>
 
@@ -219,6 +220,28 @@ let activeLesson = null;
 let originalData = [];
 let autoTRVoice = localStorage.getItem('auto_tr_voice') === 'true';
 
+// --- SES EFEKTİ SİSTEMİ ---
+function playSwipeSound(type) {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        if(type === 'up') { // BİLDİM (İnce Ses)
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        } else { // BİLEMEDİM (Kalın Ses)
+            osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        }
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+    } catch(e) { console.log("Ses çalınamadı."); }
+}
+
 if(autoTRVoice) document.getElementById('trVoiceToggle').classList.add('active');
 
 function toggleTRVoice() {
@@ -252,7 +275,12 @@ function speakEN() {
 }
 
 function show() {
-    if(cards.length === 0) { alert("Lesson completed!"); localStorage.removeItem(`lesson_progress_${activeLesson.name}`); goHome(); return; }
+    if(cards.length === 0) { 
+        alert("Lesson completed!"); 
+        localStorage.removeItem(`lesson_progress_${activeLesson.name}`); 
+        goHome(); 
+        return; 
+    }
     mainCard.classList.remove('flipped');
     mainCard.style.cssText = "top: 0; opacity: 1; transform: rotateY(0deg);";
     document.getElementById('trDisplay').innerText = cards[0].tr;
@@ -282,7 +310,13 @@ function handleFlip(e) {
 const area = document.getElementById('swipeArea');
 const mainCard = document.getElementById('mainCard');
 
-const startAction = (y) => { startY = y; isDragging = true; hasMoved = false; mainCard.style.transition = "none"; };
+const startAction = (y) => { 
+    startY = y; 
+    isDragging = true; 
+    hasMoved = false; 
+    mainCard.style.transition = "none"; 
+};
+
 const moveAction = (y) => {
     if (!isDragging) return;
     currentY = y - startY;
@@ -290,10 +324,15 @@ const moveAction = (y) => {
     let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
     mainCard.style.top = currentY + "px";
     mainCard.style.transform = `rotateY(${rotY}deg) rotateX(${-currentY/20}deg)`;
+    
     if(currentY < -50) document.getElementById('note-know').style.opacity = "1";
     else if(currentY > 50) document.getElementById('note-dont').style.opacity = "1";
-    else { document.getElementById('note-know').style.opacity = "0"; document.getElementById('note-dont').style.opacity = "0"; }
+    else { 
+        document.getElementById('note-know').style.opacity = "0"; 
+        document.getElementById('note-dont').style.opacity = "0"; 
+    }
 };
+
 const endAction = () => {
     if (!isDragging) return;
     isDragging = false;
@@ -316,16 +355,46 @@ window.onmousemove = (e) => moveAction(e.clientY);
 window.onmouseup = endAction;
 
 function handleChoice(isCorrect) {
-    if(isCorrect) { mainCard.style.top = "-1000px"; mainCard.style.opacity = "0"; setTimeout(() => { learned++; cards.shift(); saveProgress(); show(); }, 200); }
-    else { mainCard.style.top = "1000px"; mainCard.style.opacity = "0"; setTimeout(() => { wrong++; cards.push(cards.shift()); saveProgress(); show(); }, 200); }
+    if(isCorrect) { 
+        playSwipeSound('up'); // Ses ekledik
+        mainCard.style.top = "-1000px"; 
+        mainCard.style.opacity = "0"; 
+        setTimeout(() => { learned++; cards.shift(); saveProgress(); show(); }, 200); 
+    }
+    else { 
+        playSwipeSound('down'); // Ses ekledik
+        mainCard.style.top = "1000px"; 
+        mainCard.style.opacity = "0"; 
+        setTimeout(() => { wrong++; cards.push(cards.shift()); saveProgress(); show(); }, 200); 
+    }
 }
 
-function resetCard() { let rotY = mainCard.classList.contains('flipped') ? 180 : 0; mainCard.style.top = "0"; mainCard.style.transform = `rotateY(${rotY}deg)`; }
+function resetCard() { 
+    let rotY = mainCard.classList.contains('flipped') ? 180 : 0; 
+    mainCard.style.top = "0"; 
+    mainCard.style.transform = `rotateY(${rotY}deg)`; 
+}
+
 function goNext() { if(cards.length < 2) return; cards.push(cards.shift()); show(); }
 function goBack() { if(cards.length < 2) return; cards.unshift(cards.pop()); show(); }
-function goHome() { saveProgress(); document.getElementById('app-screen').style.display = 'none'; document.getElementById('entry-page').style.display = 'flex'; }
-function saveProgress() { if (activeLesson && cards.length > 0) localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify({cards, learned, wrong})); }
-function resetLesson() { if(confirm("Reset?")) { localStorage.removeItem(`lesson_progress_${activeLesson.name}`); loadLesson(activeLesson); } }
+function goHome() { 
+    saveProgress(); 
+    document.getElementById('app-screen').style.display = 'none'; 
+    document.getElementById('entry-page').style.display = 'flex'; 
+}
+
+function saveProgress() { 
+    if (activeLesson && cards.length > 0) {
+        localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify({cards, learned, wrong})); 
+    }
+}
+
+function resetLesson() { 
+    if(confirm("Reset?")) { 
+        localStorage.removeItem(`lesson_progress_${activeLesson.name}`); 
+        loadLesson(activeLesson); 
+    } 
+}
 
 function loadLesson(lesson) {
     activeLesson = lesson;
@@ -333,7 +402,12 @@ function loadLesson(lesson) {
         originalData = data;
         totalInLesson = data.length;
         const saved = localStorage.getItem(`lesson_progress_${lesson.name}`);
-        if (saved) { const p = JSON.parse(saved); cards = p.cards; learned = p.learned; wrong = p.wrong; }
+        if (saved) { 
+            const p = JSON.parse(saved); 
+            cards = p.cards; 
+            learned = p.learned; 
+            wrong = p.wrong; 
+        }
         else { cards = [...data]; learned = 0; wrong = 0; }
         
         // BAŞLIKLARI GÜNCELLE
