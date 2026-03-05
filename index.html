@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce Flash Card - V.5.3 </title>
+    <title>5 Dakikada İngilizce Flash Card - V.5.8 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -182,7 +182,7 @@
     </style>
 </head>
 <body>
-<div class="v-tag">V.5.3 PRO</div>
+<div class="v-tag">V.5.8 </div>
 
 <div id="entry-page">
     <img src="logo.png" style="width: 80px; margin-bottom: 10px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
@@ -349,20 +349,16 @@ function toggleShuffle() {
         cards = [...cards].sort(() => Math.random() - 0.5);
     } else {
         btn.classList.remove('active');
-        const remaining = new Set(cards.map(c => c.tr));
-        cards = originalData.filter(c => remaining.has(c.tr));
+        // Orijinal sırayı koruyarak mevcut kartları güncelle
+        const currentIds = new Set(cards.map(c => c.tr));
+        cards = originalData.filter(c => currentIds.has(c.tr));
     }
     currentIndex = 0;
     show();
 }
 
 function show() {
-    if(cards.length === 0) { 
-        alert("Lesson completed!"); 
-        localStorage.removeItem(`lesson_progress_${activeLesson.name}`); 
-        goHome(); 
-        return; 
-    }
+    if(cards.length === 0) return;
     
     if(currentIndex >= cards.length) currentIndex = 0;
     if(currentIndex < 0) currentIndex = cards.length - 1;
@@ -372,9 +368,13 @@ function show() {
     document.getElementById('trDisplay').innerText = cards[currentIndex].tr;
     document.getElementById('engDisplay').innerText = cards[currentIndex].en;
     document.getElementById('remainCount').innerText = cards.length;
-    document.getElementById('correctCount').innerText = learned;
-    document.getElementById('wrongCount').innerText = wrong;
     
+    // İstatistikleri hesapla
+    const learnedCount = cards.filter(c => c.isLearned).length;
+    const unknownCount = cards.filter(c => c.isUnknown).length;
+    
+    document.getElementById('correctCount').innerText = learnedCount;
+    document.getElementById('wrongCount').innerText = unknownCount;
     document.getElementById('orderCount').innerText = (currentIndex + 1) + '/' + cards.length;
     
     if(autoTRVoice) { setTimeout(speakTR, 300); }
@@ -438,22 +438,23 @@ window.onmouseup = endAction;
 function handleChoice(isCorrect) {
     if(isCorrect) { 
         playSwipeSound('up');
+        cards[currentIndex].isLearned = true; // SİLMEK YERİNE İŞARETLE
+        cards[currentIndex].isUnknown = false;
         mainCard.style.top = "-1000px"; 
         mainCard.style.opacity = "0"; 
         setTimeout(() => { 
-            learned++; 
-            cards.splice(currentIndex, 1);
-            if(currentIndex >= cards.length) currentIndex = 0;
+            currentIndex = (currentIndex + 1) % cards.length;
             saveProgress(); 
             show(); 
         }, 200); 
     }
     else { 
         playSwipeSound('down');
+        cards[currentIndex].isUnknown = true; // SİLMEK YERİNE İŞARETLE
+        cards[currentIndex].isLearned = false;
         mainCard.style.top = "1000px"; 
         mainCard.style.opacity = "0"; 
         setTimeout(() => { 
-            wrong++; 
             currentIndex = (currentIndex + 1) % cards.length;
             saveProgress(); 
             show(); 
@@ -487,7 +488,7 @@ function goHome() {
 
 function saveProgress() { 
     if (activeLesson && cards.length > 0) {
-        localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify({cards, learned, wrong, currentIndex})); 
+        localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify({cards, currentIndex})); 
     }
 }
 
@@ -508,11 +509,12 @@ function loadLesson(lesson) {
         if (saved) { 
             const p = JSON.parse(saved); 
             cards = p.cards; 
-            learned = p.learned; 
-            wrong = p.wrong; 
             currentIndex = p.currentIndex || 0;
         }
-        else { cards = [...data]; learned = 0; wrong = 0; currentIndex = 0; }
+        else { 
+            cards = data.map(item => ({...item, isLearned: false, isUnknown: false})); 
+            currentIndex = 0; 
+        }
         document.getElementById('lessonTitle').innerText = lesson.name;
         document.getElementById('lessonContent').innerText = lesson.subTitle || "";
         document.getElementById('entry-page').style.display = 'none';
