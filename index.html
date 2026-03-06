@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce Flash Card - V.6.3</title>
+    <title>5 Dakikada İngilizce Flash Card - V.6.4</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -75,7 +75,6 @@
 
         #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
         
-        /* MOBİL UYUMLU YATAY TOP BAR */
         .top-bar { 
             display: flex; 
             justify-content: space-between; 
@@ -210,7 +209,7 @@
         }
 
         .confetti {
-            position: absolute; width: 10px; height: 10px; opacity: 0;
+            position: absolute; width: 100%; height: 10px; opacity: 0;
             animation: confetti-fall 3s ease-in infinite; pointer-events: none;
         }
         @keyframes confetti-fall {
@@ -220,7 +219,7 @@
     </style>
 </head>
 <body>
-<div class="v-tag">V.6.3 </div>
+<div class="v-tag">V.6.4</div>
 
 <div id="entry-page">
     <img src="logo.png" style="width: 80px; margin-bottom: 10px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
@@ -316,7 +315,43 @@ let cards = [], totalInLesson = 0, startY = 0, currentY = 0, isDragging = false,
 let activeLesson = null, originalData = [], currentIndex = 0;
 let autoTRVoice = localStorage.getItem('auto_tr_voice') === 'true';
 let shuffleMode = false;
-let audioCtx = null, pendingSound = null;
+let audioCtx = null;
+
+// --- REVIZE EDILEN SES MOTORU (MOBIL GARANTILI) ---
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}
+
+function _playSound(type) {
+    initAudio();
+    try {
+        const g = audioCtx.createGain();
+        const o = audioCtx.createOscillator();
+        o.connect(g); g.connect(audioCtx.destination);
+        const t = audioCtx.currentTime;
+        if (type === 'up') {
+            o.frequency.setValueAtTime(600, t);
+            o.frequency.exponentialRampToValueAtTime(1200, t + 0.1);
+            g.gain.setValueAtTime(0.3, t);
+            g.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
+            o.start(t); o.stop(t + 0.15);
+        } else {
+            o.frequency.setValueAtTime(300, t);
+            o.frequency.exponentialRampToValueAtTime(150, t + 0.15);
+            g.gain.setValueAtTime(0.3, t);
+            g.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+            o.start(t); o.stop(t + 0.2);
+        }
+    } catch(e) {}
+}
+
+// Global dokunma olayıyla kilidi aç
+document.addEventListener('touchstart', initAudio, { passive: true });
 
 // --- UTILS ---
 function fetchNoCache(url) {
@@ -324,50 +359,11 @@ function fetchNoCache(url) {
     return fetch(`${url}?v=${timestamp}`);
 }
 
-function _createAudioCtx() {
-    if (!audioCtx) {
-        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
-    }
-    return audioCtx;
-}
-
-function _playSound(type) {
-    if (!audioCtx) return;
-    try {
-        const g = audioCtx.createGain();
-        const o = audioCtx.createOscillator();
-        o.connect(g); g.connect(audioCtx.destination);
-        const t = audioCtx.currentTime;
-        if (type === 'up') {
-            o.frequency.setValueAtTime(523, t);
-            o.frequency.exponentialRampToValueAtTime(1047, t + 0.12);
-            g.gain.setValueAtTime(0.5, t);
-            g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
-            o.start(t); o.stop(t + 0.18);
-        } else {
-            o.frequency.setValueAtTime(400, t);
-            o.frequency.exponentialRampToValueAtTime(200, t + 0.18);
-            g.gain.setValueAtTime(0.5, t);
-            g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
-            o.start(t); o.stop(t + 0.22);
-        }
-    } catch(e) {}
-}
-
-document.addEventListener('touchstart', () => {
-    _createAudioCtx();
-    if (pendingSound && audioCtx) { _playSound(pendingSound); pendingSound = null; }
-}, { passive: true });
-
-function playSwipeSound(type) {
-    if (audioCtx && audioCtx.state === 'running') { _playSound(type); }
-    else { pendingSound = type; }
-}
-
 // --- VOICE ---
 if(autoTRVoice) document.getElementById('trVoiceToggle').classList.add('active');
 
 function toggleTRVoice() {
+    initAudio();
     autoTRVoice = !autoTRVoice;
     localStorage.setItem('auto_tr_voice', autoTRVoice);
     const btn = document.getElementById('trVoiceToggle');
@@ -384,6 +380,7 @@ function speakTR() {
 }
 
 function speakEN() {
+    initAudio();
     if(!cards.length || !cards[currentIndex]) return;
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(cards[currentIndex].en);
@@ -393,6 +390,7 @@ function speakEN() {
 
 // --- CORE ---
 function toggleShuffle() {
+    initAudio();
     shuffleMode = !shuffleMode;
     const btn = document.getElementById('shuffleToggle');
     if (shuffleMode) {
@@ -450,6 +448,7 @@ function show() {
 
 function handleFlip(event) {
     if (hasMoved) return;
+    initAudio();
     mainCard.classList.toggle('flipped');
     let rotY = mainCard.classList.contains('flipped') ? 180 : 0;
     mainCard.style.transform = `rotateY(${rotY}deg)`;
@@ -460,7 +459,7 @@ const area = document.getElementById('swipeArea');
 const mainCard = document.getElementById('mainCard');
 
 const startAction = (y) => { 
-    _createAudioCtx(); 
+    initAudio(); 
     startY = y; isDragging = true; hasMoved = false; 
     mainCard.style.transition = "none"; 
 };
@@ -506,7 +505,7 @@ window.onmouseup = endAction;
 
 function handleChoice(isCorrect) {
     if(isCorrect) { 
-        playSwipeSound('up');
+        _playSound('up');
         cards[currentIndex].isLearned = true;
         cards[currentIndex].isUnknown = false;
         mainCard.style.top = "-1000px"; mainCard.style.opacity = "0"; 
@@ -514,7 +513,6 @@ function handleChoice(isCorrect) {
         setTimeout(() => { 
             const learnedCount = cards.filter(c => c.isLearned).length;
             if(learnedCount === cards.length) {
-                // Ders bittiğinde LocalStorage temizleniyor
                 localStorage.removeItem(`lesson_progress_${activeLesson.name}`);
                 showCompletion();
             } else {
@@ -528,7 +526,7 @@ function handleChoice(isCorrect) {
         }, 200); 
     }
     else { 
-        playSwipeSound('down');
+        _playSound('down');
         cards[currentIndex].isUnknown = true;
         cards[currentIndex].isLearned = false;
         mainCard.style.top = "1000px"; mainCard.style.opacity = "0"; 
@@ -544,8 +542,8 @@ function resetCard() {
     mainCard.style.top = "0"; mainCard.style.transform = `rotateY(${rotY}deg)`; 
 }
 
-function goNext() { currentIndex = (currentIndex + 1) % cards.length; show(); }
-function goBack() { currentIndex = (currentIndex - 1 + cards.length) % cards.length; show(); }
+function goNext() { initAudio(); currentIndex = (currentIndex + 1) % cards.length; show(); }
+function goBack() { initAudio(); currentIndex = (currentIndex - 1 + cards.length) % cards.length; show(); }
 
 function goHome() { 
     saveProgress(); 
@@ -560,6 +558,7 @@ function saveProgress() {
 }
 
 function resetLesson() { 
+    initAudio();
     if(confirm("Reset?")) { 
         localStorage.removeItem(`lesson_progress_${activeLesson.name}`); 
         loadLesson(activeLesson); 
@@ -567,7 +566,7 @@ function resetLesson() {
 }
 
 function loadLesson(lesson) {
-    _createAudioCtx(); 
+    initAudio();
     activeLesson = lesson;
     shuffleMode = false;
     
@@ -577,9 +576,7 @@ function loadLesson(lesson) {
         
         if (saved) { 
             const p = JSON.parse(saved); 
-            // Eğer ders daha önce %100 bittiyse (tüm kartlar isLearned ise), sıfırdan başlat
             const isFinished = p.cards.every(c => c.isLearned);
-            
             if (isFinished || p.cards.length !== data.length) {
                 cards = data.map(item => ({...item, isLearned: false, isUnknown: false})); 
                 currentIndex = 0;
