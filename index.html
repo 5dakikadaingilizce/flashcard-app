@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce Flash Card - V.6.1</title>
+    <title>5 Dakikada İngilizce Flash Card - V.6.2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -209,7 +209,7 @@
     </style>
 </head>
 <body>
-<div class="v-tag">V.6.1 </div>
+<div class="v-tag">V.6.2 </div>
 
 <div id="entry-page">
     <img src="logo.png" style="width: 80px; margin-bottom: 10px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
@@ -296,7 +296,7 @@
     <div class="congrats-title">COMPLETED!</div>
     <div class="congrats-text">Tebrikler, bu dersi bitirdin!</div>
     <button class="btn-main" onclick="closeCompletion()" style="max-width: 280px; margin-top: 20px;">
-        <span class="material-symbols-rounded">celebration</span> HARİKA!
+        <span class="material-symbols-rounded">library_books</span> MORE LESSONS
     </button>
 </div>
 
@@ -410,7 +410,6 @@ function show() {
     document.getElementById('trDisplay').innerText = cards[currentIndex].tr;
     document.getElementById('engDisplay').innerText = cards[currentIndex].en;
     
-    // Tag System
     const tagF = document.getElementById('tagFront');
     const tagB = document.getElementById('tagBack');
     tagF.className = "status-tag"; tagB.className = "status-tag";
@@ -426,14 +425,14 @@ function show() {
         tagF.style.display = tagB.style.display = "block";
     }
 
-    // Stats
     const learnedCount = cards.filter(c => c.isLearned).length;
     const unknownCount = cards.filter(c => c.isUnknown).length;
     
     document.getElementById('remainCount').innerText = cards.length;
     document.getElementById('correctCount').innerText = learnedCount;
     document.getElementById('wrongCount').innerText = unknownCount;
-    document.getElementById('orderCount').innerText = (currentIndex + 1) + '/' + cards.length;
+    // Sadece Mevcut Sıra Rakamı Gösteriliyor
+    document.getElementById('orderCount').innerText = (currentIndex + 1);
     
     if(autoTRVoice) { setTimeout(speakTR, 300); }
     document.getElementById('guideLayer').style.opacity = "1";
@@ -504,11 +503,11 @@ function handleChoice(isCorrect) {
         
         setTimeout(() => { 
             const learnedCount = cards.filter(c => c.isLearned).length;
-            // BİTİŞ ŞARTI: Tüm sorular öğrenildiğinde
             if(learnedCount === cards.length) {
+                // Ders bittiğinde LocalStorage temizleniyor ki tekrar girince sıfır başlasın
+                localStorage.removeItem(`lesson_progress_${activeLesson.name}`);
                 showCompletion();
             } else {
-                // Öğrenilmeyeni bulana kadar dön
                 let nextIdx = (currentIndex + 1) % cards.length;
                 while(cards[nextIdx].isLearned) {
                     nextIdx = (nextIdx + 1) % cards.length;
@@ -562,14 +561,12 @@ function loadLesson(lesson) {
     activeLesson = lesson;
     shuffleMode = false;
     
-    // Cache Busting Fetch
     fetchNoCache(lesson.file).then(res => res.json()).then(data => {
         originalData = data;
         const saved = localStorage.getItem(`lesson_progress_${lesson.name}`);
         
         if (saved) { 
             const p = JSON.parse(saved); 
-            // Senkronizasyon Kontrolü: Soru sayısı değiştiyse sıfırla
             if(p.cards.length !== data.length) {
                 cards = data.map(item => ({...item, isLearned: false, isUnknown: false})); 
                 currentIndex = 0;
@@ -617,7 +614,6 @@ function createConfetti() {
     }
 }
 
-// Init Lesson List with Cache Busting
 fetchNoCache('data.json').then(res => res.json()).then(data => {
     const container = document.getElementById('lesson-list-container');
     data.forEach(lesson => {
