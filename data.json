@@ -1,7 +1,7 @@
 [
   { "id": 1, "name": "Lesson #1", "subTitle": "Go / Went / Gone", "file": "lessons/lesson1.json" },
-  { "id": 2, "name": "Lesson #2", "subTitle": " + cümle kullanımı", "file": "lessons/lesson2.json" },
-  { "id": 3, "name": "Lesson #3", "subTitle": " ----- kullanımı", "file": "lessons/lesson3.json" },
+  { "id": 2, "name": "Lesson #2", "subTitle": " + olumlu cümle kurma", "file": "lessons/lesson2.json" },
+  { "id": 3, "name": "Lesson #3", "subTitle": " - olumsuz cümle kurma", "file": "lessons/lesson3.json" },
   { "id": 4, "name": "Lesson #4", "subTitle": " ----- kullanımı", "file": "lessons/lesson4.json" },
   { "id": 5, "name": "Lesson #5", "subTitle": " ----- kullanımı", "file": "lessons/lesson5.json" },
   { "id": 6, "name": "Lesson #6", "subTitle": "V2 kullanımı", "file": "lessons/lesson6.json" },
