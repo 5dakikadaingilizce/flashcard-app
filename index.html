@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce Flash Card - V.6.2</title>
+    <title>5 Dakikada İngilizce Flash Card - V.6.3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -74,13 +74,24 @@
         }
 
         #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
-        .top-bar { display: flex; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
-        .nav-btn { 
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 12px; height: 40px; padding: 0 12px; font-size: 11px; font-weight: bold; 
-            color: white; cursor: pointer; display: flex; align-items: center; gap: 5px; 
+        
+        /* MOBİL UYUMLU YATAY TOP BAR */
+        .top-bar { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 12px; 
+            gap: 4px; 
+            width: 100%;
         }
-        .nav-btn.active { background: var(--accent); box-shadow: 0 0 15px rgba(251, 113, 133, 0.4); border-color: white; }
+        .nav-btn { 
+            flex: 1; 
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 10px; height: 36px; padding: 0 2px; font-size: 9px; font-weight: bold; 
+            color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 3px;
+            white-space: nowrap; overflow: hidden;
+        }
+        .nav-btn .material-symbols-rounded { font-size: 16px; }
+        .nav-btn.active { background: var(--accent); box-shadow: 0 0 10px rgba(251, 113, 133, 0.4); border-color: white; }
 
         .app-box { 
             background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -209,7 +220,7 @@
     </style>
 </head>
 <body>
-<div class="v-tag">V.6.2 </div>
+<div class="v-tag">V.6.3 </div>
 
 <div id="entry-page">
     <img src="logo.png" style="width: 80px; margin-bottom: 10px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
@@ -431,7 +442,6 @@ function show() {
     document.getElementById('remainCount').innerText = cards.length;
     document.getElementById('correctCount').innerText = learnedCount;
     document.getElementById('wrongCount').innerText = unknownCount;
-    // Sadece Mevcut Sıra Rakamı Gösteriliyor
     document.getElementById('orderCount').innerText = (currentIndex + 1);
     
     if(autoTRVoice) { setTimeout(speakTR, 300); }
@@ -504,7 +514,7 @@ function handleChoice(isCorrect) {
         setTimeout(() => { 
             const learnedCount = cards.filter(c => c.isLearned).length;
             if(learnedCount === cards.length) {
-                // Ders bittiğinde LocalStorage temizleniyor ki tekrar girince sıfır başlasın
+                // Ders bittiğinde LocalStorage temizleniyor
                 localStorage.removeItem(`lesson_progress_${activeLesson.name}`);
                 showCompletion();
             } else {
@@ -567,11 +577,15 @@ function loadLesson(lesson) {
         
         if (saved) { 
             const p = JSON.parse(saved); 
-            if(p.cards.length !== data.length) {
+            // Eğer ders daha önce %100 bittiyse (tüm kartlar isLearned ise), sıfırdan başlat
+            const isFinished = p.cards.every(c => c.isLearned);
+            
+            if (isFinished || p.cards.length !== data.length) {
                 cards = data.map(item => ({...item, isLearned: false, isUnknown: false})); 
                 currentIndex = 0;
             } else {
-                cards = p.cards; currentIndex = p.currentIndex || 0;
+                cards = p.cards; 
+                currentIndex = p.currentIndex || 0;
             }
         }
         else { 
