@@ -201,7 +201,7 @@
   { "no": 200, "tr": "Ali dün araba kullanmadı mı?", "en": "Didn't Ali drive yesterday?" },
   { "no": 201, "tr": "Ali yarın araba kullanacak mı?", "en": "Will Ali drive tomorrow?" },
   { "no": 202, "tr": "Ali yarın araba kullanmayacak mı?", "en": "Won't Ali drive tomorrow?" },
-  { "no": 203, "tr": "Ali daha demin araba kullandı mı?", "en": "Has Ali just driven now?" },
+  { "no": 203, "tr": "Ali daha demin araba kullandı mı?", "en": "Has Ali just driven?" },
   { "no": 204, "tr": "Ali hiç araba kullandı mı?", "en": "Has Ali ever driven?" },
   { "no": 205, "tr": "Ali hiç araba kullanmadı mı?", "en": "Hasn't Ali ever driven?" },
   { "no": 206, "tr": "Ali senden önce araba kullanmış mıydı?", "en": "Had Ali driven before you?" },
