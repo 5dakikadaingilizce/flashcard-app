@@ -64,7 +64,7 @@
   { "no": 63, "tr": "Mutlu olmak zorunda mıyım?", "en": "Do I have to be happy?" },
   { "no": 64, "tr": "Mutlu olabilir miyiz?", "en": "Can we be happy?" },
   { "no": 65, "tr": "Mutlu olabilir miydik?", "en": "Could we be happy?" },
-  { "no": 66, "tr": "Mutlu olmalı mıyız?", "en": ": Must we be happy?" },
+  { "no": 66, "tr": "Mutlu olmalı mıyız?", "en": "Must we be happy?" },
   { "no": 67, "tr": "Bir kedi var mı?", "en": "Is there a cat?" },
   { "no": 68, "tr": "Hiç kedi var mı?", "en": "Are there any cats?" },
   { "no": 69, "tr": "Çok kedi var mı?", "en": "Are there a lot of cats?" },
