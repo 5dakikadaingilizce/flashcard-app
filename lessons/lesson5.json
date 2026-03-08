@@ -201,7 +201,7 @@
   { "no": 200, "tr": "Ali hangi şarkıyı söylüyordu?", "en": "Which song was Ali singing?" },
   { "no": 201, "tr": "Ali hangi şarkıyı söyleyebilir?", "en": "Which song can Ali sing?" },
   { "no": 202, "tr": "Ali hangi şarkıyı söyleyebilirdi?", "en": "Which song could Ali sing?" },
-  { "no": 203, "tr": "Ali hangi şarkıyı söylemeli?", "en": "Which song should Ali sing?" },
+  { "no": 203, "tr": "Ali hangi şarkıyı söylemeli?", "en": "Which song must Ali sing?" },
   { "no": 204, "tr": "Ali ödevini nasıl yaptı?", "en": "How did Ali do his homework?" },
   { "no": 205, "tr": "Ali ödevini nasıl yapar?", "en": "How does Ali do his homework?" },
   { "no": 206, "tr": "Ali ödevini nasıl yapmış?", "en": "How had Ali done his homework?" },
