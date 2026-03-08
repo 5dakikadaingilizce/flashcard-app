@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce Flash Card - V.6.0</title>
+    <title>5 Dakikada İngilizce Flash Card - V.6.1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -100,7 +100,6 @@
             z-index: 2;
         }
 
-        /* YENİ: İlerleme Barı */
         .progress-container {
             width: 100%;
             height: 4px;
@@ -137,7 +136,6 @@
             font-family: 'Poppins';
         }
 
-        /* YENİ: Mod Seçim Modal */
         #mode-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -219,7 +217,12 @@
             margin-top: 4px;
         }
 
-        #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
+        #app-screen, #test-screen, #write-screen { 
+            display: none; 
+            width: 100%; 
+            max-width: 400px; 
+            flex-direction: column; 
+        }
         
         .top-bar { 
             display: flex; 
@@ -587,7 +590,6 @@
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Card entry animation */
         @keyframes cardEnter {
             from {
                 opacity: 0;
@@ -602,9 +604,7 @@
             animation: cardEnter 0.4s ease-out;
         }
 
-        /* YENİ: TEST MODU STİLLERİ */
-        #test-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
-        
+        /* TEST MODU */
         .test-question {
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
             border: 1px solid var(--glass-border);
@@ -679,33 +679,7 @@
             75% { transform: translateX(10px); }
         }
 
-        .test-progress {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 0 5px;
-        }
-
-        .test-progress-bar {
-            flex: 1;
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-            margin: 0 15px;
-            overflow: hidden;
-        }
-
-        .test-progress-fill {
-            height: 100%;
-            background: var(--logo-grad);
-            border-radius: 3px;
-            transition: width 0.4s ease;
-        }
-
-        /* YENİ: YAZMA MODU STİLLERİ */
-        #write-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
-        
+        /* YAZMA MODU */
         .write-prompt {
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
             border: 1px solid var(--glass-border);
@@ -786,14 +760,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .write-hint {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-top: 10px;
-            font-style: italic;
-        }
-
-        /* Mode indicator */
         .mode-indicator {
             position: absolute;
             top: 15px;
@@ -810,6 +776,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            cursor: pointer;
         }
 
         .mode-indicator .material-symbols-rounded {
@@ -818,7 +785,7 @@
     </style>
 </head>
 <body>
-<div class="v-tag">V.6.0</div>
+<div class="v-tag">V.6.1</div>
 
 <!-- GİRİŞ SAYFASI -->
 <div id="entry-page">
@@ -850,7 +817,7 @@
     </div>
 </div>
 
-<!-- FLASHCARD MODU (Mevcut) -->
+<!-- FLASHCARD MODU -->
 <div id="app-screen">
     <div class="mode-indicator" onclick="backToModeSelect()">
         <span class="material-symbols-rounded">flip</span> FLASH
@@ -927,24 +894,25 @@
     </div>
 </div>
 
-<!-- TEST MODU -->
+<!-- TEST MODU - Flash Card ile aynı yapı -->
 <div id="test-screen">
     <div class="mode-indicator" onclick="backToModeSelect()">
         <span class="material-symbols-rounded">quiz</span> TEST
     </div>
     <div class="top-bar">
         <button class="nav-btn" onclick="goHome()"><span class="material-symbols-rounded">home</span> HOME</button>
+        <button id="trVoiceToggleTest" class="nav-btn" onclick="toggleTRVoice()">
+            <span class="material-symbols-rounded">volume_up</span> AUTO TR
+        </button>
         <button class="nav-btn" onclick="resetLesson()"><span class="material-symbols-rounded">restart_alt</span> RESET</button>
     </div>
     
     <div class="app-box">
-        <div class="test-progress">
-            <span id="testCurrent">1</span>
-            <div class="test-progress-bar">
-                <div class="test-progress-fill" id="testProgressFill" style="width: 0%"></div>
-            </div>
-            <span id="testTotal">10</span>
-        </div>
+        <img src="logo.png" class="app-logo-small" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
+        <div class="app-brand-text">5 Dakikada İngilizce</div>
+        
+        <div id="testLessonTitle" class="lesson-title-grad">#Lesson</div>
+        <div id="testLessonContent" class="lesson-content-desc"></div>
 
         <div class="test-question" id="testQuestion">Loading...</div>
         
@@ -953,38 +921,47 @@
         <button class="btn-main" onclick="nextTestQuestion()" id="nextTestBtn" style="display:none;">
             NEXT <span class="material-symbols-rounded">arrow_forward</span>
         </button>
-
-        <div class="stats" style="margin-top: 15px;">
+        
+        <div class="stats">
             <div class="stat-item">
-                <div class="stat-label-row">SCORE <span class="material-symbols-rounded">emoji_events</span></div>
-                <span id="testScore" class="stat-val" style="color:var(--secondary)">0</span>
+                <div class="stat-label-row">ORDER <span class="material-symbols-rounded">assistant_navigation</span></div>
+                <span id="testOrderCount" class="stat-val">0</span>
             </div>
             <div class="stat-item">
-                <div class="stat-label-row">STREAK <span class="material-symbols-rounded">local_fire_department</span></div>
-                <span id="testStreak" class="stat-val" style="color:var(--accent)">0</span>
+                <div class="stat-label-row">REMAIN <span class="material-symbols-rounded">layers</span></div>
+                <span id="testRemainCount" class="stat-val">0</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label-row">CORRECT <span class="material-symbols-rounded" style="color:var(--secondary)">task_alt</span></div>
+                <span id="testCorrectCount" class="stat-val" style="color:var(--secondary)">0</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label-row">WRONG <span class="material-symbols-rounded" style="color:var(--accent)">cancel</span></div>
+                <span id="testWrongCount" class="stat-val" style="color:var(--accent)">0</span>
             </div>
         </div>
     </div>
 </div>
 
-<!-- YAZMA MODU -->
+<!-- YAZMA MODU - Flash Card ile aynı yapı -->
 <div id="write-screen">
     <div class="mode-indicator" onclick="backToModeSelect()">
         <span class="material-symbols-rounded">edit</span> WRITE
     </div>
     <div class="top-bar">
         <button class="nav-btn" onclick="goHome()"><span class="material-symbols-rounded">home</span> HOME</button>
+        <button id="trVoiceToggleWrite" class="nav-btn" onclick="toggleTRVoice()">
+            <span class="material-symbols-rounded">volume_up</span> AUTO TR
+        </button>
         <button class="nav-btn" onclick="resetLesson()"><span class="material-symbols-rounded">restart_alt</span> RESET</button>
     </div>
 
     <div class="app-box">
-        <div class="test-progress">
-            <span id="writeCurrent">1</span>
-            <div class="test-progress-bar">
-                <div class="test-progress-fill" id="writeProgressFill" style="width: 0%"></div>
-            </div>
-            <span id="writeTotal">10</span>
-        </div>
+        <img src="logo.png" class="app-logo-small" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
+        <div class="app-brand-text">5 Dakikada İngilizce</div>
+        
+        <div id="writeLessonTitle" class="lesson-title-grad">#Lesson</div>
+        <div id="writeLessonContent" class="lesson-content-desc"></div>
 
         <div class="write-prompt" id="writePrompt">Loading...</div>
         
@@ -1000,15 +977,23 @@
         <button class="btn-main" onclick="nextWriteQuestion()" id="nextWriteBtn" style="display:none;">
             NEXT <span class="material-symbols-rounded">arrow_forward</span>
         </button>
-
-        <div class="stats" style="margin-top: 15px;">
+        
+        <div class="stats">
             <div class="stat-item">
-                <div class="stat-label-row">CORRECT <span class="material-symbols-rounded">task_alt</span></div>
-                <span id="writeCorrect" class="stat-val" style="color:var(--secondary)">0</span>
+                <div class="stat-label-row">ORDER <span class="material-symbols-rounded">assistant_navigation</span></div>
+                <span id="writeOrderCount" class="stat-val">0</span>
             </div>
             <div class="stat-item">
-                <div class="stat-label-row">ATTEMPTS <span class="material-symbols-rounded">replay</span></div>
-                <span id="writeAttempts" class="stat-val">0</span>
+                <div class="stat-label-row">REMAIN <span class="material-symbols-rounded">layers</span></div>
+                <span id="writeRemainCount" class="stat-val">0</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label-row">CORRECT <span class="material-symbols-rounded" style="color:var(--secondary)">task_alt</span></div>
+                <span id="writeCorrectCount" class="stat-val" style="color:var(--secondary)">0</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label-row">WRONG <span class="material-symbols-rounded" style="color:var(--accent)">cancel</span></div>
+                <span id="writeWrongCount" class="stat-val" style="color:var(--accent)">0</span>
             </div>
         </div>
     </div>
@@ -1033,10 +1018,10 @@ let audioCtx = null;
 let currentMode = 'flashcard';
 
 // Test modu değişkenleri
-let testQuestions = [], testCurrentIndex = 0, testScore = 0, testStreak = 0;
-let writeQuestions = [], writeCurrentIndex = 0, writeCorrect = 0, writeAttempts = 0;
+let testQuestions = [], testCurrentIndex = 0, testCorrect = 0, testWrong = 0;
+let writeQuestions = [], writeCurrentIndex = 0, writeCorrect = 0, writeWrong = 0;
 
-// --- GÜÇLENDİRİLMİŞ MOBİL SES MOTORU ---
+// --- SES ---
 function initAudio() {
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1061,31 +1046,18 @@ function _playSound(type) {
             const o = audioCtx.createOscillator();
             o.connect(g); g.connect(audioCtx.destination);
             const t = audioCtx.currentTime;
-            if (type === 'up') {
+            if (type === 'up' || type === 'correct') {
                 o.frequency.setValueAtTime(600, t);
                 o.frequency.exponentialRampToValueAtTime(1200, t + 0.1);
                 g.gain.setValueAtTime(0.3, t);
                 g.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
                 o.start(t); o.stop(t + 0.15);
-            } else if (type === 'down') {
+            } else if (type === 'down' || type === 'wrong') {
                 o.frequency.setValueAtTime(300, t);
                 o.frequency.exponentialRampToValueAtTime(150, t + 0.15);
                 g.gain.setValueAtTime(0.3, t);
                 g.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
                 o.start(t); o.stop(t + 0.2);
-            } else if (type === 'correct') {
-                o.frequency.setValueAtTime(523.25, t);
-                o.frequency.setValueAtTime(659.25, t + 0.1);
-                o.frequency.setValueAtTime(783.99, t + 0.2);
-                g.gain.setValueAtTime(0.3, t);
-                g.gain.exponentialRampToValueAtTime(0.01, t + 0.4);
-                o.start(t); o.stop(t + 0.4);
-            } else if (type === 'wrong') {
-                o.frequency.setValueAtTime(200, t);
-                o.frequency.exponentialRampToValueAtTime(100, t + 0.3);
-                g.gain.setValueAtTime(0.3, t);
-                g.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
-                o.start(t); o.stop(t + 0.3);
             }
         } catch(e) {}
     });
@@ -1100,45 +1072,61 @@ function fetchNoCache(url) {
     return fetch(`${url}?v=${timestamp}`);
 }
 
-function calculateLessonProgress(lessonName, totalCards) {
+function normalizeText(text) {
+    // Büyük/küçük harf, noktalama, boşluk, apostrof farklarını kaldır
+    return text
+        .toLowerCase()
+        .replace(/[^\w\s]/g, '') // Tüm noktalama işaretlerini kaldır
+        .replace(/\s+/g, ' ')    // Fazla boşlukları tek boşluğa indir
+        .trim();
+}
+
+function calculateLessonProgress(lessonName) {
     const saved = localStorage.getItem(`lesson_progress_${lessonName}`);
     if (!saved) return 0;
     try {
         const data = JSON.parse(saved);
+        if (!data.cards || data.cards.length === 0) return 0;
         const learned = data.cards.filter(c => c.isLearned).length;
-        return Math.round((learned / totalCards) * 100);
+        return Math.round((learned / data.cards.length) * 100);
     } catch(e) {
         return 0;
     }
 }
 
 // --- VOICE ---
-if(autoTRVoice) document.getElementById('trVoiceToggle')?.classList.add('active');
-
 function toggleTRVoice() {
     initAudio();
     autoTRVoice = !autoTRVoice;
     localStorage.setItem('auto_tr_voice', autoTRVoice);
-    const btn = document.getElementById('trVoiceToggle');
-    if(autoTRVoice) { btn.classList.add('active'); speakTR(); }
-    else { btn.classList.remove('active'); window.speechSynthesis.cancel(); }
+    
+    // Tüm ekranlardaki butonları güncelle
+    ['trVoiceToggle', 'trVoiceToggleTest', 'trVoiceToggleWrite'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            if (autoTRVoice) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+    });
+    
+    if (autoTRVoice) speakCurrent();
+    else window.speechSynthesis.cancel();
 }
 
-function speakTR() {
-    if(!cards.length || !autoTRVoice || !cards[currentIndex]) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(cards[currentIndex].tr);
-    u.lang = 'tr-TR';
-    window.speechSynthesis.speak(u);
+function speakCurrent() {
+    if (currentMode === 'flashcard' && cards[currentIndex]) {
+        speakText(cards[currentIndex].tr, 'tr-TR');
+    } else if (currentMode === 'test' && testQuestions[testCurrentIndex]) {
+        speakText(testQuestions[testCurrentIndex].tr, 'tr-TR');
+    } else if (currentMode === 'write' && writeQuestions[writeCurrentIndex]) {
+        speakText(writeQuestions[writeCurrentIndex].tr, 'tr-TR');
+    }
 }
 
 function speakEN() {
     initAudio();
-    if(!cards.length || !cards[currentIndex]) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(cards[currentIndex].en);
-    u.lang = 'en-US';
-    window.speechSynthesis.speak(u);
+    if (!cards[currentIndex]) return;
+    speakText(cards[currentIndex].en, 'en-US');
 }
 
 function speakText(text, lang = 'en-US') {
@@ -1175,7 +1163,7 @@ function backToModeSelect() {
     showModeModal(activeLesson);
 }
 
-// --- FLASHCARD CORE (Mevcut Kod) ---
+// --- FLASHCARD CORE ---
 function toggleShuffle() {
     initAudio();
     shuffleMode = !shuffleMode;
@@ -1221,13 +1209,7 @@ function show() {
         tagF.style.display = tagB.style.display = "block";
     }
 
-    const learnedCount = cards.filter(c => c.isLearned).length;
-    const unknownCount = cards.filter(c => c.isUnknown).length;
-    
-    document.getElementById('remainCount').innerText = cards.length;
-    document.getElementById('correctCount').innerText = learnedCount;
-    document.getElementById('wrongCount').innerText = unknownCount;
-    document.getElementById('orderCount').innerText = (currentIndex + 1);
+    updateStats('flashcard');
     
     if(autoTRVoice) { setTimeout(speakTR, 300); }
     document.getElementById('guideLayer').style.opacity = "1";
@@ -1241,7 +1223,7 @@ function handleFlip(event) {
     mainCard.style.transform = `rotateY(${rotY}deg)`;
 }
 
-// --- SWIPE LOGIC (Mevcut) ---
+// --- SWIPE LOGIC ---
 const area = document.getElementById('swipeArea');
 const mainCard = document.getElementById('mainCard');
 
@@ -1350,16 +1332,17 @@ function saveProgress() {
 
 function resetLesson() { 
     initAudio();
-    if(confirm("Reset?")) { 
-        localStorage.removeItem(`lesson_progress_${activeLesson.name}`); 
-        if (currentMode === 'flashcard') {
-            loadLesson(activeLesson); 
-        } else if (currentMode === 'test') {
-            loadTestMode(activeLesson);
-        } else if (currentMode === 'write') {
-            loadWriteMode(activeLesson);
-        }
-    } 
+    if(!confirm("Reset?")) return;
+    
+    localStorage.removeItem(`lesson_progress_${activeLesson.name}`); 
+    
+    if (currentMode === 'flashcard') {
+        loadLesson(activeLesson); 
+    } else if (currentMode === 'test') {
+        loadTestMode(activeLesson);
+    } else if (currentMode === 'write') {
+        loadWriteMode(activeLesson);
+    }
 }
 
 function loadLesson(lesson) {
@@ -1395,24 +1378,34 @@ function loadLesson(lesson) {
         document.getElementById('test-screen').style.display = 'none';
         document.getElementById('write-screen').style.display = 'none';
         document.getElementById('shuffleToggle').classList.remove('active');
+        
+        // Voice buton durumunu sync et
+        if (autoTRVoice) document.getElementById('trVoiceToggle').classList.add('active');
+        else document.getElementById('trVoiceToggle').classList.remove('active');
+        
         show();
     });
 }
 
-// --- TEST MODU ---
+// --- TEST MODU - Flash Card yapısına göre düzenlendi ---
 function loadTestMode(lesson) {
     fetchNoCache(lesson.file).then(res => res.json()).then(data => {
         testQuestions = [...data].sort(() => Math.random() - 0.5);
         testCurrentIndex = 0;
-        testScore = 0;
-        testStreak = 0;
+        testCorrect = 0;
+        testWrong = 0;
         
-        document.getElementById('testTotal').innerText = testQuestions.length;
+        document.getElementById('testLessonTitle').innerText = lesson.name;
+        document.getElementById('testLessonContent').innerText = lesson.subTitle || "";
         document.getElementById('entry-page').style.display = 'none';
         document.getElementById('mode-modal').style.display = 'none';
         document.getElementById('app-screen').style.display = 'none';
         document.getElementById('test-screen').style.display = 'flex';
         document.getElementById('write-screen').style.display = 'none';
+        
+        // Voice buton durumunu sync et
+        if (autoTRVoice) document.getElementById('trVoiceToggleTest').classList.add('active');
+        else document.getElementById('trVoiceToggleTest').classList.remove('active');
         
         showTestQuestion();
     });
@@ -1421,11 +1414,10 @@ function loadTestMode(lesson) {
 function showTestQuestion() {
     const q = testQuestions[testCurrentIndex];
     document.getElementById('testQuestion').innerText = q.tr;
-    document.getElementById('testCurrent').innerText = testCurrentIndex + 1;
-    document.getElementById('testProgressFill').style.width = ((testCurrentIndex / testQuestions.length) * 100) + '%';
-    document.getElementById('testScore').innerText = testScore;
-    document.getElementById('testStreak').innerText = testStreak;
     document.getElementById('nextTestBtn').style.display = 'none';
+    
+    // Stats güncelle
+    updateStats('test');
     
     // 3 yanlış seçenek oluştur
     const otherOptions = testQuestions
@@ -1447,18 +1439,17 @@ function showTestQuestion() {
         container.appendChild(btn);
     });
     
-    speakText(q.tr, 'tr-TR');
+    if(autoTRVoice) speakText(q.tr, 'tr-TR');
 }
 
 function selectTestOption(btn, selected, correct) {
-    const allBtns = document.querySelectorAll('.option-btn');
+    const allBtns = document.querySelectorAll('#testOptions .option-btn');
     allBtns.forEach(b => b.classList.add('disabled'));
     
     if (selected === correct) {
         btn.classList.add('correct');
         _playSound('correct');
-        testScore += 10 + (testStreak * 2);
-        testStreak++;
+        testCorrect++;
         speakText(correct, 'en-US');
     } else {
         btn.classList.add('wrong');
@@ -1466,11 +1457,10 @@ function selectTestOption(btn, selected, correct) {
             if (b.innerText === correct) b.classList.add('correct');
         });
         _playSound('wrong');
-        testStreak = 0;
+        testWrong++;
     }
     
-    document.getElementById('testScore').innerText = testScore;
-    document.getElementById('testStreak').innerText = testStreak;
+    updateStats('test');
     document.getElementById('nextTestBtn').style.display = 'flex';
 }
 
@@ -1486,26 +1476,32 @@ function nextTestQuestion() {
 
 function showTestCompletion() {
     document.getElementById('completionText').innerHTML = 
-        `Score: <span style="color: var(--secondary); font-size: 32px;">${testScore}</span><br>` +
-        `Accuracy: ${Math.round((testScore / (testQuestions.length * 10)) * 100)}%`;
+        `Correct: <span style="color: var(--secondary); font-size: 32px;">${testCorrect}</span><br>` +
+        `Wrong: <span style="color: var(--accent); font-size: 32px;">${testWrong}</span><br>` +
+        `Accuracy: ${Math.round((testCorrect / testQuestions.length) * 100)}%`;
     document.getElementById('completion-overlay').style.display = 'flex';
     createConfetti();
 }
 
-// --- YAZMA MODU ---
+// --- YAZMA MODU - Flash Card yapısına göre düzenlendi ---
 function loadWriteMode(lesson) {
     fetchNoCache(lesson.file).then(res => res.json()).then(data => {
         writeQuestions = [...data].sort(() => Math.random() - 0.5);
         writeCurrentIndex = 0;
         writeCorrect = 0;
-        writeAttempts = 0;
+        writeWrong = 0;
         
-        document.getElementById('writeTotal').innerText = writeQuestions.length;
+        document.getElementById('writeLessonTitle').innerText = lesson.name;
+        document.getElementById('writeLessonContent').innerText = lesson.subTitle || "";
         document.getElementById('entry-page').style.display = 'none';
         document.getElementById('mode-modal').style.display = 'none';
         document.getElementById('app-screen').style.display = 'none';
         document.getElementById('test-screen').style.display = 'none';
         document.getElementById('write-screen').style.display = 'flex';
+        
+        // Voice buton durumunu sync et
+        if (autoTRVoice) document.getElementById('trVoiceToggleWrite').classList.add('active');
+        else document.getElementById('trVoiceToggleWrite').classList.remove('active');
         
         showWriteQuestion();
     });
@@ -1514,27 +1510,26 @@ function loadWriteMode(lesson) {
 function showWriteQuestion() {
     const q = writeQuestions[writeCurrentIndex];
     document.getElementById('writePrompt').innerText = q.tr;
-    document.getElementById('writeCurrent').innerText = writeCurrentIndex + 1;
-    document.getElementById('writeProgressFill').style.width = ((writeCurrentIndex / writeQuestions.length) * 100) + '%';
-    document.getElementById('writeCorrect').innerText = writeCorrect;
-    document.getElementById('writeAttempts').innerText = writeAttempts;
     
     const input = document.getElementById('writeInput');
     input.value = '';
     input.className = 'write-input';
     input.disabled = false;
-    input.focus();
     
     document.getElementById('writeFeedback').className = 'write-feedback';
     document.getElementById('writeFeedback').innerHTML = '';
     document.getElementById('checkWriteBtn').style.display = 'flex';
     document.getElementById('nextWriteBtn').style.display = 'none';
     
-    speakText(q.tr, 'tr-TR');
+    // Stats güncelle
+    updateStats('write');
+    
+    if(autoTRVoice) speakText(q.tr, 'tr-TR');
     
     // Enter tuşu desteği
-    input.onkeypress = (e) => {
+    input.onkeydown = (e) => {
         if (e.key === 'Enter') {
+            e.preventDefault();
             if (document.getElementById('nextWriteBtn').style.display !== 'none') {
                 nextWriteQuestion();
             } else {
@@ -1542,44 +1537,42 @@ function showWriteQuestion() {
             }
         }
     };
+    
+    setTimeout(() => input.focus(), 100);
 }
 
 function checkWriteAnswer() {
     const q = writeQuestions[writeCurrentIndex];
     const input = document.getElementById('writeInput');
-    const userAnswer = input.value.trim().toLowerCase();
-    const correctAnswer = q.en.toLowerCase();
-    
-    writeAttempts++;
-    document.getElementById('writeAttempts').innerText = writeAttempts;
+    const userAnswer = input.value.trim();
+    const correctAnswer = q.en;
     
     input.disabled = true;
     const feedback = document.getElementById('writeFeedback');
     
-    // Esnek karşılaştırma (noktalama ve boşlukları görmezden gel)
-    const normalize = (str) => str.replace(/[^\w\s]/gi, '').replace(/\s+/g, ' ').trim();
+    // Normalize edilmiş karşılaştırma
+    const normalizedUser = normalizeText(userAnswer);
+    const normalizedCorrect = normalizeText(correctAnswer);
     
-    if (normalize(userAnswer) === normalize(correctAnswer) || 
-        correctAnswer.includes(userAnswer) || 
-        userAnswer.includes(correctAnswer)) {
-        
+    if (normalizedUser === normalizedCorrect) {
         input.classList.add('correct');
         feedback.className = 'write-feedback correct show';
         feedback.innerHTML = `<span class="material-symbols-rounded" style="vertical-align: middle;">check_circle</span> Correct!`;
         _playSound('correct');
         writeCorrect++;
-        document.getElementById('writeCorrect').innerText = writeCorrect;
-        speakText(q.en, 'en-US');
+        speakText(correctAnswer, 'en-US');
     } else {
         input.classList.add('wrong');
         feedback.className = 'write-feedback wrong show';
         feedback.innerHTML = `
             <span class="material-symbols-rounded" style="vertical-align: middle;">cancel</span> Wrong!<br>
-            <small>Correct: <strong>${q.en}</strong></small>
+            <small>Correct: <strong>${correctAnswer}</strong></small>
         `;
         _playSound('wrong');
+        writeWrong++;
     }
     
+    updateStats('write');
     document.getElementById('checkWriteBtn').style.display = 'none';
     document.getElementById('nextWriteBtn').style.display = 'flex';
 }
@@ -1595,15 +1588,38 @@ function nextWriteQuestion() {
 }
 
 function showWriteCompletion() {
-    const accuracy = Math.round((writeCorrect / writeQuestions.length) * 100);
     document.getElementById('completionText').innerHTML = 
-        `Correct: <span style="color: var(--secondary); font-size: 32px;">${writeCorrect}/${writeQuestions.length}</span><br>` +
-        `Accuracy: ${accuracy}%`;
+        `Correct: <span style="color: var(--secondary); font-size: 32px;">${writeCorrect}</span><br>` +
+        `Wrong: <span style="color: var(--accent); font-size: 32px;">${writeWrong}</span><br>` +
+        `Accuracy: ${Math.round((writeCorrect / writeQuestions.length) * 100)}%`;
     document.getElementById('completion-overlay').style.display = 'flex';
     createConfetti();
 }
 
-// --- GENEL FONKSİYONLAR ---
+// --- ORTAK FONKSİYONLAR ---
+function updateStats(mode) {
+    if (mode === 'flashcard') {
+        const learned = cards.filter(c => c.isLearned).length;
+        const unknown = cards.filter(c => c.isUnknown).length;
+        document.getElementById('remainCount').innerText = cards.length;
+        document.getElementById('correctCount').innerText = learned;
+        document.getElementById('wrongCount').innerText = unknown;
+        document.getElementById('orderCount').innerText = (currentIndex + 1);
+    } else if (mode === 'test') {
+        const remain = testQuestions.length - testCurrentIndex;
+        document.getElementById('testRemainCount').innerText = remain;
+        document.getElementById('testCorrectCount').innerText = testCorrect;
+        document.getElementById('testWrongCount').innerText = testWrong;
+        document.getElementById('testOrderCount').innerText = (testCurrentIndex + 1);
+    } else if (mode === 'write') {
+        const remain = writeQuestions.length - writeCurrentIndex;
+        document.getElementById('writeRemainCount').innerText = remain;
+        document.getElementById('writeCorrectCount').innerText = writeCorrect;
+        document.getElementById('writeWrongCount').innerText = writeWrong;
+        document.getElementById('writeOrderCount').innerText = (writeCurrentIndex + 1);
+    }
+}
+
 function showCompletion() {
     document.getElementById('completionText').innerText = "Tebrikler, bu dersi bitirdin!";
     document.getElementById('completion-overlay').style.display = 'flex';
@@ -1616,7 +1632,7 @@ function closeCompletion() {
 }
 
 function createConfetti() {
-    const colors = ['#38bdf8', '#2dd4tf', '#fb7185', '#f97316', '#ffffff'];
+    const colors = ['#38bdf8', '#2dd4bf', '#fb7185', '#f97316', '#ffffff'];
     const overlay = document.getElementById('completion-overlay');
     for (let i = 0; i < 60; i++) {
         const confetti = document.createElement('div');
@@ -1639,7 +1655,7 @@ fetchNoCache('data.json').then(res => res.json()).then(data => {
         div.className = 'lesson-card';
         
         // İlerleme hesapla
-        const progress = calculateLessonProgress(lesson.name, lesson.count || 10);
+        const progress = calculateLessonProgress(lesson.name);
         
         div.innerHTML = `
             <h3>${lesson.name}</h3>
