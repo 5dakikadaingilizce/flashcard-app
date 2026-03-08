@@ -101,7 +101,7 @@
   { "no": 100, "tr": "Ali’nin kaç parası olabilir?", "en": "How much money can Ali have?" },
   { "no": 101, "tr": "Ali’nin kaç parası olabilirdi?", "en": "How much money could Ali have?" },
   { "no": 102, "tr": "Ali’nin kaç paraya ihtiyacı var?", "en": "How much money does Ali need?" },
-  { "no": 103, "tr": "Ali’nin kaç parası olmalı?", "en": "How much money should Ali have?" },
+  { "no": 103, "tr": "Ali’nin kaç parası olmalı?", "en": "How much money must Ali have?" },
   { "no": 104, "tr": "Ali’nin kaç parası olmak zorunda?", "en": "How much money does Ali have to have?" },
   { "no": 105, "tr": "Niye iyiydi?", "en": "Why was it good?" },
   { "no": 106, "tr": "Niye iyi değildi?", "en": "Why wasn't it good?" },
