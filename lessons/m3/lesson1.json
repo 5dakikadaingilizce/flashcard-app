@@ -5,7 +5,7 @@
   { "id": 4, "tr": "Cebinde kaç para var?", "en": "How much money is there in your pocket?" },
   { "id": 5, "tr": "Senin kaç tane çocuğun var?", "en": "How many children do you have?" },
   { "id": 6, "tr": "Benim bankada hiç param yok.", "en": "I have no money in the bank. / I don't have any money in the bank" },
-  { "id": 7, "tr": "Denizin dibinde birkaç tane köpekbalığı var.", "en": "There are some sharks at the bottom of the sea." },
+  { "id": 7, "tr": "Denizin dibinde birkaç tane köpekbalığı var.", "en": "There are some sharks below the sea." },
   { "id": 8, "tr": "Senin sınıfında kaç tane öğrenci var?", "en": "How many students are there in your class?" },
   { "id": 9, "tr": "Evimizin yakınlarında çok güzel bir göl var.", "en": "There is a very beautiful lake near our house." },
   { "id": 10, "tr": "Bugün sokaklarda hiç insan yok.", "en": "There are no people on the streets today. / There isn't any people on the streets today" },
