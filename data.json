@@ -1,11 +1,16 @@
-[
-  { "id": 1, "name": "Lesson #1", "subTitle": "Tüm Zamanlar : Go / Went / Gone", "file": "lessons/lesson1.json" },
-  { "id": 2, "name": "Lesson #2", "subTitle": " + olumlu cümle kurma", "file": "lessons/lesson2.json" },
-  { "id": 3, "name": "Lesson #3", "subTitle": " - olumsuz cümle kurma", "file": "lessons/lesson3.json" },
-  { "id": 4, "name": "Lesson #4", "subTitle": " ? soru cümlesi kurma", "file": "lessons/lesson4.json" },
-  { "id": 5, "name": "Lesson #5", "subTitle": " WH ile soru cümlesi kurma", "file": "lessons/lesson5.json" },
-  { "id": 6, "name": "Lesson #6", "subTitle": "V2 kullanımı", "file": "lessons/lesson6.json" },
-  { "id": 7, "name": "Lesson #7", "subTitle": "V3 kullanımı", "file": "lessons/lesson7.json" },
-  { "id": 8, "name": "Lesson #8", "subTitle": "V2-V3 kullanımı", "file": "lessons/lesson8.json" },
-  { "id": 9, "name": "Lesson #9", "subTitle": " To + tüm kullanımlar", "file": "lessons/lesson9.json" }
-]
+{
+  "module3": [
+    { "id": 1, "name": "Lesson #1", "subTitle": "Sınav Zamanı", "file": "lessons/m3/lesson1.json"  }
+  ],
+  "module4": [
+    { "id": 1, "name": "Lesson #1", "subTitle": "Tüm Zamanlar : Go / Went / Gone", "file": "lessons/m4/lesson1.json" },
+    { "id": 2, "name": "Lesson #2", "subTitle": " + olumlu cümle kurma", "file": "lessons/m4/lesson2.json" },
+    { "id": 3, "name": "Lesson #3", "subTitle": " - olumsuz cümle kurma", "file": "lessons/m4/lesson3.json" },
+    { "id": 4, "name": "Lesson #4", "subTitle": " ? soru cümlesi kurma", "file": "lessons/m4/lesson4.json" },
+    { "id": 5, "name": "Lesson #5", "subTitle": " WH ile soru cümlesi kurma", "file": "lessons/m4/lesson5.json" },
+    { "id": 6, "name": "Lesson #6", "subTitle": "V2 kullanımı", "file": "lessons/m4/lesson6.json" },
+    { "id": 7, "name": "Lesson #7", "subTitle": "V3 kullanımı", "file": "lessons/m4/lesson7.json" },
+    { "id": 8, "name": "Lesson #8", "subTitle": "V2-V3 kullanımı", "file": "lessons/m4/lesson8.json" },
+    { "id": 9, "name": "Lesson #9", "subTitle": " To + tüm kullanımlar", "file": "lessons/m4/lesson9.json" }
+  ]
+}
