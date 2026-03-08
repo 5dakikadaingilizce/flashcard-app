@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce Flash Card - V.6.1</title>
+    <title>5 Dakikada İngilizce Flash Card - V.6.3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -20,24 +20,32 @@
             --shadow-glow: 0 0 30px rgba(249, 115, 22, 0.15);
         }
 
+        /* FIX 3: Ekrana sığmama - html/body scale ile tam fit */
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+
         body { 
             margin: 0; 
             font-family: 'Inter', sans-serif; 
             background: radial-gradient(circle at top right, #1e293b, #0f172a); 
-            min-height: 100dvh; 
+            height: 100dvh;
+            max-height: 100dvh;
             display: flex; 
             justify-content: center; 
-            align-items: center; 
+            align-items: flex-start;
             color: var(--text-main); 
-            overflow: hidden; 
-            padding: 10px; 
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0;
             box-sizing: border-box; 
             user-select: none; 
             -webkit-user-select: none; 
             touch-action: manipulation; 
         }
 
-        #entry-page { display: flex; flex-direction: column; align-items: center; width: 100%; max-height: 95vh; overflow-y: auto; }
+        #entry-page { display: flex; flex-direction: column; align-items: center; width: 100%; padding: 15px 10px 40px; box-sizing: border-box; }
         
         .main-title-white { 
             font-family: 'Poppins'; font-size: 24px; font-weight: 900; 
@@ -53,7 +61,7 @@
 
         #lesson-list-container { 
             width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; max-width: 500px; padding-bottom: 40px; 
+            gap: 12px; max-width: 500px; padding-bottom: 20px; 
         }
 
         .lesson-card { 
@@ -217,17 +225,23 @@
             margin-top: 4px;
         }
 
+        /* FIX 3: app/test/write screen - scrollable container */
         #app-screen, #test-screen, #write-screen { 
             display: none; 
             width: 100%; 
-            max-width: 400px; 
-            flex-direction: column; 
+            max-width: 420px;
+            flex-direction: column;
+            padding: 10px 10px 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            max-height: 100dvh;
         }
         
+        /* FIX 2: top-bar - mod göstergesi top-bar içine alındı, artık ayrı absolute pozisyon değil */
         .top-bar { 
             display: flex; 
             justify-content: space-between; 
-            margin-bottom: 12px; 
+            margin-bottom: 10px; 
             gap: 4px; 
             width: 100%;
             background: rgba(15, 23, 42, 0.6);
@@ -271,11 +285,22 @@
             border-color: rgba(255,255,255,0.3);
             color: white;
         }
+        /* FIX 2: Mod butonu artık top-bar içinde bir nav-btn olarak, ayrıca gradient stil */
+        .nav-btn.mode-nav-btn {
+            background: linear-gradient(135deg, #ff4d4d 0%, #f97316 100%);
+            color: white;
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+        }
+        .nav-btn.mode-nav-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        }
 
         .app-box { 
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            padding: 20px; 
+            padding: 16px; 
             border-radius: 30px; 
             border: 1px solid rgba(255, 255, 255, 0.12); 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), var(--shadow-glow); 
@@ -290,18 +315,18 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         }
 
-        .app-logo-small { width: 50px; margin-bottom: 5px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
-        .app-brand-text { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 2px; letter-spacing: 0.5px; }
+        .app-logo-small { width: 44px; margin-bottom: 4px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
+        .app-brand-text { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 2px; letter-spacing: 0.5px; }
         
         .lesson-title-grad { 
             background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            font-weight: 900; font-size: 28px; font-family: 'Poppins'; margin: 0 0 4px 0;
+            font-weight: 900; font-size: 26px; font-family: 'Poppins'; margin: 0 0 2px 0;
             display: block !important; width: 100% !important; clear: both !important; line-height: 1.3 !important;
             filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.2));
         }
         .lesson-content-desc { 
             color: #94a3b8 !important; -webkit-text-fill-color: #94a3b8 !important;
-            font-size: 13px !important; font-weight: 500 !important; margin: 0 0 15px 0 !important; 
+            font-size: 12px !important; font-weight: 500 !important; margin: 0 0 10px 0 !important; 
             display: block !important; width: 100% !important; clear: both !important; line-height: 1.4 !important;
         }
 
@@ -347,7 +372,8 @@
             100% { opacity: 0.2; transform: scale(0.95); }
         }
 
-        .card-container { perspective: 1000px; width: 100%; height: 210px; margin: 10px 0; position: relative; }
+        /* FIX 3: Card container height küçültüldü */
+        .card-container { perspective: 1000px; width: 100%; height: 185px; margin: 8px 0; position: relative; }
         .card { 
             width: 100%; 
             height: 100%; 
@@ -366,7 +392,7 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            padding: 25px; 
+            padding: 20px; 
             border-radius: 25px; 
             border: 1px solid rgba(255,255,255,0.15); 
             box-sizing: border-box;
@@ -375,14 +401,14 @@
         .front { 
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
             color: var(--secondary); 
-            font-size: 26px; 
+            font-size: 24px; 
             font-weight: 800; 
         }
         .back { 
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
             color: var(--text-main); 
             transform: rotateY(180deg); 
-            font-size: 22px; 
+            font-size: 20px; 
             font-weight: 700; 
             border-color: var(--primary); 
         }
@@ -406,12 +432,12 @@
             color: white; 
         }
 
-        .controls-row { display: flex; gap: 8px; margin-bottom: 12px; }
+        .controls-row { display: flex; gap: 8px; margin-bottom: 10px; }
         .control-btn { 
             flex: 1; 
             background: rgba(51, 65, 85, 0.6); 
             border: 1px solid rgba(255,255,255,0.08); 
-            padding: 14px; 
+            padding: 12px; 
             border-radius: 14px; 
             color: white; 
             cursor: pointer; 
@@ -443,14 +469,14 @@
             background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%); 
             color: white; 
             width: 100%; 
-            padding: 18px; 
+            padding: 15px; 
             border-radius: 18px; 
-            font-size: 18px; 
+            font-size: 17px; 
             font-weight: 900; 
             border: none; 
             font-family: 'Poppins'; 
             cursor: pointer; 
-            margin-bottom: 15px; 
+            margin-bottom: 12px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -489,7 +515,7 @@
             display: flex; 
             justify-content: space-between; 
             background: rgba(15, 23, 42, 0.5); 
-            padding: 16px 8px; 
+            padding: 12px 8px; 
             border-radius: 20px; 
             border: 1px solid rgba(255,255,255,0.06);
             backdrop-filter: blur(10px);
@@ -531,14 +557,14 @@
         .stat-label-row .material-symbols-rounded { font-size: 12px; }
         .stat-val { 
             font-weight: 900; 
-            font-size: 16px; 
+            font-size: 15px; 
             color: var(--primary);
             font-variant-numeric: tabular-nums;
             text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
         }
 
         .v-tag { 
-            position: absolute; 
+            position: fixed; 
             top: 10px; 
             right: 10px; 
             font-size: 10px; 
@@ -549,6 +575,7 @@
             border: 1px solid rgba(255,255,255,0.05);
             font-weight: 600;
             letter-spacing: 0.5px;
+            z-index: 9999;
         }
 
         #completion-overlay {
@@ -609,14 +636,14 @@
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
             border: 1px solid var(--glass-border);
             border-radius: 25px;
-            padding: 30px 20px;
-            margin-bottom: 20px;
+            padding: 24px 20px;
+            margin-bottom: 16px;
             text-align: center;
             font-family: 'Poppins';
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             color: var(--secondary);
-            min-height: 120px;
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -626,17 +653,17 @@
         .options-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 16px;
         }
 
         .option-btn {
             background: rgba(51, 65, 85, 0.6);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 16px;
-            padding: 18px 20px;
+            padding: 15px 20px;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -684,11 +711,11 @@
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
             border: 1px solid var(--glass-border);
             border-radius: 25px;
-            padding: 30px 20px;
-            margin-bottom: 20px;
+            padding: 24px 20px;
+            margin-bottom: 16px;
             text-align: center;
             font-family: 'Poppins';
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
             color: var(--secondary);
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4);
@@ -696,7 +723,7 @@
 
         .write-input-container {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .write-input {
@@ -704,9 +731,9 @@
             background: rgba(15, 23, 42, 0.6);
             border: 2px solid rgba(255,255,255,0.1);
             border-radius: 20px;
-            padding: 20px;
+            padding: 18px;
             color: white;
-            font-size: 18px;
+            font-size: 17px;
             font-family: 'Inter', sans-serif;
             font-weight: 600;
             text-align: center;
@@ -760,32 +787,14 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* FIX 2: mode-indicator artık kullanılmıyor - top-bar içinde nav-btn olarak */
         .mode-indicator {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: var(--logo-grad);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 800;
-            font-family: 'Poppins';
-            letter-spacing: 1px;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-        }
-
-        .mode-indicator .material-symbols-rounded {
-            font-size: 16px;
+            display: none;
         }
     </style>
 </head>
 <body>
-<div class="v-tag">V.6.1</div>
+<div class="v-tag">V.6.3</div>
 
 <!-- GİRİŞ SAYFASI -->
 <div id="entry-page">
@@ -819,10 +828,9 @@
 
 <!-- FLASHCARD MODU -->
 <div id="app-screen">
-    <div class="mode-indicator" onclick="backToModeSelect()">
-        <span class="material-symbols-rounded">flip</span> FLASH
-    </div>
+    <!-- FIX 2: Mod butonu top-bar içine alındı -->
     <div class="top-bar">
+        <button class="nav-btn mode-nav-btn" onclick="backToModeSelect()"><span class="material-symbols-rounded">flip</span> FLASH</button>
         <button class="nav-btn" onclick="goHome()"><span class="material-symbols-rounded">home</span> HOME</button>
         <button id="trVoiceToggle" class="nav-btn" onclick="toggleTRVoice()">
             <span class="material-symbols-rounded">volume_up</span> AUTO TR
@@ -894,12 +902,11 @@
     </div>
 </div>
 
-<!-- TEST MODU - Flash Card ile aynı yapı -->
+<!-- TEST MODU -->
 <div id="test-screen">
-    <div class="mode-indicator" onclick="backToModeSelect()">
-        <span class="material-symbols-rounded">quiz</span> TEST
-    </div>
+    <!-- FIX 2: Mod butonu top-bar içine alındı -->
     <div class="top-bar">
+        <button class="nav-btn mode-nav-btn" onclick="backToModeSelect()"><span class="material-symbols-rounded">quiz</span> TEST</button>
         <button class="nav-btn" onclick="goHome()"><span class="material-symbols-rounded">home</span> HOME</button>
         <button id="trVoiceToggleTest" class="nav-btn" onclick="toggleTRVoice()">
             <span class="material-symbols-rounded">volume_up</span> AUTO TR
@@ -943,12 +950,11 @@
     </div>
 </div>
 
-<!-- YAZMA MODU - Flash Card ile aynı yapı -->
+<!-- YAZMA MODU -->
 <div id="write-screen">
-    <div class="mode-indicator" onclick="backToModeSelect()">
-        <span class="material-symbols-rounded">edit</span> WRITE
-    </div>
+    <!-- FIX 2: Mod butonu top-bar içine alındı -->
     <div class="top-bar">
+        <button class="nav-btn mode-nav-btn" onclick="backToModeSelect()"><span class="material-symbols-rounded">edit</span> WRITE</button>
         <button class="nav-btn" onclick="goHome()"><span class="material-symbols-rounded">home</span> HOME</button>
         <button id="trVoiceToggleWrite" class="nav-btn" onclick="toggleTRVoice()">
             <span class="material-symbols-rounded">volume_up</span> AUTO TR
@@ -1072,12 +1078,14 @@ function fetchNoCache(url) {
     return fetch(`${url}?v=${timestamp}`);
 }
 
+// FIX 1: Büyük/küçük harf, noktalama, boşluk, apostrof duyarsız normalize
 function normalizeText(text) {
-    // Büyük/küçük harf, noktalama, boşluk, apostrof farklarını kaldır
     return text
         .toLowerCase()
-        .replace(/[^\w\s]/g, '') // Tüm noktalama işaretlerini kaldır
-        .replace(/\s+/g, ' ')    // Fazla boşlukları tek boşluğa indir
+        .replace(/[''`]/g, "'")         // Farklı apostrof tiplerini normalize et
+        .replace(/[^a-z0-9\s']/gi, '')  // Noktalama kaldır (apostrof hariç)
+        .replace(/'/g, '')              // Apostrofları da kaldır
+        .replace(/\s+/g, ' ')           // Fazla boşluk
         .trim();
 }
 
@@ -1100,7 +1108,6 @@ function toggleTRVoice() {
     autoTRVoice = !autoTRVoice;
     localStorage.setItem('auto_tr_voice', autoTRVoice);
     
-    // Tüm ekranlardaki butonları güncelle
     ['trVoiceToggle', 'trVoiceToggleTest', 'trVoiceToggleWrite'].forEach(id => {
         const btn = document.getElementById(id);
         if (btn) {
@@ -1379,7 +1386,6 @@ function loadLesson(lesson) {
         document.getElementById('write-screen').style.display = 'none';
         document.getElementById('shuffleToggle').classList.remove('active');
         
-        // Voice buton durumunu sync et
         if (autoTRVoice) document.getElementById('trVoiceToggle').classList.add('active');
         else document.getElementById('trVoiceToggle').classList.remove('active');
         
@@ -1387,7 +1393,7 @@ function loadLesson(lesson) {
     });
 }
 
-// --- TEST MODU - Flash Card yapısına göre düzenlendi ---
+// --- TEST MODU ---
 function loadTestMode(lesson) {
     fetchNoCache(lesson.file).then(res => res.json()).then(data => {
         testQuestions = [...data].sort(() => Math.random() - 0.5);
@@ -1403,7 +1409,6 @@ function loadTestMode(lesson) {
         document.getElementById('test-screen').style.display = 'flex';
         document.getElementById('write-screen').style.display = 'none';
         
-        // Voice buton durumunu sync et
         if (autoTRVoice) document.getElementById('trVoiceToggleTest').classList.add('active');
         else document.getElementById('trVoiceToggleTest').classList.remove('active');
         
@@ -1416,10 +1421,8 @@ function showTestQuestion() {
     document.getElementById('testQuestion').innerText = q.tr;
     document.getElementById('nextTestBtn').style.display = 'none';
     
-    // Stats güncelle
     updateStats('test');
     
-    // 3 yanlış seçenek oluştur
     const otherOptions = testQuestions
         .filter(item => item.en !== q.en)
         .sort(() => Math.random() - 0.5)
@@ -1483,7 +1486,7 @@ function showTestCompletion() {
     createConfetti();
 }
 
-// --- YAZMA MODU - Flash Card yapısına göre düzenlendi ---
+// --- YAZMA MODU ---
 function loadWriteMode(lesson) {
     fetchNoCache(lesson.file).then(res => res.json()).then(data => {
         writeQuestions = [...data].sort(() => Math.random() - 0.5);
@@ -1499,7 +1502,6 @@ function loadWriteMode(lesson) {
         document.getElementById('test-screen').style.display = 'none';
         document.getElementById('write-screen').style.display = 'flex';
         
-        // Voice buton durumunu sync et
         if (autoTRVoice) document.getElementById('trVoiceToggleWrite').classList.add('active');
         else document.getElementById('trVoiceToggleWrite').classList.remove('active');
         
@@ -1521,12 +1523,10 @@ function showWriteQuestion() {
     document.getElementById('checkWriteBtn').style.display = 'flex';
     document.getElementById('nextWriteBtn').style.display = 'none';
     
-    // Stats güncelle
     updateStats('write');
     
     if(autoTRVoice) speakText(q.tr, 'tr-TR');
     
-    // Enter tuşu desteği
     input.onkeydown = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -1541,6 +1541,7 @@ function showWriteQuestion() {
     setTimeout(() => input.focus(), 100);
 }
 
+// FIX 1: Büyük/küçük harf duyarsız cevap kontrolü
 function checkWriteAnswer() {
     const q = writeQuestions[writeCurrentIndex];
     const input = document.getElementById('writeInput');
@@ -1550,7 +1551,7 @@ function checkWriteAnswer() {
     input.disabled = true;
     const feedback = document.getElementById('writeFeedback');
     
-    // Normalize edilmiş karşılaştırma
+    // FIX 1: normalizeText ile büyük/küçük harf, noktalama, apostrof farkı yok sayılır
     const normalizedUser = normalizeText(userAnswer);
     const normalizedCorrect = normalizeText(correctAnswer);
     
@@ -1654,7 +1655,6 @@ fetchNoCache('data.json').then(res => res.json()).then(data => {
         const div = document.createElement('div');
         div.className = 'lesson-card';
         
-        // İlerleme hesapla
         const progress = calculateLessonProgress(lesson.name);
         
         div.innerHTML = `
