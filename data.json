@@ -1,6 +1,6 @@
 [
   { "id": 1, "name": "Lesson #1", "subTitle": "Tüm Zamanlar : Go / Went / Gone", "file": "lessons/lesson1.json" },
-  { "id": 2, "name": "Lesson #2", "subTitle": " + olumlu cümle kurma", "file": "lessons/lesson2.json" },
+  { "id": 2, "name": "Lesson #2", "subTitle": " + olumlu cümle kurma https://www.youtube.com/watch?v=LjCnskxFdmE ", "file": "lessons/lesson2.json" },
   { "id": 3, "name": "Lesson #3", "subTitle": " - olumsuz cümle kurma", "file": "lessons/lesson3.json" },
   { "id": 4, "name": "Lesson #4", "subTitle": " ? soru cümlesi kurma", "file": "lessons/lesson4.json" },
   { "id": 5, "name": "Lesson #5", "subTitle": " WH ile soru cümlesi kurma", "file": "lessons/lesson5.json" },
