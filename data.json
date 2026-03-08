@@ -1,6 +1,7 @@
 {
   "module3": [
-    { "id": 1, "name": "Lesson #1", "subTitle": "Sınav Zamanı", "file": "lessons/m3/lesson1.json"  }
+    { "id": 1, "name": "Lesson #1", "subTitle": "Sınav Zamanı", "file": "lessons/m3/lesson1.json"  },
+    { "id": 1, "name": "Lesson #2", "subTitle": "fiilsiz Cümleler", "file": "lessons/m3/lesson1.json"  }
   ],
   "module4": [
     { "id": 1, "name": "Lesson #1", "subTitle": "Tüm Zamanlar : Go / Went / Gone", "file": "lessons/m4/lesson1.json" },
