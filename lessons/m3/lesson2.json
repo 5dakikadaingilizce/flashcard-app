@@ -65,7 +65,7 @@
   { "id": 64, "tr": "Kızım sabahları sinirli değildir.", "en": "My daughter isn't angry in the mornings." },
   { "id": 65, "tr": "Kızın sabahları sinirli midir?", "en": "Is your daughter angry in the mornings?" },
   { "id": 66, "tr": "Müdürüm öğlenleyin toplantıda.", "en": "My manager is at the meeting at noon." },
-  { "id": 67, "tr": "Müdürüm öğlenleyin toplantıda değil.", "en": "My manager isn't in a meeting at noon." },
+  { "id": 67, "tr": "Müdürüm öğlenleyin toplantıda değil.", "en": "My manager isn't at the meeting at noon." },
   { "id": 68, "tr": "Müdürüm öğlenleyin toplantıda mı?", "en": "Is my manager at the meeting at noon?" },
   { "id": 69, "tr": "Müdürüm öğlenleyin niye toplantıda?", "en": "Why is my manager at the meeting at noon?" },
   { "id": 70, "tr": "Müdürüm öğlenleyin niye toplantıda değil?", "en": "Why isn't my manager at the meeting at noon?" },
