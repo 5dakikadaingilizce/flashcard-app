@@ -142,7 +142,7 @@
   {"id": 141, "tr": "Ödevimi bitiriyorum.", "en": "I finish my homework."},
   {"id": 142, "tr": "Ödevimi bitirmiyorum.", "en": "I don't finish my homework."},
   {"id": 143, "tr": "Ödevini bitiriyor musun?", "en": "Do you finish your homework?"},
-  {"id": 144, "tr": "Ne bitiriyorsun?", "en": "What do you finish?"},
+  {"id": 144, "tr": "Ödevini ne zaman bitiriyorsun?", "en": "When do you finish your homework?"},
   {"id": 145, "tr": "Film 2 saat içinde bitiyor.", "en": "The movie finishes in 2 hours."},
   {"id": 146, "tr": "Film 2 saat içinde bitmiyor.", "en": "The movie doesn't finish in 2 hours."},
   {"id": 147, "tr": "Film 2 saat içinde bitiyor mu?", "en": "Does the movie finish in 2 hours?"},
