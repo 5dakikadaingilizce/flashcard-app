@@ -3,7 +3,7 @@
     { "id": 1, "name": "Lesson #1", "subTitle": "Sınav Zamanı", "file": "lessons/m3/lesson1.json" },
     { "id": 2, "name": "Lesson #2", "subTitle": "Fiilsiz Cümleler", "file": "lessons/m3/lesson2.json" },
     { "id": 3, "name": "Lesson #3", "subTitle": "PRESENT TENSE (+,-,?,Wh) Cümle Kurma", "file": "lessons/m3/lesson3.json" },
-    { "id": 4, "name": "Lesson #4", "subTitle": "Yakında....", "file": "lessons/m3/lesson4.json" },
+    { "id": 4, "name": "Lesson #4", "subTitle": "PRESENT CONTİNİOUS TENSE (+,-,?,Wh) Cümle Kurma", "file": "lessons/m3/lesson4.json" },
     { "id": 5, "name": "Lesson #5", "subTitle": "Yakında....", "file": "lessons/m3/lesson5.json" },
     { "id": 6, "name": "Lesson #6", "subTitle": "Yakında....", "file": "lessons/m3/lesson6.json" },
     { "id": 7, "name": "Lesson #7", "subTitle": "Yakında....", "file": "lessons/m3/lesson7.json" },
