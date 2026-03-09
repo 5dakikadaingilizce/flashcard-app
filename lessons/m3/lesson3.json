@@ -65,7 +65,7 @@
   {"id": 64, "tr": "Annen ne zaman uyuyor?", "en": "When does your mother sleep?"},
   {"id": 65, "tr": "Saat 8'de otobüse binerim.", "en": "I get on the bus at 8 o'clock."},
   {"id": 66, "tr": "Saat 8'de otobüse binmem.", "en": "I don't get on the bus at 8 o'clock."},
-  {"id": 67, "tr": "Saat 8'de otobüse biner musun?", "en": "Do you get on the bus at 8 o'clock?"},
+  {"id": 67, "tr": "Otobüse Saat 8'de mi biniyorsun?", "en": "Do you get on the bus at 8 o'clock?"},
   {"id": 68, "tr": "Otobüse ne zaman biniyorsun?", "en": "When do you get on the bus?"},
   {"id": 69, "tr": "Saat 9'da otobüsten iniyoruz.", "en": "We get off the bus at nine o'clock."},
   {"id": 70, "tr": "Saat 9'da otobüsten inmiyoruz.", "en": "We don't get off the bus at nine o'clock."},
