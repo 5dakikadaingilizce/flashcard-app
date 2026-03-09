@@ -77,7 +77,7 @@
   {"id": 76, "tr": "Murat ne soruyor?", "en": "What does Murat ask?"},
   {"id": 77, "tr": "Öğretmen sorularımızı yanıtlıyor.", "en": "The teacher answers our questions."},
   {"id": 78, "tr": "Öğretmen sorularımızı yanıtlamıyor.", "en": "The teacher doesn't answer our questions."},
-  {"id": 79, "tr": "Öğretmen sorularımızı yanıtlıyor mu?", "en": "Does the teacher answer your questions?"},
+  {"id": 79, "tr": "Öğretmen sorularınızı yanıtlıyor mu?", "en": "Does the teacher answer your questions?"},
   {"id": 80, "tr": "Öğretmen kimin sorularını yanıtlıyor?", "en": "Whose questions does the teacher answer?"},
   {"id": 81, "tr": "Öğrencilerim dersi anlıyor.", "en": "My students understand the lesson."},
   {"id": 82, "tr": "Öğrencilerim dersi anlamıyor.", "en": "My students don't understand the lesson."},
