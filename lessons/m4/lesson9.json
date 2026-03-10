@@ -128,7 +128,7 @@
   {"no": 127, "tr": "Ne yapacaklarını bilmiyorlar.", "en": "They don't know what to do."},
   {"no": 128, "tr": "Nasıl yapacaklarını bilmiyorlar.", "en": "They don't know how to do it."},
   {"no": 129, "tr": "Nereye gideceğimi söylemeni istiyorum.", "en": "I want you to tell me where to go."},
-  {"no": 130, "tr": "Ne yapacağımı söylemen gerek.", "en": "You need to tell me what to do."},
+  {"no": 130, "tr": "Bana ne yapacağımı söylemen gerek.", "en": "You need to tell me what to do."},
   {"no": 131, "tr": "Nasıl yapacağımı bilmiyorum.", "en": "I don't know how to do it."},
   {"no": 132, "tr": "Sana nasıl İngilizce konuşacağını öğretmek istiyorum.", "en": "I want to teach you how to speak English."},
   {"no": 133, "tr": "Nasıl İngilizce konuşacağını öğrenmek ister misin?", "en": "Do you want to learn how to speak English?"},
