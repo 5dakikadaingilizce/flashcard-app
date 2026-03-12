@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce Flash Card - V.5.9</title>
+    <title>5 Dakikada İngilizce Flash Card - V.6.0</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -91,6 +91,13 @@
             font-size: 36px;
             margin-bottom: 4px;
         }
+        /* MODULE LOGO IMAGE */
+        .module-card .module-icon img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            display: block;
+        }
         .module-card h2 {
             margin: 0;
             font-family: 'Poppins';
@@ -177,6 +184,15 @@
             box-shadow: 0 20px 40px -10px rgba(249, 115, 22, 0.25), inset 0 1px 0 rgba(255,255,255,0.1);
         }
         .lesson-card:hover::before { opacity: 1; }
+
+        /* LESSON CARD LOGO */
+        .lesson-card-logo {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            margin-bottom: 6px;
+            display: block;
+        }
         
         .lesson-card h3 { 
             margin: 0 0 4px 0 !important; font-family: 'Poppins' !important; font-size: 1.1rem !important; 
@@ -315,11 +331,18 @@
         .control-btn .material-symbols-rounded { transition: transform 0.2s; }
         .control-btn:hover .material-symbols-rounded { transform: scale(1.1); }
 
+        /* LISTEN BUTTONS ROW */
+        .listen-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
         .btn-main { 
             background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%); 
-            color: white; width: 100%; padding: 18px; border-radius: 18px; font-size: 18px; font-weight: 900; 
-            border: none; font-family: 'Poppins'; cursor: pointer; margin-bottom: 15px; 
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            color: white; flex: 1; padding: 18px 10px; border-radius: 18px; font-size: 15px; font-weight: 900; 
+            border: none; font-family: 'Poppins'; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 7px;
             animation: pulse-glow 2s infinite; box-shadow: 0 10px 30px -5px rgba(56, 189, 248, 0.4);
             position: relative; overflow: hidden; transition: transform 0.2s;
         }
@@ -332,10 +355,28 @@
         .btn-main:hover { transform: translateY(-2px); box-shadow: 0 15px 40px -5px rgba(56, 189, 248, 0.5); }
         .btn-main:active { transform: translateY(0); }
 
+        .btn-slow {
+            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #6d28d9 100%);
+            box-shadow: 0 10px 30px -5px rgba(139, 92, 246, 0.4);
+            animation: pulse-glow-slow 2s infinite;
+        }
+        .btn-slow:hover { box-shadow: 0 15px 40px -5px rgba(139, 92, 246, 0.5); }
+
+        /* snail emoji size inside button */
+        .btn-slow .btn-emoji {
+            font-size: 18px;
+            line-height: 1;
+        }
+
         @keyframes pulse-glow {
             0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7), 0 10px 30px -5px rgba(56, 189, 248, 0.4); transform: scale(1); }
             70% { box-shadow: 0 0 0 15px rgba(56, 189, 248, 0), 0 15px 40px -5px rgba(56, 189, 248, 0.5); transform: scale(1.02); }
             100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0), 0 10px 30px -5px rgba(56, 189, 248, 0.4); transform: scale(1); }
+        }
+        @keyframes pulse-glow-slow {
+            0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7), 0 10px 30px -5px rgba(139, 92, 246, 0.4); transform: scale(1); }
+            70% { box-shadow: 0 0 0 15px rgba(139, 92, 246, 0), 0 15px 40px -5px rgba(139, 92, 246, 0.5); transform: scale(1.02); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0), 0 10px 30px -5px rgba(139, 92, 246, 0.4); transform: scale(1); }
         }
 
         .stats { 
@@ -368,6 +409,7 @@
             border: 1px solid rgba(255,255,255,0.05); font-weight: 600; letter-spacing: 0.5px;
         }
 
+        /* COMPLETION OVERLAY */
         #completion-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.98); display: none; flex-direction: column; 
@@ -380,7 +422,41 @@
             background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
             margin-bottom: 10px; filter: drop-shadow(0 0 30px rgba(249, 115, 22, 0.3));
         }
-        .congrats-text { color: #94a3b8; font-size: 18px; margin-bottom: 30px; font-weight: 600; }
+        .congrats-text { color: #94a3b8; font-size: 18px; margin-bottom: 10px; font-weight: 600; }
+
+        /* COMPLETION COUNT */
+        .completion-count-box {
+            background: rgba(249, 115, 22, 0.12);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 20px;
+            padding: 14px 36px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .completion-count-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #f97316;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .completion-count-val {
+            font-family: 'Poppins';
+            font-size: 42px;
+            font-weight: 900;
+            background: var(--logo-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+        .completion-count-sub {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+        }
 
         @keyframes trophy-bounce {
             from { transform: translateY(0) scale(1); filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.4)); }
@@ -409,46 +485,26 @@
     </style>
 </head>
 <body>
-<div class="v-tag">V.5.9</div>
+<div class="v-tag">V.6.0</div>
 
 <!-- MODULE SELECTION PAGE -->
 <div id="module-page" class="page-anim">
     <img src="logo.png" style="width: 80px; margin-bottom: 10px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
     <div class="main-title-white">5 Dakikada İngilizce</div>
-    <div class="select-lesson-title" style="margin-bottom: 24px;">Select Module </div>
+    <div class="select-lesson-title" style="margin-bottom: 24px;">Select Module</div>
     <div class="module-grid">
         <div class="module-card" onclick="selectModule('module3')">
             <div class="module-icon">
-                <svg width="52" height="62" viewBox="0 0 52 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="6" y="2" width="40" height="58" rx="5" fill="url(#bookGrad3)" />
-                    <rect x="6" y="2" width="7" height="58" rx="3" fill="rgba(0,0,0,0.25)" />
-                    <rect x="6" y="2" width="40" height="58" rx="5" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                    <text x="27" y="37" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="900" font-size="15" fill="white" opacity="0.95">Vol.3</text>
-                    <defs>
-                        <linearGradient id="bookGrad3" x1="6" y1="2" x2="46" y2="60" gradientUnits="userSpaceOnUse">
-                            <stop offset="0%" stop-color="#3b82f6"/>
-                            <stop offset="100%" stop-color="#1d4ed8"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
+                <img src="module3logo.png" alt="Module 3"
+                     onerror="this.outerHTML='<svg width=\'52\' height=\'62\' viewBox=\'0 0 52 62\' fill=\'none\'><rect x=\'6\' y=\'2\' width=\'40\' height=\'58\' rx=\'5\' fill=\'url(#bg3)\'/><text x=\'27\' y=\'37\' text-anchor=\'middle\' font-family=\'Poppins\' font-weight=\'900\' font-size=\'15\' fill=\'white\'>Vol.3</text><defs><linearGradient id=\'bg3\' x1=\'6\' y1=\'2\' x2=\'46\' y2=\'60\'><stop offset=\'0%\' stop-color=\'#3b82f6\'/><stop offset=\'100%\' stop-color=\'#1d4ed8\'/></linearGradient></defs></svg>'">
             </div>
             <h2>Module #3</h2>
             <p>1 Ders</p>
         </div>
         <div class="module-card" onclick="selectModule('module4')">
             <div class="module-icon">
-                <svg width="52" height="62" viewBox="0 0 52 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="6" y="2" width="40" height="58" rx="5" fill="url(#bookGrad4)" />
-                    <rect x="6" y="2" width="7" height="58" rx="3" fill="rgba(0,0,0,0.25)" />
-                    <rect x="6" y="2" width="40" height="58" rx="5" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                    <text x="27" y="37" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="900" font-size="15" fill="white" opacity="0.95">Vol.4</text>
-                    <defs>
-                        <linearGradient id="bookGrad4" x1="6" y1="2" x2="46" y2="60" gradientUnits="userSpaceOnUse">
-                            <stop offset="0%" stop-color="#22c55e"/>
-                            <stop offset="100%" stop-color="#15803d"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
+                <img src="module4logo.png" alt="Module 4"
+                     onerror="this.outerHTML='<svg width=\'52\' height=\'62\' viewBox=\'0 0 52 62\' fill=\'none\'><rect x=\'6\' y=\'2\' width=\'40\' height=\'58\' rx=\'5\' fill=\'url(#bg4)\'/><text x=\'27\' y=\'37\' text-anchor=\'middle\' font-family=\'Poppins\' font-weight=\'900\' font-size=\'15\' fill=\'white\'>Vol.4</text><defs><linearGradient id=\'bg4\' x1=\'6\' y1=\'2\' x2=\'46\' y2=\'60\'><stop offset=\'0%\' stop-color=\'#22c55e\'/><stop offset=\'100%\' stop-color=\'#15803d\'/></linearGradient></defs></svg>'">
             </div>
             <h2>Module #4</h2>
             <p>9 Ders</p>
@@ -516,9 +572,15 @@
             <button class="control-btn" onclick="goNext()">NEXT <span class="material-symbols-rounded">arrow_forward_ios</span></button>
         </div>
 
-        <button class="btn-main" onclick="speakEN()">
-            <span class="material-symbols-rounded">record_voice_over</span> LISTEN EN
-        </button>
+        <!-- LISTEN BUTTONS — yan yana -->
+        <div class="listen-row">
+            <button class="btn-main" onclick="speakEN()">
+                <span class="material-symbols-rounded">record_voice_over</span> LISTEN EN
+            </button>
+            <button class="btn-main btn-slow" onclick="speakENSlow()">
+                <span class="btn-emoji">🐌</span> LISTEN SLOW
+            </button>
+        </div>
         
         <div class="stats">
             <div class="stat-item">
@@ -541,24 +603,31 @@
     </div>
 </div>
 
+<!-- COMPLETION OVERLAY -->
 <div id="completion-overlay">
     <div class="trophy-icon">🏆</div>
     <div class="congrats-title">COMPLETED!</div>
     <div class="congrats-text">Tebrikler, bu dersi bitirdin!</div>
-    <button class="btn-main" onclick="closeCompletion()" style="max-width: 280px; margin-top: 20px;">
+    <div class="completion-count-box">
+        <div class="completion-count-label">🔥 Toplam Tamamlama</div>
+        <div class="completion-count-val" id="completionCountVal">1</div>
+        <div class="completion-count-sub" id="completionCountSub">kez tamamladın</div>
+    </div>
+    <button class="btn-main" onclick="closeCompletion()" style="max-width: 280px; margin-top: 0px;">
         <span class="material-symbols-rounded">library_books</span> MORE LESSONS
     </button>
 </div>
 
 <script>
-let cards = [], totalInLesson = 0, startY = 0, currentY = 0, isDragging = false, hasMoved = false;
+// ---- STATE ----
+let cards = [], startY = 0, currentY = 0, isDragging = false, hasMoved = false;
 let activeLesson = null, originalData = [], currentIndex = 0;
 let autoTRVoice = localStorage.getItem('auto_tr_voice') === 'true';
 let shuffleMode = false;
 let audioCtx = null;
 let allModulesData = null;
 
-// --- AUDIO ENGINE ---
+// ---- AUDIO ENGINE ----
 function initAudio() {
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -567,9 +636,7 @@ function initAudio() {
         audioCtx.resume();
         const b = audioCtx.createBuffer(1, 1, 22050);
         const s = audioCtx.createBufferSource();
-        s.buffer = b;
-        s.connect(audioCtx.destination);
-        s.start(0);
+        s.buffer = b; s.connect(audioCtx.destination); s.start(0);
     }
 }
 
@@ -602,10 +669,9 @@ function _playSound(type) {
 document.addEventListener('touchstart', initAudio, { passive: true });
 document.addEventListener('mousedown', initAudio);
 
-// --- UTILS ---
+// ---- UTILS ----
 function fetchNoCache(url) {
-    const timestamp = new Date().getTime();
-    return fetch(`${url}?v=${timestamp}`);
+    return fetch(`${url}?v=${Date.now()}`);
 }
 
 function showPage(pageId) {
@@ -615,14 +681,14 @@ function showPage(pageId) {
     });
     const target = document.getElementById(pageId);
     if (target) {
-        target.style.display = pageId === 'app-screen' ? 'flex' : 'flex';
+        target.style.display = 'flex';
         target.classList.remove('page-anim');
-        void target.offsetWidth; // reflow
+        void target.offsetWidth;
         target.classList.add('page-anim');
     }
 }
 
-// --- MODULE NAVIGATION ---
+// ---- MODULE NAVIGATION ----
 function selectModule(moduleKey) {
     initAudio();
     if (!allModulesData) return;
@@ -638,7 +704,14 @@ function selectModule(moduleKey) {
         const div = document.createElement('div');
         div.className = 'lesson-card';
         div.onclick = () => loadLesson(lesson);
-        div.innerHTML = `<h3>${lesson.name}</h3><p>${lesson.subTitle || ""}</p>`;
+
+        // Her ders için özel logo — logos/ klasöründen, yoksa gösterme
+        const logoFile = lesson.logo ? `logos/${lesson.logo}` : null;
+        const logoHTML = logoFile
+            ? `<img class="lesson-card-logo" src="${logoFile}" alt="" loading="lazy" onerror="this.style.display='none'">`
+            : '';
+
+        div.innerHTML = `${logoHTML}<h3>${lesson.name}</h3><p>${lesson.subTitle || ""}</p>`;
         container.appendChild(div);
     });
 
@@ -650,7 +723,7 @@ function goToModulePage() {
     showPage('module-page');
 }
 
-// --- VOICE ---
+// ---- VOICE ----
 if (autoTRVoice) document.getElementById('trVoiceToggle').classList.add('active');
 
 function toggleTRVoice() {
@@ -676,10 +749,22 @@ function speakEN() {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(cards[currentIndex].en);
     u.lang = 'en-US';
+    u.rate = 1.0;
     window.speechSynthesis.speak(u);
 }
 
-// --- CORE ---
+// LISTEN SLOW — aynı telaffuz, 0.5x hız
+function speakENSlow() {
+    initAudio();
+    if (!cards.length || !cards[currentIndex]) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(cards[currentIndex].en);
+    u.lang = 'en-US';
+    u.rate = 0.5;
+    window.speechSynthesis.speak(u);
+}
+
+// ---- CORE ----
 function toggleShuffle() {
     initAudio();
     shuffleMode = !shuffleMode;
@@ -689,11 +774,14 @@ function toggleShuffle() {
         cards = [...cards].sort(() => Math.random() - 0.5);
     } else {
         btn.classList.remove('active');
-        const currentIds = new Set(cards.map(c => c.tr));
-        cards = originalData.filter(c => currentIds.has(c.tr)).map(c => {
-            const currentCard = cards.find(sc => sc.tr === c.tr);
-            return currentCard ? currentCard : {...c, isLearned: false, isUnknown: false};
-        });
+        // Orijinal sıraya dön, durumları koru
+        const stateMap = {};
+        cards.forEach(c => { stateMap[c.tr] = { isLearned: c.isLearned, isUnknown: c.isUnknown }; });
+        cards = originalData.map(c => ({
+            ...c,
+            isLearned: stateMap[c.tr] ? stateMap[c.tr].isLearned : false,
+            isUnknown: stateMap[c.tr] ? stateMap[c.tr].isUnknown : false
+        }));
     }
     currentIndex = 0;
     show();
@@ -727,7 +815,7 @@ function show() {
 
     const learnedCount = cards.filter(c => c.isLearned).length;
     const unknownCount = cards.filter(c => c.isUnknown).length;
-    
+
     document.getElementById('remainCount').innerText = cards.length;
     document.getElementById('correctCount').innerText = learnedCount;
     document.getElementById('wrongCount').innerText = unknownCount;
@@ -745,7 +833,7 @@ function handleFlip(event) {
     mainCard.style.transform = `rotateY(${rotY}deg)`;
 }
 
-// --- SWIPE LOGIC ---
+// ---- SWIPE LOGIC ----
 const area = document.getElementById('swipeArea');
 const mainCard = document.getElementById('mainCard');
 
@@ -804,8 +892,14 @@ function handleChoice(isCorrect) {
         setTimeout(() => { 
             const learnedCount = cards.filter(c => c.isLearned).length;
             if (learnedCount === cards.length) {
+                // Completion count artır
+                const countKey = `completion_count_${activeLesson.name}`;
+                const prevCount = parseInt(localStorage.getItem(countKey) || '0');
+                const newCount = prevCount + 1;
+                localStorage.setItem(countKey, newCount);
+                // Progress temizle
                 localStorage.removeItem(`lesson_progress_${activeLesson.name}`);
-                showCompletion();
+                showCompletion(newCount);
             } else {
                 let nextIdx = (currentIndex + 1) % cards.length;
                 while (cards[nextIdx].isLearned) {
@@ -840,10 +934,12 @@ function goHome() {
     showPage('entry-page');
 }
 
+// ---- PROGRESS: Sadece durum kaydediliyor, içerik değil ----
 function saveProgress() { 
-    if (activeLesson && cards.length > 0) {
-        localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify({cards, currentIndex})); 
-    }
+    if (!activeLesson || cards.length === 0) return;
+    // Sadece tr (key), isLearned, isUnknown ve currentIndex kaydet
+    const stateOnly = cards.map(c => ({ tr: c.tr, isLearned: c.isLearned, isUnknown: c.isUnknown }));
+    localStorage.setItem(`lesson_progress_${activeLesson.name}`, JSON.stringify({ state: stateOnly, currentIndex }));
 }
 
 function resetLesson() { 
@@ -861,20 +957,54 @@ function loadLesson(lesson) {
     
     fetchNoCache(lesson.file).then(res => res.json()).then(data => {
         originalData = data;
+
         const saved = localStorage.getItem(`lesson_progress_${lesson.name}`);
-        
-        if (saved) { 
-            const p = JSON.parse(saved); 
-            const isFinished = p.cards.every(c => c.isLearned);
-            if (isFinished || p.cards.length !== data.length) {
-                cards = data.map(item => ({...item, isLearned: false, isUnknown: false})); 
-                currentIndex = 0;
+
+        if (saved) {
+            const p = JSON.parse(saved);
+
+            // YENİ FORMAT: state array ile — içerik her zaman data.json'dan gelir
+            if (p.state && Array.isArray(p.state)) {
+                const stateMap = {};
+                p.state.forEach(s => { stateMap[s.tr] = s; });
+
+                cards = data.map(item => ({
+                    ...item, // İçerik HER ZAMAN data.json'dan — revize anında gelir
+                    isLearned: stateMap[item.tr] ? stateMap[item.tr].isLearned : false,
+                    isUnknown: stateMap[item.tr] ? stateMap[item.tr].isUnknown : false
+                }));
+
+                // Tümü tamamlandıysa sıfırla
+                const allDone = cards.every(c => c.isLearned);
+                if (allDone) {
+                    cards = data.map(item => ({ ...item, isLearned: false, isUnknown: false }));
+                    currentIndex = 0;
+                } else {
+                    currentIndex = Math.min(p.currentIndex || 0, cards.length - 1);
+                }
+
+            } else if (p.cards && Array.isArray(p.cards)) {
+                // ESKİ FORMAT uyumluluğu — kart sayısı farklıysa sıfırla
+                if (p.cards.length !== data.length || p.cards.every(c => c.isLearned)) {
+                    cards = data.map(item => ({ ...item, isLearned: false, isUnknown: false }));
+                    currentIndex = 0;
+                } else {
+                    // Eski formattaki kartları yeni formata çevir: içerik data.json'dan al
+                    const stateMap = {};
+                    p.cards.forEach(c => { stateMap[c.tr] = c; });
+                    cards = data.map(item => ({
+                        ...item,
+                        isLearned: stateMap[item.tr] ? stateMap[item.tr].isLearned : false,
+                        isUnknown: stateMap[item.tr] ? stateMap[item.tr].isUnknown : false
+                    }));
+                    currentIndex = p.currentIndex || 0;
+                }
             } else {
-                cards = p.cards; 
-                currentIndex = p.currentIndex || 0;
+                cards = data.map(item => ({ ...item, isLearned: false, isUnknown: false }));
+                currentIndex = 0;
             }
         } else { 
-            cards = data.map(item => ({...item, isLearned: false, isUnknown: false})); 
+            cards = data.map(item => ({ ...item, isLearned: false, isUnknown: false })); 
             currentIndex = 0; 
         }
         
@@ -886,7 +1016,11 @@ function loadLesson(lesson) {
     });
 }
 
-function showCompletion() {
+function showCompletion(count) {
+    const countVal = document.getElementById('completionCountVal');
+    const countSub = document.getElementById('completionCountSub');
+    countVal.innerText = count;
+    countSub.innerText = count === 1 ? 'kez tamamladın 🎉' : `kez tamamladın 🔥`;
     document.getElementById('completion-overlay').style.display = 'flex';
     createConfetti();
 }
@@ -912,10 +1046,9 @@ function createConfetti() {
     }
 }
 
-// --- INIT: Load data.json (now multi-module format) ---
+// ---- INIT ----
 fetchNoCache('data.json').then(res => res.json()).then(data => {
     allModulesData = data;
-    // Module card ders sayılarını güncelle
     const moduleCounts = {
         module3: (data.module3 || []).length,
         module4: (data.module4 || []).length,
@@ -925,8 +1058,7 @@ fetchNoCache('data.json').then(res => res.json()).then(data => {
     moduleCards.forEach((card, i) => {
         const p = card.querySelector('p');
         if (p && keys[i]) {
-            const count = moduleCounts[keys[i]] || 0;
-            p.innerText = `${count} Ders`;
+            p.innerText = `${moduleCounts[keys[i]] || 0} Ders`;
         }
     });
 });
