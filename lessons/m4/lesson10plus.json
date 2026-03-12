@@ -265,7 +265,7 @@
   { "id": 264, "tr": "Öğrenmek zorunda olduğum şeyleri bana söylemeni istiyorum.", "en": "I want you to tell me the things that I have to learn" },
   { "id": 265, "tr": "Öğrenmek zorunda olduğum şeyleri bana söylemeni istemiyorum.", "en": "I don't want you to tell me the things that I have to learn" },
   { "id": 266, "tr": "Öğrenmek zorunda olduğun şeyleri sana söylememi ister misin?", "en": "Do you want me to tell you the things that you have to learn" },
-  { "id": 267, "tr": "Öğrenmek zorunda olduğun şeyleri sana ne zaman söylememi ister misin?", "en": "When do you want me to tell you the things that you have to learn" },
+  { "id": 267, "tr": "Öğrenmek zorunda olduğun şeyleri sana ne zaman söylememi istersin?", "en": "When do you want me to tell you the things that you have to learn" },
   { "id": 268, "tr": "Duymak istediğin sözleri duyuyorsun.", "en": "You hear the words that you want to hear" },
   { "id": 269, "tr": "Duymak istemediğin sözleri duymuyorsun.", "en": "You don't hear the words that you don't want to hear" },
   { "id": 270, "tr": "Duymak istediğin sözleri duydun.", "en": "You heard the words that you wanted to hear" },
