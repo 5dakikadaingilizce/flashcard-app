@@ -48,6 +48,6 @@
     { "id": 8, "name": "Lesson #8", "subTitle": "V2-V3 kullanımı", "file": "lessons/m4/lesson8.json" },
     { "id": 9, "name": "Lesson #9", "subTitle": " To + tüm kullanımlar", "file": "lessons/m4/lesson9.json" },
     { "id": 10, "name": "Lesson #10", "subTitle": " THAT #RELATIVE CLAUSE", "file": "lessons/m4/lesson10.json" },
-    { "id": 11, "name": "Lesson #10 #plus", "subTitle": " THAT #RELATIVE CLAUSE (+,-,?,Wh)", "file": "lessons/m4/lesson10plus.json" }
+    { "id": 11, "name": "Lesson #10 +plus", "subTitle": " THAT #RELATIVE CLAUSE (+,-,?,Wh)", "file": "lessons/m4/lesson10plus.json" }
   ]
 }
