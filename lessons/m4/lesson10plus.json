@@ -272,7 +272,7 @@
   { "id": 271, "tr": "Duymak istediğin sözleri duyuyordun.", "en": "You were hearing the words that you wanted to hear" },
   { "id": 272, "tr": "Anlamanı istediğim konuları bilmek ister misin?", "en": "Do you want to know the topics that I want you to understand" },
   { "id": 273, "tr": "Anlamanı istediğim konuları bilmek istemez misin?", "en": "Don't you want to know the topics that I want you to understand" },
-  { "id": 274, "tr": "Anlamanı istediğim konuları neden bilmek istemez misin?", "en": "Why don't you want to know the topics that I want you to understand" },
+  { "id": 274, "tr": "Anlamanı istediğim konuları neden bilmek istemezsin?", "en": "Why don't you want to know the topics that I want you to understand" },
   { "id": 275, "tr": "Dün izlediğimiz film çok sıkıcıydı.", "en": "The movie that we watched yesterday was very boring" },
   { "id": 276, "tr": "Dün izlediğimiz film çok sıkıcı değildi.", "en": "The movie that we watched yesterday wasn't very boring" },
   { "id": 277, "tr": "Dün izlediğiniz film nasıldı?", "en": "How was the movie that you watched yesterday" },
