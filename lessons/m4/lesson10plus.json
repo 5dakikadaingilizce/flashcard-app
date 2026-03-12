@@ -346,7 +346,7 @@
   { "id": 345, "tr": "İngilizce hakkında öğrenmek istediğin her şey bu sitede.", "en": "Everything that you want to learn about English is on this website" },
   { "id": 346, "tr": "Dün otobüste gördüğüm herkes mutsuzdu.", "en": "Everybody that I saw on the bus yesterday was unhappy" },
   { "id": 347, "tr": "Dün otobüste gördüğüm insanların tamamı mutsuzdu.", "en": "All of the people that I saw on the bus yesterday was unhappy" },
-  { "id": 348, "tr": "Dün otobüste gördüğüm insanların tamamı mutsuzdu.", "en": "All of the people that I saw on the bus yesterday were unhappy" },
+  { "id": 348, "tr": "Dün otobüste gördüğüm insanların hiç biri mutsuz değildi.", "en": "None of the people that I saw on the bus yesterday were unhappy" },
   { "id": 349, "tr": "Dün otobüste gördüğüm insanların bazıları mutsuzdu.", "en": "Some of the people that I saw on the bus yesterday were unhappy" },
   { "id": 350, "tr": "Az önce otobüste gördüğüm insanların bazıları mutsuzdu.", "en": "Some of the people that I have just seen on the bus were unhappy" },
   { "id": 351, "tr": "Az önce otobüste gördüğün insanların bazıları mutsuz muydu?", "en": "Were some of the people that you have just seen on the bus unhappy?" },
