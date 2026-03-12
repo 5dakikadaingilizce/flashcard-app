@@ -276,7 +276,7 @@
   { "id": 275, "tr": "Dün izlediğimiz film çok sıkıcıydı.", "en": "The movie that we watched yesterday was very boring" },
   { "id": 276, "tr": "Dün izlediğimiz film çok sıkıcı değildi.", "en": "The movie that we watched yesterday wasn't very boring" },
   { "id": 277, "tr": "Dün izlediğiniz film nasıldı?", "en": "How was the movie that you watched yesterday" },
-  { "id": 278, "tr": "Sence dün izlediğimiz film nasıldı?", "en": "How was the movie that we saw yesterday, Do you think" },
+  { "id": 278, "tr": "Sence dün izlediğimiz film nasıldı?", "en": "Do you think, How was the movie that we watched yesterday? " },
   { "id": 279, "tr": "Bu sabah konuştuğum öğretmen çok yardım severdi.", "en": "The teacher that I talked to this morning was very helpful" },
   { "id": 280, "tr": "Az önce konuştuğum öğretmen çok yardım severdi.", "en": "The teacher that I have just talked to was very helpful" },
   { "id": 281, "tr": "Az önce konuştuğum öğretmen çok yardım sever değildi.", "en": "The teacher that I have just talked to wasn't very helpful" },
