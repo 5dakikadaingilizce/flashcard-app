@@ -461,12 +461,12 @@ function speakTR(){
 
 function speakEN(){
   initAudio();if(!cards.length||!cards[currentIndex])return;
-  window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=1.0;window.speechSynthesis.speak(u);
+  window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=0.8;window.speechSynthesis.speak(u);
 }
 
 function speakENSlow(){
   initAudio();if(!cards.length||!cards[currentIndex])return;
-  window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=0.3;window.speechSynthesis.speak(u);
+  window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=0.4;window.speechSynthesis.speak(u);
 }
 
 // SHUFFLE
