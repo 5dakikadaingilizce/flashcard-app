@@ -377,7 +377,7 @@ function selectModule(moduleKey){
   initAudio();if(!allModulesData)return;
   const lessons=allModulesData[moduleKey];if(!lessons)return;
   activeModuleKey=moduleKey;
-  const moduleNames={module3:'Module #3 Flash Cards',module4:'Module #4 Flash Cards'};
+  const moduleNames={module3:'Module #3',module4:'Module #4'};
   const moduleLogos={module3:'module3logo.png',module4:'module4logo.png'};
   document.getElementById('moduleTitle').innerText=moduleNames[moduleKey]||moduleKey;
   const entryLogo=document.getElementById('entryModuleLogo');
