@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>5 Dakikada İngilizce Flash Card - V.6.4</title>
+<title>5 Dakikada İngilizce Flash Card - V.6.5</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -148,26 +148,65 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 .front { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: var(--secondary); font-size: 26px; font-weight: 800; }
 .back { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--text-main); transform: rotateY(180deg); font-size: 22px; font-weight: 700; border-color: var(--primary); flex-wrap: wrap; gap: 4px; }
 
-/* --- YENİ: Tıklanabilir kelime span'ları --- */
+/* --- V.6.5: Tıklanabilir kelime span'ları --- */
 .word-span {
   display: inline-block;
   cursor: pointer;
-  padding: 3px 5px;
-  border-radius: 7px;
-  transition: background 0.15s, color 0.15s, transform 0.1s;
-  margin: 2px 1px;
+  padding: 2px 1px;
+  padding-bottom: 4px;
+  border-bottom: 2px dotted rgba(56, 189, 248, 0.7);
+  transition: color 0.15s, transform 0.1s, border-color 0.15s;
+  margin: 2px 0;
   user-select: none;
   -webkit-user-select: none;
+  position: relative;
+  line-height: 1.6;
 }
 .word-span:hover {
-  background: rgba(56, 189, 248, 0.22);
   color: #38bdf8;
+  border-bottom-color: #38bdf8;
 }
 .word-span:active {
-  background: rgba(56, 189, 248, 0.42);
   transform: scale(0.93);
 }
-/* ----------------------------------------- */
+.word-span.active-word {
+  color: #38bdf8;
+  border-bottom-color: #38bdf8;
+}
+
+/* Tooltip */
+.word-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.97);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #38bdf8;
+  white-space: nowrap;
+  z-index: 999;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  pointer-events: none;
+  animation: tooltipPop 0.15s ease-out;
+}
+.word-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(56, 189, 248, 0.4);
+}
+@keyframes tooltipPop {
+  from { opacity: 0; transform: translateX(-50%) scale(0.85); }
+  to   { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+/* --------------------------------------------- */
 
 .swipe-note { position: absolute; left: 50%; transform: translateX(-50%); padding: 10px 30px; border-radius: 50px; font-family: 'Poppins'; font-weight: 900; font-size: 16px; opacity: 0; transition: all 0.2s; z-index: 60; pointer-events: none; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 #note-know { top: 40px; background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%); color: #0f172a; }
@@ -253,7 +292,7 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 </head>
 <body>
 
-<div class="v-tag">V.6.4</div>
+<div class="v-tag">V.6.5</div>
 
 <!-- MODULE PAGE -->
 <div id="module-page" class="page-anim">
@@ -490,19 +529,65 @@ function speakENSlow(){
   window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=0.4;window.speechSynthesis.speak(u);
 }
 
-// --- YENİ: Tek kelime seslendirme ---
-function speakWord(word) {
+// --- V.6.5: Tek kelime seslendirme + tooltip ---
+let activeTooltipSpan = null;
+
+function closeTooltip() {
+  if (activeTooltipSpan) {
+    const tip = activeTooltipSpan.querySelector('.word-tooltip');
+    if (tip) tip.remove();
+    activeTooltipSpan.classList.remove('active-word');
+    activeTooltipSpan = null;
+  }
+}
+
+function speakWord(word, spanEl) {
   initAudio();
-  // Noktalama işaretlerini temizle, sadece harfleri bırak
+  // Noktalama temizle
   const clean = word.replace(/[^a-zA-Z'\u2019\-]/g, '');
   if (!clean) return;
+
+  // Eğer aynı span'a tıklandıysa kapat
+  if (activeTooltipSpan === spanEl) {
+    closeTooltip();
+    return;
+  }
+
+  // Öncekini kapat
+  closeTooltip();
+
+  // Seslendirme — "I" tek başına düzgün çıksın diye cümle içinde veriyoruz
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(clean);
+  const speakText = clean === 'I' ? 'I' : clean;
+  const u = new SpeechSynthesisUtterance(speakText);
   u.lang = 'en-US';
   u.rate = 0.8;
   window.speechSynthesis.speak(u);
+
+  // Aktif span işaretle
+  spanEl.classList.add('active-word');
+  activeTooltipSpan = spanEl;
+
+  // Tooltip — önce yükleniyor göster
+  const tooltip = document.createElement('div');
+  tooltip.className = 'word-tooltip';
+  tooltip.innerText = '...';
+  spanEl.appendChild(tooltip);
+
+  // MyMemory API ile Türkçe çeviri
+  fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=en|tr`)
+    .then(r => r.json())
+    .then(data => {
+      if (activeTooltipSpan !== spanEl) return; // kapandıysa iptal
+      const tr = data && data.responseData && data.responseData.translatedText;
+      if (tr) tooltip.innerText = tr;
+      else tooltip.innerText = '?';
+    })
+    .catch(() => {
+      if (activeTooltipSpan === spanEl) tooltip.innerText = '?';
+    });
 }
-// ------------------------------------
+// -----------------------------------------------
 
 // SHUFFLE
 function toggleShuffle(){
@@ -520,15 +605,16 @@ function show(){
   if(!cards.length)return;
   if(currentIndex>=cards.length)currentIndex=0;
   if(currentIndex<0)currentIndex=cards.length-1;
+  closeTooltip(); // V.6.5: yeni karta geçince tooltip kapat
   mainCard.classList.remove('flipped');
   mainCard.style.cssText="top:0;opacity:1;transform:rotateY(0deg);";
   document.getElementById('trDisplay').innerText=cards[currentIndex].tr;
 
-  // --- YENİ: İngilizce metni kelime kelime tıklanabilir span'lara böl ---
+  // --- V.6.5: İngilizce metni kelime kelime tıklanabilir span'lara böl ---
   const words = cards[currentIndex].en.split(' ');
   document.getElementById('engDisplay').innerHTML = words.map(w => {
     const escaped = w.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-    return `<span class="word-span" onclick="event.stopPropagation();speakWord('${escaped}')">${w}</span>`;
+    return `<span class="word-span" onclick="event.stopPropagation();speakWord('${escaped}',this)">${w}</span>`;
   }).join(' ');
   // ---------------------------------------------------------------------
 
@@ -550,6 +636,11 @@ function show(){
 
 function handleFlip(event){
   if(hasMoved)return;initAudio();
+  // V.6.5: Kart arka yüzdeyken boşluğa tıklayınca tooltip kapat
+  if(mainCard.classList.contains('flipped') && activeTooltipSpan){
+    closeTooltip();return;
+  }
+  closeTooltip();
   mainCard.classList.toggle('flipped');
   mainCard.style.transform=`rotateY(${mainCard.classList.contains('flipped')?180:0}deg)`;
 }
