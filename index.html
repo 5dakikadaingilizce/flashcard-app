@@ -238,9 +238,7 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 <div id="module-page" class="page-anim">
   <img src="logo.png" style="width:80px;margin-bottom:10px;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.3));" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
   <div class="main-title-white">5 Dakikada İngilizce</div>
-<div id="moduleLogoHeader" style="margin:-10px 0 16px 0;text-align:center;">
   <div class="select-lesson-title" style="margin-bottom:24px;">Select Module</div>
-</div>
   <div class="module-grid">
     <div class="module-card" onclick="selectModule('module3')">
       <div class="module-icon" onclick="selectModule('module3')">
@@ -265,8 +263,7 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
     <img id="entryModuleLogo" class="entry-module-logo" src="" alt="" onerror="this.style.display='none'">
     <div class="main-title-white">5 Dakikada İngilizce</div>
   </div>
-<div id="moduleTitle" class="select-lesson-title" style="display:none;">Module Flash Cards</div>
-<img id="moduleTitleLogo" src="" style="width:300px;margin:-10px 0 16px 0;filter:drop-shadow(0 4px 15px rgba(0,0,0,0.4));display:none;" onerror="this.style.display='none';document.getElementById('moduleTitle').style.display='block';">
+  <div id="moduleTitle" class="select-lesson-title">Module Flash Cards</div>
   <button class="back-to-modules-btn" onclick="goToModulePage()">
     <span class="material-symbols-rounded">arrow_back_ios_new</span> Select Module
   </button>
@@ -376,38 +373,16 @@ function getStarCount(lessonName){return Math.min(parseInt(localStorage.getItem(
 function renderStarsHTML(count){let h='';for(let i=0;i<3;i++)h+=i<count?'⭐':'☆';return h;}
 
 // MODULE NAV
-function selectModule(moduleKey) {
-  initAudio();
-  if (!allModulesData) return;
-  const lessons = allModulesData[moduleKey];
-  if (!lessons) return;
-  activeModuleKey = moduleKey;
-
-  const moduleNames = { module3: 'Module #3', module4: 'Module #4' };
-  const moduleLogos = { module3: 'module3logo.png', module4: 'module4logo.png' };
-
-  // Hata buradaydı: Fonksiyon burada kapanıyordu, şimdi devam ediyor.
-  if (moduleLogos[moduleKey]) {
-    titleText.style.display = 'none';
-    titleLogo.src = moduleLogos[moduleKey];
-    titleLogo.style.display = 'block';
-  } else {
-    titleText.innerText = moduleNames[moduleKey] || moduleKey;
-    titleText.style.display = 'block';
-    titleLogo.style.display = 'none';
-  }
-
-  const moduleLogoMap = { module3: 'module3logokurdele.png', module4: 'module4logokurdele.png' };
-  const headerDiv = document.getElementById('moduleLogoHeader');
-
-  if (moduleLogoMap[moduleKey]) {
-    headerDiv.innerHTML = `<img src="${moduleLogoMap[moduleKey]}" style="width:300px;margin:-10px 0 16px 0;filter:drop-shadow(0 4px 15px rgba(0,0,0,0.4));" onerror="this.outerHTML='<div class=\\'select-lesson-title\\'>Module</div>'">`;
-  }
-
-  const entryLogo = document.getElementById('entryModuleLogo');
-  entryLogo.src = moduleLogos[moduleKey] || '';
-  entryLogo.style.display = moduleLogos[moduleKey] ? 'block' : 'none';
-  
+function selectModule(moduleKey){
+  initAudio();if(!allModulesData)return;
+  const lessons=allModulesData[moduleKey];if(!lessons)return;
+  activeModuleKey=moduleKey;
+  const moduleNames={module3:'Module #3',module4:'Module #4'};
+  const moduleLogos={module3:'module3logo.png',module4:'module4logo.png'};
+  document.getElementById('moduleTitle').innerText=moduleNames[moduleKey]||moduleKey;
+  const entryLogo=document.getElementById('entryModuleLogo');
+  entryLogo.src=moduleLogos[moduleKey]||'';
+  entryLogo.style.display=moduleLogos[moduleKey]?'block':'none';
   buildSnakeLayout(lessons);
   showPage('entry-page');
 }
