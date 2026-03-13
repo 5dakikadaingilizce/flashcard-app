@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce Flash Card - V.6.2</title>
+    <title>5 Dakikada İngilizce Flash Card - V.6.3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -12,554 +12,337 @@
             --secondary: #2dd4bf; --accent: #fb7185; --text-main: #f8fafc; 
             --logo-grad: linear-gradient(90deg, #ff4d4d, #f97316); 
             --white-grad: linear-gradient(180deg, #ffffff, #94a3b8);
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --shadow-glow: 0 0 30px rgba(249, 115, 22, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(circle at top right, #1e293b, #0f172a); min-height: 100dvh; display: flex; justify-content: center; align-items: center; color: var(--text-main); overflow: hidden; padding: 10px; box-sizing: border-box; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body { 
+            margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text-main); 
+            min-height: 100vh; overflow-x: hidden; -webkit-user-select: none; user-select: none;
+        }
 
-        /* MODULE PAGE */
-        #module-page { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 500px; }
-        .module-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%; margin-top: 10px; }
-        .module-card { background: linear-gradient(145deg, rgba(30,41,59,0.85) 0%, rgba(15,23,42,0.95) 100%); backdrop-filter: blur(15px); padding: 24px 15px 20px; border-radius: 28px; border: 1px solid var(--glass-border); text-align: center; cursor: pointer; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05); position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
-        .module-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #ff4d4d, #f97316); opacity: 0; transition: opacity 0.3s ease; }
-        .module-card:hover { border-color: rgba(249,115,22,0.5); transform: translateY(-8px); box-shadow: 0 20px 40px -10px rgba(249,115,22,0.25), inset 0 1px 0 rgba(255,255,255,0.1); }
-        .module-card:hover::before { opacity: 1; }
-        .module-card .module-icon { width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; }
-        .module-card .module-icon img { width: 100%; height: 100%; object-fit: contain; animation: float3d 3s ease-in-out infinite; filter: drop-shadow(0 8px 20px rgba(249,115,22,0.35)); }
-        @keyframes float3d { 0% { transform: translateY(0px) rotateX(0deg); } 50% { transform: translateY(-10px) rotateX(6deg); } 100% { transform: translateY(0px) rotateX(0deg); } }
-        .module-card h2 { margin: 0; font-family: 'Poppins'; font-size: 1.3rem; font-weight: 900; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .module-card p { margin: 0; font-size: 11px; color: #94a3b8; -webkit-text-fill-color: #94a3b8; font-weight: 500; line-height: 1.4; }
+        /* YENİ: LOGO ANİMASYONLARI (ARKA PLAN) */
+        .bg-decor { position: fixed; width: 120px; height: 120px; opacity: 0.15; z-index: -1; pointer-events: none; animation: floatLogo 8s ease-in-out infinite; }
+        .bg-decor.left { left: -20px; top: 25%; transform: rotate(-15deg); }
+        .bg-decor.right { right: -20px; top: 65%; transform: rotate(15deg); animation-delay: 2s; }
+        @keyframes floatLogo { 0%, 100% { transform: translateY(0) rotate(-15deg); } 50% { transform: translateY(-30px) rotate(-5deg); } }
 
-        /* ENTRY PAGE */
-        #entry-page { display: none; flex-direction: column; align-items: center; width: 100%; max-height: 95vh; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
-        #entry-page::-webkit-scrollbar { display: none; }
-        .main-title-white { font-family: 'Poppins'; font-size: 24px; font-weight: 900; background: var(--white-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
-        .select-lesson-title { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; margin: 5px 0 20px 0; font-weight: 900; font-family: 'Poppins'; filter: drop-shadow(0 0 15px rgba(249,115,22,0.3)); }
-        .back-to-modules-btn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 8px 16px; color: #94a3b8; font-size: 12px; font-weight: 700; cursor: pointer; margin-bottom: 16px; transition: all 0.3s; align-self: flex-start; }
-        .back-to-modules-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        .back-to-modules-btn .material-symbols-rounded { font-size: 16px; }
-        .entry-module-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; }
-        .entry-module-logo { width: 70px; height: 70px; object-fit: contain; animation: float3d 3s ease-in-out infinite; filter: drop-shadow(0 6px 16px rgba(249,115,22,0.3)); margin-bottom: 4px; }
+        .container { max-width: 500px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; padding: 20px; position: relative; }
+        
+        /* HEADER */
+        header { text-align: center; margin-bottom: 25px; padding-top: 10px; }
+        .logo { font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 2.2rem; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); letter-spacing: -1px; cursor: pointer; }
 
-        /* DUOLINGO-STYLE NODE LESSON LIST */
-        #lesson-list-container { width: 100%; max-width: 360px; padding: 0 8px 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; position: relative; }
-        #lesson-list-container::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 4px; background: linear-gradient(180deg, rgba(249,115,22,0.35) 0%, rgba(249,115,22,0.04) 100%); border-radius: 4px; z-index: 0; }
+        /* MODÜL SEÇİM EKRANI (REVİZE: SADECE LOGO) */
+        #module-screen { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; padding: 20px; }
+        .module-btn { 
+            display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s;
+        }
+        .module-btn img { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4)); }
+        .module-btn span { font-weight: 800; font-size: 1rem; color: var(--text-main); text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .module-btn:active { transform: scale(0.9); }
 
-        .lesson-card { position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer; margin-bottom: 18px; z-index: 1; transition: transform 0.2s; }
-        .lesson-card:nth-child(5n+1) { align-self: center; }
-        .lesson-card:nth-child(5n+2) { align-self: flex-end; margin-right: 20px; }
-        .lesson-card:nth-child(5n+3) { align-self: flex-end; margin-right: 50px; }
-        .lesson-card:nth-child(5n+4) { align-self: flex-end; margin-right: 20px; }
-        .lesson-card:nth-child(5n+5) { align-self: center; }
+        /* DERS YOLU (DUOLINGO STİLİ ZİKZAK) */
+        #path-screen { flex-grow: 1; display: none; }
+        .lesson-path { display: flex; flex-direction: column; align-items: center; gap: 50px; padding: 40px 0 120px 0; position: relative; }
+        .lesson-node { position: relative; width: 90px; height: 90px; cursor: pointer; z-index: 10; }
+        .lesson-circle { 
+            width: 100%; height: 100%; border-radius: 50%; background: #1e293b; border: 5px solid #334155;
+            display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; color: #475569;
+            box-shadow: 0 8px 0 #0f172a; transition: 0.2s;
+        }
+        .lesson-node.active .lesson-circle { border-color: var(--primary); color: var(--primary); box-shadow: 0 8px 0 #0369a1; background: #1e293b; }
+        .lesson-node.completed .lesson-circle { background: var(--primary); color: white; border-color: #0ea5e9; box-shadow: 0 8px 0 #075985; }
+        
+        /* Zikzak Dizilim Mantığı */
+        .lesson-node:nth-child(4n+2) { transform: translateX(70px); }
+        .lesson-node:nth-child(4n+4) { transform: translateX(-70px); }
 
-        .node-btn { width: 88px; height: 88px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex-shrink: 0; }
-        .node-btn:hover { transform: translateY(-4px) scale(1.05); }
+        /* LESSON POPOVER (DERS KUTUCUĞU) */
+        .lesson-popover {
+            position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%) scale(0.9);
+            width: 180px; background: #1e293b; border: 3px solid var(--primary); border-radius: 20px;
+            padding: 15px; display: none; flex-direction: column; align-items: center; gap: 10px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6); z-index: 100; opacity: 0; transition: 0.3s;
+        }
+        .lesson-popover.show { display: flex; opacity: 1; transform: translateX(-50%) scale(1); }
+        .lesson-popover::after {
+            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 12px solid var(--primary);
+        }
+        .popover-title { font-weight: 800; font-size: 0.9rem; text-align: center; color: white; }
+        .btn-start-lesson { 
+            background: var(--primary); color: white; border: none; padding: 8px 20px; 
+            border-radius: 15px; font-weight: 900; font-size: 0.8rem; cursor: pointer; width: 100%;
+            box-shadow: 0 4px 0 #0369a1;
+        }
+        .btn-start-lesson:active { transform: translateY(2px); box-shadow: 0 2px 0 #0369a1; }
 
-        .node-logo { width: 68%; height: 68%; background-size: contain !important; background-repeat: no-repeat !important; background-position: center !important; display: block; }
-
-        .lesson-card h3 { font-size: 11px; font-weight: 800; color: #f8fafc; text-align: center; max-width: 100px; font-family: 'Poppins'; line-height: 1.2; margin: 6px 0 2px 0 !important; }
-
-        .lesson-stars { display: flex; gap: 3px; font-size: 13px; line-height: 1; justify-content: center; }
-
-        @keyframes floatAnim { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-
-        .lesson-card.active .node-btn { width: 104px !important; height: 104px !important; background: #fbbf24 !important; box-shadow: 0 8px 0 #d97706, 0 16px 30px rgba(251,191,36,0.4) !important; animation: floatAnim 2.5s ease-in-out infinite; }
-        .lesson-card.completed .node-btn { opacity: 0.85; }
-        .lesson-card.disabled { cursor: not-allowed; }
-        .lesson-card.disabled .node-btn { background: #374151 !important; box-shadow: 0 8px 0 #1f2937 !important; opacity: 0.55; }
-        .lesson-card.disabled .node-logo { filter: grayscale(1) opacity(0.4); }
-        .lesson-card.disabled h3 { color: #4b5563; }
-        .lesson-card.disabled .lesson-stars { opacity: 0.3; }
-
-        .start-badge { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); background: white; color: #d97706; padding: 4px 12px; border-radius: 12px; font-weight: 900; font-size: 10px; box-shadow: 0 4px 0 #cbd5e1; z-index: 15; animation: bounce 1.5s infinite; white-space: nowrap; }
-
-        /* APP SCREEN */
-        #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
-        .top-bar { display: flex; justify-content: space-between; margin-bottom: 12px; gap: 4px; width: 100%; background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); padding: 6px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); box-sizing: border-box; }
-        .nav-btn { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; height: 36px; padding: 0 4px; font-size: 9px; font-weight: 700; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 3px; white-space: nowrap; overflow: hidden; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
-        .nav-btn .material-symbols-rounded { font-size: 16px; transition: transform 0.2s; }
-        .nav-btn:hover { background: rgba(255,255,255,0.1); color: white; transform: translateY(-1px); }
-        .nav-btn.active { background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%); box-shadow: 0 4px 15px rgba(251,113,133,0.4); border-color: rgba(255,255,255,0.3); color: white; }
-        .app-box { background: linear-gradient(145deg, rgba(30,41,59,0.7) 0%, rgba(15,23,42,0.8) 100%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6), var(--shadow-glow); text-align: center; position: relative; overflow: hidden; }
-        .app-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); }
-        .app-logo-small { width: 50px; margin-bottom: 5px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
-        .app-brand-text { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 2px; letter-spacing: 0.5px; }
-        .lesson-title-grad { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 28px; font-family: 'Poppins'; margin: 0 0 4px 0; display: block !important; width: 100% !important; clear: both !important; line-height: 1.3 !important; filter: drop-shadow(0 0 20px rgba(249,115,22,0.2)); }
-        .lesson-content-desc { color: #94a3b8 !important; -webkit-text-fill-color: #94a3b8 !important; font-size: 13px !important; font-weight: 500 !important; margin: 0 0 15px 0 !important; display: block !important; width: 100% !important; clear: both !important; line-height: 1.4 !important; }
-        .status-tag { position: absolute; top: 15px; left: 15px; padding: 4px 12px; border-radius: 50px; font-size: 10px; font-weight: 900; font-family: 'Poppins'; letter-spacing: 1px; text-transform: uppercase; z-index: 20; display: none; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .tag-learned { background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%); color: #0f172a; display: block; }
-        .tag-unknown { background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%); color: white; display: block; }
-        .guide-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 10px 0; pointer-events: none; z-index: 50; transition: opacity 0.3s; }
-        .guide-item { display: flex; flex-direction: column; align-items: center; font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 13px; animation: guide-pulse 2s infinite ease-in-out; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        #guide-up { color: var(--secondary); margin-top: -5px; }
-        #guide-down { color: var(--accent); margin-bottom: -5px; }
-        .guide-item .material-symbols-rounded { font-size: 32px; margin: -2px 0; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); }
-        @keyframes guide-pulse { 0% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 0.6; transform: scale(1.05); } 100% { opacity: 0.2; transform: scale(0.95); } }
-        .card-container { perspective: 1000px; width: 100%; height: 210px; margin: 10px 0; position: relative; }
-        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275), top 0.3s, opacity 0.3s; z-index: 10; cursor: pointer; animation: cardEnter 0.4s ease-out; }
+        /* FLASHCARD EKRANI */
+        #flashcard-screen { display: none; flex-grow: 1; flex-direction: column; }
+        .card-container { perspective: 1000px; height: 380px; margin: 20px 0; position: relative; }
+        .card { 
+            position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; 
+        }
         .card.flipped { transform: rotateY(180deg); }
-        .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); box-sizing: border-box; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1); }
-        .front { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: var(--secondary); font-size: 26px; font-weight: 800; }
-        .back { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--text-main); transform: rotateY(180deg); font-size: 22px; font-weight: 700; border-color: var(--primary); }
-        .swipe-note { position: absolute; left: 50%; transform: translateX(-50%); padding: 10px 30px; border-radius: 50px; font-family: 'Poppins'; font-weight: 900; font-size: 16px; opacity: 0; transition: all 0.2s; z-index: 60; pointer-events: none; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        #note-know { top: 40px; background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%); color: #0f172a; }
-        #note-dont { bottom: 40px; background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%); color: white; }
-        .controls-row { display: flex; gap: 8px; margin-bottom: 12px; }
-        .control-btn { flex: 1; background: rgba(51,65,85,0.6); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 14px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); backdrop-filter: blur(10px); }
-        .control-btn:hover { background: rgba(71,85,105,0.8); border-color: rgba(255,255,255,0.15); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-        .control-btn:active { transform: translateY(0); }
-        .control-btn .material-symbols-rounded { transition: transform 0.2s; }
-        .listen-row { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn-main { background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%); color: white; flex: 1; padding: 16px 8px; border-radius: 18px; font-size: 12px; font-weight: 900; border: none; font-family: 'Poppins'; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; animation: pulse-glow 2s infinite; box-shadow: 0 10px 30px -5px rgba(56,189,248,0.4); position: relative; overflow: hidden; transition: transform 0.2s; }
-        .btn-main::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
-        .btn-main:hover::before { left: 100%; }
-        .btn-main:hover { transform: translateY(-2px); }
-        .btn-main:active { transform: translateY(0); }
-        .btn-main .material-symbols-rounded { font-size: 17px; }
-        .btn-slow { background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #6d28d9 100%); box-shadow: 0 10px 30px -5px rgba(139,92,246,0.4); animation: pulse-glow-slow 2s infinite; }
-        .btn-slow .btn-emoji { font-size: 15px; line-height: 1; }
-        @keyframes pulse-glow { 0% { box-shadow: 0 0 0 0 rgba(56,189,248,0.7), 0 10px 30px -5px rgba(56,189,248,0.4); transform: scale(1); } 70% { box-shadow: 0 0 0 10px rgba(56,189,248,0), 0 15px 40px -5px rgba(56,189,248,0.5); transform: scale(1.01); } 100% { box-shadow: 0 0 0 0 rgba(56,189,248,0), 0 10px 30px -5px rgba(56,189,248,0.4); transform: scale(1); } }
-        @keyframes pulse-glow-slow { 0% { box-shadow: 0 0 0 0 rgba(139,92,246,0.7), 0 10px 30px -5px rgba(139,92,246,0.4); transform: scale(1); } 70% { box-shadow: 0 0 0 10px rgba(139,92,246,0), 0 15px 40px -5px rgba(139,92,246,0.5); transform: scale(1.01); } 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0), 0 10px 30px -5px rgba(139,92,246,0.4); transform: scale(1); } }
-        .stats { display: flex; justify-content: space-between; background: rgba(15,23,42,0.5); padding: 16px 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(10px); position: relative; overflow: hidden; }
-        .stats::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
-        .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
-        .stat-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.1), transparent); }
-        .stat-label-row { display: flex; align-items: center; gap: 3px; font-size: 7px; color: #64748b; font-weight: 800; margin-bottom: 4px; letter-spacing: 0.5px; }
-        .stat-label-row .material-symbols-rounded { font-size: 12px; }
-        .stat-val { font-weight: 900; font-size: 16px; color: var(--primary); font-variant-numeric: tabular-nums; text-shadow: 0 0 20px rgba(56,189,248,0.3); }
-        .v-tag { position: absolute; top: 10px; right: 10px; font-size: 10px; color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); font-weight: 600; letter-spacing: 0.5px; }
+        .card-face { 
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 35px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px;
+            background: var(--card-bg); border: 2px solid var(--glass-border); backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .card-back { transform: rotateY(180deg); background: linear-gradient(145deg, rgba(30,41,59,0.9), rgba(15,23,42,0.95)); }
+        
+        /* PROGRESS BAR */
+        .progress-container { height: 12px; background: #334155; border-radius: 10px; margin: 10px 0 30px 0; overflow: hidden; border: 2px solid #1e293b; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.4s ease; }
 
-        /* COMPLETION */
-        #completion-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.98); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(20px); text-align: center; padding: 20px; box-sizing: border-box; }
-        .trophy-icon { font-size: 72px; margin-bottom: 16px; animation: trophy-bounce 1s infinite alternate; filter: drop-shadow(0 0 30px rgba(249,115,22,0.5)); }
-        .congrats-title { font-family: 'Poppins'; font-size: 36px; font-weight: 900; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
-        .congrats-text { color: #94a3b8; font-size: 16px; margin-bottom: 24px; font-weight: 600; }
-        .completion-stars { display: flex; gap: 16px; margin-bottom: 20px; align-items: center; justify-content: center; }
-        .comp-star { font-size: 54px; line-height: 1; }
-        .comp-star.filled { animation: star-pop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) forwards; filter: drop-shadow(0 0 14px rgba(251,191,36,0.9)); }
-        .comp-star.empty { filter: grayscale(1) opacity(0.25); }
-        @keyframes star-pop { 0% { transform: scale(0.4) rotate(-20deg); } 60% { transform: scale(1.35) rotate(10deg); } 100% { transform: scale(1) rotate(0deg); } }
-        .completion-hint { font-size: 13px; color: #94a3b8; margin-bottom: 24px; font-weight: 600; min-height: 20px; }
-        @keyframes trophy-bounce { from { transform: translateY(0) scale(1); } to { transform: translateY(-12px) scale(1.08); } }
-        .confetti { position: absolute; opacity: 0; animation: confetti-fall 3s ease-in infinite; pointer-events: none; border-radius: 50%; }
-        @keyframes confetti-fall { 0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
-        @keyframes cardEnter { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes pageSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .page-anim { animation: pageSlideIn 0.35s ease-out; }
+        /* TEBRİKLER EKRANI (REVİZE: BUTON BOYUTU) */
+        #completion-overlay { 
+            position: fixed; inset: 0; background: rgba(15,23,42,0.98); display: none; 
+            flex-direction: column; align-items: center; justify-content: center; z-index: 1000; text-align: center; padding: 40px;
+        }
+        .stars-row { display: flex; gap: 15px; margin: 30px 0; }
+        .comp-star { font-size: 50px; color: #334155; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .comp-star.filled { color: #fbbf24; transform: scale(1.2) rotate(15deg); filter: drop-shadow(0 0 15px rgba(251,191,36,0.5)); }
+        .btn-done { 
+            background: var(--primary); color: white; border: none; padding: 14px 40px; 
+            border-radius: 30px; font-weight: 800; font-size: 1.1rem; cursor: pointer;
+            box-shadow: 0 6px 0 #0369a1; transition: 0.2s;
+        }
+        .btn-done:active { transform: translateY(3px); box-shadow: 0 3px 0 #0369a1; }
+
+        /* DİĞER BUTONLAR */
+        .nav-btn { background: #1e293b; border: 2px solid #334155; color: white; padding: 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+        .nav-btn:active { transform: scale(0.95); }
+        .nav-btn.primary { background: var(--primary); border-color: #0ea5e9; }
+
+        .hidden { display: none !important; }
+        .confetti { position: absolute; width: 10px; height: 10px; border-radius: 2px; pointer-events: none; z-index: 1001; }
     </style>
 </head>
 <body>
-<div class="v-tag">V.6.2</div>
 
-<!-- MODULE PAGE -->
-<div id="module-page" class="page-anim">
-    <img src="logo.png" style="width:80px;margin-bottom:10px;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.3));" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
-    <div class="main-title-white">5 Dakikada İngilizce</div>
-    <div class="select-lesson-title" style="margin-bottom:24px;">Select Module</div>
-    <div class="module-grid">
-        <div class="module-card" onclick="selectModule('module3')">
-            <div class="module-icon">
-                <img src="module3logo.png" alt="Module 3" onerror="this.outerHTML='<div style=\'font-size:52px;animation:float3d 3s ease-in-out infinite\'>📗</div>'">
-            </div>
-            <h2>Module #3</h2>
-            <p>Yükleniyor...</p>
-        </div>
-        <div class="module-card" onclick="selectModule('module4')">
-            <div class="module-icon">
-                <img src="module4logo.png" alt="Module 4" onerror="this.outerHTML='<div style=\'font-size:52px;animation:float3d 3s ease-in-out infinite\'>📘</div>'">
-            </div>
-            <h2>Module #4</h2>
-            <p>Yükleniyor...</p>
-        </div>
-    </div>
-</div>
+    <img src="logo.png" class="bg-decor left" alt="decor">
+    <img src="logo.png" class="bg-decor right" alt="decor">
 
-<!-- LESSON LIST PAGE -->
-<div id="entry-page">
-    <div class="entry-module-header">
-        <img id="entryModuleLogo" class="entry-module-logo" src="" alt="" onerror="this.style.display='none'">
-        <div class="main-title-white">5 Dakikada İngilizce</div>
-    </div>
-    <div id="moduleTitle" class="select-lesson-title">Module Flash Cards</div>
-    <button class="back-to-modules-btn" onclick="goToModulePage()">
-        <span class="material-symbols-rounded">arrow_back_ios_new</span> Select Module
-    </button>
-    <div id="lesson-list-container"></div>
-</div>
+    <div class="container">
+        <header>
+            <div class="logo" onclick="goHome()">5DK İNGİLİZCE</div>
+        </header>
 
-<!-- APP SCREEN -->
-<div id="app-screen">
-    <div class="top-bar">
-        <button class="nav-btn" onclick="goHome()"><span class="material-symbols-rounded">home</span> HOME</button>
-        <button id="trVoiceToggle" class="nav-btn" onclick="toggleTRVoice()"><span class="material-symbols-rounded">volume_up</span> AUTO TR</button>
-        <button id="shuffleToggle" class="nav-btn" onclick="toggleShuffle()"><span class="material-symbols-rounded">shuffle</span> SHUFFLE</button>
-        <button class="nav-btn" onclick="resetLesson()"><span class="material-symbols-rounded">restart_alt</span> RESET</button>
-    </div>
-    <div class="app-box">
-        <img src="logo.png" class="app-logo-small" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
-        <div class="app-brand-text">5 Dakikada İngilizce</div>
-        <div id="lessonTitle" class="lesson-title-grad">#Lesson</div>
-        <div id="lessonContent" class="lesson-content-desc"></div>
-        <div id="note-know" class="swipe-note">I KNOW ✅</div>
-        <div id="note-dont" class="swipe-note">I DON'T KNOW ❌</div>
-        <div class="card-container" id="swipeArea">
-            <div class="guide-container" id="guideLayer">
-                <div id="guide-up" class="guide-item"><span class="material-symbols-rounded">keyboard_double_arrow_up</span><span>I KNOW</span></div>
-                <div id="guide-down" class="guide-item"><span>I DON'T KNOW</span><span class="material-symbols-rounded">keyboard_double_arrow_down</span></div>
-            </div>
-            <div class="card" id="mainCard" onclick="handleFlip(event)">
-                <div class="face front"><div id="tagFront" class="status-tag"></div><span id="trDisplay">...</span></div>
-                <div class="face back"><div id="tagBack" class="status-tag"></div><span id="engDisplay">...</span></div>
+        <div id="module-screen">
+            <div class="module-grid">
+                <div class="module-btn" onclick="selectModule('module3')">
+                    <img src="logo.png" alt="M3">
+                    <span>Modül 3</span>
+                </div>
+                <div class="module-btn" onclick="selectModule('module4')">
+                    <img src="logo.png" alt="M4">
+                    <span>Modül 4</span>
+                </div>
             </div>
         </div>
-        <div class="controls-row">
-            <button class="control-btn" onclick="goBack()"><span class="material-symbols-rounded">arrow_back_ios_new</span> BACK</button>
-            <button class="control-btn" onclick="goNext()">NEXT <span class="material-symbols-rounded">arrow_forward_ios</span></button>
+
+        <div id="path-screen">
+            <div class="lesson-path" id="lessonPathContainer"></div>
         </div>
-        <div class="listen-row">
-            <button class="btn-main" onclick="speakEN()"><span class="material-symbols-rounded">record_voice_over</span> LISTEN EN</button>
-            <button class="btn-main btn-slow" onclick="speakENSlow()"><span class="btn-emoji">🐌</span> LISTEN SLOW EN</button>
-        </div>
-        <div class="stats">
-            <div class="stat-item"><div class="stat-label-row">ORDER <span class="material-symbols-rounded">assistant_navigation</span></div><span id="orderCount" class="stat-val">0</span></div>
-            <div class="stat-item"><div class="stat-label-row">REMAIN <span class="material-symbols-rounded">layers</span></div><span id="remainCount" class="stat-val">0</span></div>
-            <div class="stat-item"><div class="stat-label-row">LEARNED <span class="material-symbols-rounded" style="color:var(--secondary)">task_alt</span></div><span id="correctCount" class="stat-val" style="color:var(--secondary)">0</span></div>
-            <div class="stat-item"><div class="stat-label-row">UNKNOWN <span class="material-symbols-rounded" style="color:var(--accent)">cancel</span></div><span id="wrongCount" class="stat-val" style="color:var(--accent)">0</span></div>
-        </div>
-    </div>
-</div>
 
-<!-- COMPLETION -->
-<div id="completion-overlay">
-    <div class="trophy-icon">🏆</div>
-    <div class="congrats-title">COMPLETED!</div>
-    <div class="congrats-text">Tebrikler, bu dersi bitirdin!</div>
-    <div class="completion-stars">
-        <span class="comp-star empty" id="star1">⭐</span>
-        <span class="comp-star empty" id="star2">⭐</span>
-        <span class="comp-star empty" id="star3">⭐</span>
-    </div>
-    <div class="completion-hint" id="completionHint"></div>
-    <button class="btn-main" onclick="closeCompletion()" style="max-width:280px;">
-        <span class="material-symbols-rounded">library_books</span> MORE LESSONS
-    </button>
-</div>
-
-<script>
-let cards=[], startY=0, currentY=0, isDragging=false, hasMoved=false;
-let activeLesson=null, originalData=[], currentIndex=0;
-let autoTRVoice=localStorage.getItem('auto_tr_voice')==='true';
-let shuffleMode=false, audioCtx=null, allModulesData=null, activeModuleKey=null;
-
-function initAudio(){
-    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    if(audioCtx.state==='suspended'){
-        audioCtx.resume();
-        const b=audioCtx.createBuffer(1,1,22050),s=audioCtx.createBufferSource();
-        s.buffer=b;s.connect(audioCtx.destination);s.start(0);
-    }
-}
-function _playSound(type){
-    initAudio();if(!audioCtx)return;
-    audioCtx.resume().then(()=>{
-        try{
-            const g=audioCtx.createGain(),o=audioCtx.createOscillator();
-            o.connect(g);g.connect(audioCtx.destination);const t=audioCtx.currentTime;
-            if(type==='up'){o.frequency.setValueAtTime(600,t);o.frequency.exponentialRampToValueAtTime(1200,t+0.1);g.gain.setValueAtTime(0.3,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.15);o.start(t);o.stop(t+0.15);}
-            else{o.frequency.setValueAtTime(300,t);o.frequency.exponentialRampToValueAtTime(150,t+0.15);g.gain.setValueAtTime(0.3,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.2);o.start(t);o.stop(t+0.2);}
-        }catch(e){}
-    });
-}
-document.addEventListener('touchstart',initAudio,{passive:true});
-document.addEventListener('mousedown',initAudio);
-
-function fetchNoCache(url){return fetch(`${url}?v=${Date.now()}`);}
-
-function showPage(pageId){
-    ['module-page','entry-page','app-screen'].forEach(id=>{
-        const el=document.getElementById(id);if(el)el.style.display='none';
-    });
-    const target=document.getElementById(pageId);
-    if(target){target.style.display='flex';target.classList.remove('page-anim');void target.offsetWidth;target.classList.add('page-anim');}
-}
-
-// STARS
-function getStarCount(lessonName){return Math.min(parseInt(localStorage.getItem('completion_count_'+lessonName)||'0'),3);}
-function renderStarsHTML(count){let h='';for(let i=0;i<3;i++)h+=i<count?'⭐':'☆';return h;}
-
-// MODULE NAV
-function selectModule(moduleKey){
-    initAudio();if(!allModulesData)return;
-    const lessons=allModulesData[moduleKey];if(!lessons)return;
-    activeModuleKey=moduleKey;
-    const moduleNames={module3:'Module #3 Flash Cards',module4:'Module #4 Flash Cards'};
-    const moduleLogos={module3:'module3logo.png',module4:'module4logo.png'};
-    document.getElementById('moduleTitle').innerText=moduleNames[moduleKey]||moduleKey;
-    const entryLogo=document.getElementById('entryModuleLogo');
-    entryLogo.src=moduleLogos[moduleKey]||'';
-    entryLogo.style.display=moduleLogos[moduleKey]?'block':'none';
-    buildSnakeLayout(lessons);
-    showPage('entry-page');
-}
-
-function buildSnakeLayout(lessons){
-    const container=document.getElementById('lesson-list-container');
-    container.innerHTML='';
-
-    const rainbowColors=[
-        {bg:'#38bdf8',shadow:'#0284c7'},
-        {bg:'#2dd4bf',shadow:'#0f766e'},
-        {bg:'#a855f7',shadow:'#7e22ce'},
-        {bg:'#fb7185',shadow:'#e11d48'},
-        {bg:'#4ade80',shadow:'#16a34a'},
-        {bg:'#60a5fa',shadow:'#2563eb'},
-        {bg:'#f97316',shadow:'#c2410c'},
-        {bg:'#e879f9',shadow:'#a21caf'},
-    ];
-
-    lessons.forEach((lesson,i)=>{
-        const starCount=getStarCount(lesson.name);
-        const colorSet=rainbowColors[i%rainbowColors.length];
-        const logoFile=lesson.logo?`logos/${lesson.logo}`:null;
-
-        const div=document.createElement('div');
-        div.className='lesson-card';
-        div.onclick=()=>loadLesson(lesson);
-
-        const nodeLogo=logoFile
-            ?`<div class="node-logo" style="background-image:url('${logoFile}');"></div>`
-            :`<div style="font-size:26px;display:flex;align-items:center;justify-content:center;width:60%;height:60%;">${i+1}</div>`;
-
-        div.innerHTML=`
-            <div class="node-btn" style="background:${colorSet.bg};box-shadow:0 8px 0 ${colorSet.shadow},0 12px 24px rgba(0,0,0,0.3);">
-                ${nodeLogo}
+        <div id="flashcard-screen">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
             </div>
-            <h3>${lesson.name}</h3>
-            <div class="lesson-stars">${renderStarsHTML(starCount)}</div>
-        `;
-        container.appendChild(div);
-    });
+            <div id="cardCounter" style="text-align:right; font-weight:800; color:var(--primary); font-size:0.9rem; margin-bottom:5px;">1 / 10</div>
+            
+            <div class="card-container">
+                <div class="card" id="mainCard" onclick="this.classList.toggle('flipped')">
+                    <div class="card-face card-front">
+                        <span class="material-symbols-rounded" style="position:absolute; top:25px; right:25px; color:#475569">info</span>
+                        <div id="wordText" style="font-size: 2.8rem; font-weight: 900; margin-bottom: 15px; text-align:center;">Word</div>
+                        <div id="wordPron" style="color: var(--secondary); font-weight: 700; font-size: 1.2rem; background: rgba(45,212,191,0.1); padding: 5px 15px; border-radius: 10px;">/pron/</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div id="wordMeaning" style="font-size: 2.2rem; font-weight: 900; color: var(--accent); margin-bottom: 20px; text-align:center;">Anlamı</div>
+                        <div id="wordExample" style="font-style: italic; text-align: center; color: #cbd5e1; line-height: 1.5; font-size: 1.1rem; padding: 0 10px;">"Example sentence"</div>
+                    </div>
+                </div>
+            </div>
 
-    // Active ve completed'i işaretle
-    const allCards=container.querySelectorAll('.lesson-card');
-    let activeFound=false;
-    lessons.forEach((lesson,i)=>{
-        const starCount=getStarCount(lesson.name);
-        const card=allCards[i];
-        if(starCount>0){
-            card.classList.add('completed');
-        } else if(!activeFound){
-            card.classList.add('active');
-            activeFound=true;
-            const badge=document.createElement('div');
-            badge.className='start-badge';
-            badge.innerText='HADİ!';
-            card.appendChild(badge);
+            <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 15px; margin-top: auto; padding-bottom: 20px;">
+                <button class="nav-btn" onclick="prevCard()">
+                    <span class="material-symbols-rounded">arrow_back_ios_new</span>
+                </button>
+                <button class="nav-btn primary" onclick="nextCard()" style="justify-content: center;">
+                    İLERİ <span class="material-symbols-rounded">arrow_forward_ios</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="completion-overlay">
+        <div style="font-size: 80px; margin-bottom: 10px;">🎉</div>
+        <h1 style="font-family: 'Poppins'; font-weight: 900; font-size: 2.5rem; margin: 0; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MÜKEMMEL!</h1>
+        <p id="completionHint" style="color: var(--secondary); font-weight: 800; font-size: 1.2rem; margin-top: 10px;"></p>
+        
+        <div class="stars-row">
+            <span class="material-symbols-rounded comp-star" id="star1">star</span>
+            <span class="material-symbols-rounded comp-star" id="star2">star</span>
+            <span class="material-symbols-rounded comp-star" id="star3">star</span>
+        </div>
+
+        <button class="btn-done" onclick="closeCompletion()">DEVAM ET</button>
+    </div>
+
+    <script>
+        let allModulesData = {};
+        let currentModule = '';
+        let currentLessonIndex = 0;
+        let currentCardIndex = 0;
+        let activeLessons = [];
+
+        function fetchNoCache(url) {
+            return fetch(url + '?v=' + Date.now()).then(res => res.json());
         }
-    });
-}
 
-function goToModulePage(){saveProgress();showPage('module-page');}
+        // INIT
+        fetchNoCache('data.json').then(data => {
+            allModulesData = data;
+            // Başlangıçta modül ekranı aktif
+        }).catch(err => console.error("Veri yüklenemedi:", err));
 
-// VOICE
-if(autoTRVoice)document.getElementById('trVoiceToggle').classList.add('active');
-function toggleTRVoice(){
-    initAudio();autoTRVoice=!autoTRVoice;localStorage.setItem('auto_tr_voice',autoTRVoice);
-    const btn=document.getElementById('trVoiceToggle');
-    if(autoTRVoice){btn.classList.add('active');speakTR();}else{btn.classList.remove('active');window.speechSynthesis.cancel();}
-}
-function speakTR(){
-    if(!cards.length||!autoTRVoice||!cards[currentIndex])return;
-    window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].tr);u.lang='tr-TR';window.speechSynthesis.speak(u);
-}
-function speakEN(){
-    initAudio();if(!cards.length||!cards[currentIndex])return;
-    window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=1.0;window.speechSynthesis.speak(u);
-}
-function speakENSlow(){
-    initAudio();if(!cards.length||!cards[currentIndex])return;
-    window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=0.5;window.speechSynthesis.speak(u);
-}
+        function selectModule(mKey) {
+            currentModule = mKey;
+            activeLessons = allModulesData[mKey] || [];
+            document.getElementById('module-screen').classList.add('hidden');
+            document.getElementById('path-screen').style.display = 'block';
+            renderPath();
+        }
 
-// SHUFFLE
-function toggleShuffle(){
-    initAudio();shuffleMode=!shuffleMode;const btn=document.getElementById('shuffleToggle');
-    if(shuffleMode){btn.classList.add('active');cards=[...cards].sort(()=>Math.random()-0.5);}
-    else{
-        btn.classList.remove('active');
-        const sm={};cards.forEach(c=>{sm[c.tr]={isLearned:c.isLearned,isUnknown:c.isUnknown};});
-        cards=originalData.map(c=>({...c,isLearned:sm[c.tr]?sm[c.tr].isLearned:false,isUnknown:sm[c.tr]?sm[c.tr].isUnknown:false}));
-    }
-    currentIndex=0;show();
-}
+        function renderPath() {
+            const container = document.getElementById('lessonPathContainer');
+            container.innerHTML = '';
+            
+            activeLessons.forEach((lesson, index) => {
+                const node = document.createElement('div');
+                node.className = 'lesson-node active'; // Hepsi aktif (senin v6.2 mantığın)
+                node.innerHTML = `
+                    <div class="lesson-circle">${index + 1}</div>
+                    <div class="lesson-popover" id="popover-${index}">
+                        <div class="popover-title">${lesson.lessonName}</div>
+                        <button class="btn-start-lesson" onclick="startLesson(${index})">BAŞLAT</button>
+                    </div>
+                `;
+                
+                node.onclick = (e) => {
+                    e.stopPropagation();
+                    showPopover(index);
+                };
+                
+                container.appendChild(node);
+            });
+        }
 
-function show(){
-    if(!cards.length)return;
-    if(currentIndex>=cards.length)currentIndex=0;
-    if(currentIndex<0)currentIndex=cards.length-1;
-    mainCard.classList.remove('flipped');
-    mainCard.style.cssText="top:0;opacity:1;transform:rotateY(0deg);";
-    document.getElementById('trDisplay').innerText=cards[currentIndex].tr;
-    document.getElementById('engDisplay').innerText=cards[currentIndex].en;
-    const tagF=document.getElementById('tagFront'),tagB=document.getElementById('tagBack');
-    tagF.className="status-tag";tagB.className="status-tag";tagF.style.display=tagB.style.display="none";
-    if(cards[currentIndex].isLearned){
-        tagF.innerText=tagB.innerText="LEARNED ✅";tagF.classList.add("tag-learned");tagB.classList.add("tag-learned");tagF.style.display=tagB.style.display="block";
-    }else if(cards[currentIndex].isUnknown){
-        tagF.innerText=tagB.innerText="UNKNOWN ❌";tagF.classList.add("tag-unknown");tagB.classList.add("tag-unknown");tagF.style.display=tagB.style.display="block";
-    }
-    const lc=cards.filter(c=>c.isLearned).length,uc=cards.filter(c=>c.isUnknown).length;
-    document.getElementById('remainCount').innerText=cards.length;
-    document.getElementById('correctCount').innerText=lc;
-    document.getElementById('wrongCount').innerText=uc;
-    document.getElementById('orderCount').innerText=(currentIndex+1);
-    if(autoTRVoice)setTimeout(speakTR,300);
-    document.getElementById('guideLayer').style.opacity="1";
-}
+        function showPopover(index) {
+            // Diğerlerini kapat
+            document.querySelectorAll('.lesson-popover').forEach(p => p.classList.remove('show'));
+            // Seçileni aç
+            const pop = document.getElementById(`popover-${index}`);
+            pop.classList.add('show');
+        }
 
-function handleFlip(event){
-    if(hasMoved)return;initAudio();
-    mainCard.classList.toggle('flipped');
-    mainCard.style.transform=`rotateY(${mainCard.classList.contains('flipped')?180:0}deg)`;
-}
+        // Boşluğa tıklayınca popover kapat
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.lesson-popover').forEach(p => p.classList.remove('show'));
+        });
 
-// SWIPE
-const area=document.getElementById('swipeArea');
-const mainCard=document.getElementById('mainCard');
-const startAction=(y)=>{initAudio();startY=y;isDragging=true;hasMoved=false;mainCard.style.transition="none";};
-const moveAction=(y)=>{
-    if(!isDragging)return;currentY=y-startY;
-    if(Math.abs(currentY)>10){hasMoved=true;document.getElementById('guideLayer').style.opacity="0";}
-    const rotY=mainCard.classList.contains('flipped')?180:0;
-    mainCard.style.top=currentY+"px";
-    mainCard.style.transform=`rotateY(${rotY}deg) rotateX(${-currentY/20}deg)`;
-    document.getElementById('note-know').style.opacity=currentY<-50?"1":"0";
-    document.getElementById('note-dont').style.opacity=currentY>50?"1":"0";
-};
-const endAction=()=>{
-    if(!isDragging)return;isDragging=false;
-    if(hasMoved){
-        mainCard.style.transition="0.4s cubic-bezier(0.175,0.885,0.32,1.275)";
-        if(currentY<-120)handleChoice(true);
-        else if(currentY>120)handleChoice(false);
-        else{resetCard();document.getElementById('guideLayer').style.opacity="1";}
-    }else{document.getElementById('guideLayer').style.opacity="1";}
-    document.getElementById('note-know').style.opacity="0";
-    document.getElementById('note-dont').style.opacity="0";
-    currentY=0;
-};
-area.addEventListener('touchstart',(e)=>startAction(e.touches[0].clientY),{passive:true});
-area.addEventListener('touchmove',(e)=>moveAction(e.touches[0].clientY),{passive:true});
-area.addEventListener('touchend',endAction);
-area.onmousedown=(e)=>startAction(e.clientY);
-window.onmousemove=(e)=>moveAction(e.clientY);
-window.onmouseup=endAction;
+        function startLesson(idx) {
+            currentLessonIndex = idx;
+            currentCardIndex = 0;
+            document.getElementById('path-screen').style.display = 'none';
+            document.getElementById('flashcard-screen').style.display = 'flex';
+            updateCard();
+        }
 
-function handleChoice(isCorrect){
-    if(isCorrect){
-        _playSound('up');cards[currentIndex].isLearned=true;cards[currentIndex].isUnknown=false;
-        mainCard.style.top="-1000px";mainCard.style.opacity="0";
-        setTimeout(()=>{
-            const lc=cards.filter(c=>c.isLearned).length;
-            if(lc===cards.length){
-                const ck='completion_count_'+activeLesson.name;
-                const prev=parseInt(localStorage.getItem(ck)||'0');
-                const newCount=Math.min(prev+1,3);
-                localStorage.setItem(ck,newCount);
-                localStorage.removeItem('lesson_progress_'+activeLesson.name);
-                showCompletion(newCount);
-            }else{
-                let nextIdx=(currentIndex+1)%cards.length;
-                while(cards[nextIdx].isLearned)nextIdx=(nextIdx+1)%cards.length;
-                currentIndex=nextIdx;saveProgress();show();
+        function updateCard() {
+            const lesson = activeLessons[currentLessonIndex];
+            const card = lesson.cards[currentCardIndex];
+            const total = lesson.cards.length;
+
+            document.getElementById('mainCard').classList.remove('flipped');
+            document.getElementById('cardCounter').innerText = `${currentCardIndex + 1} / ${total}`;
+            document.getElementById('progressBar').style.width = `${((currentCardIndex + 1) / total) * 100}%`;
+            
+            document.getElementById('wordText').innerText = card.word;
+            document.getElementById('wordPron').innerText = card.pron;
+            document.getElementById('wordMeaning').innerText = card.meaning;
+            document.getElementById('wordExample').innerText = `"${card.example}"`;
+        }
+
+        function nextCard() {
+            const lesson = activeLessons[currentLessonIndex];
+            if(currentCardIndex < lesson.cards.length - 1) {
+                currentCardIndex++;
+                updateCard();
+            } else {
+                showCompletion();
             }
-        },200);
-    }else{
-        _playSound('down');cards[currentIndex].isUnknown=true;cards[currentIndex].isLearned=false;
-        mainCard.style.top="1000px";mainCard.style.opacity="0";
-        setTimeout(()=>{currentIndex=(currentIndex+1)%cards.length;saveProgress();show();},200);
-    }
-}
-function resetCard(){mainCard.style.top="0";mainCard.style.transform=`rotateY(${mainCard.classList.contains('flipped')?180:0}deg)`;}
-function goNext(){initAudio();currentIndex=(currentIndex+1)%cards.length;show();}
-function goBack(){initAudio();currentIndex=(currentIndex-1+cards.length)%cards.length;show();}
-function goHome(){
-    saveProgress();
-    if(activeModuleKey&&allModulesData)buildSnakeLayout(allModulesData[activeModuleKey]);
-    showPage('entry-page');
-}
-function saveProgress(){
-    if(!activeLesson||cards.length===0)return;
-    const so=cards.map(c=>({tr:c.tr,isLearned:c.isLearned,isUnknown:c.isUnknown}));
-    localStorage.setItem('lesson_progress_'+activeLesson.name,JSON.stringify({state:so,currentIndex}));
-}
-function resetLesson(){
-    initAudio();
-    if(confirm("Reset?")){localStorage.removeItem('lesson_progress_'+activeLesson.name);loadLesson(activeLesson);}
-}
-function loadLesson(lesson){
-    initAudio();activeLesson=lesson;shuffleMode=false;
-    fetchNoCache(lesson.file).then(res=>res.json()).then(data=>{
-        originalData=data;
-        const saved=localStorage.getItem('lesson_progress_'+lesson.name);
-        if(saved){
-            const p=JSON.parse(saved);
-            if(p.state&&Array.isArray(p.state)){
-                const sm={};p.state.forEach(s=>{sm[s.tr]=s;});
-                cards=data.map(item=>({...item,isLearned:sm[item.tr]?sm[item.tr].isLearned:false,isUnknown:sm[item.tr]?sm[item.tr].isUnknown:false}));
-                const allDone=cards.every(c=>c.isLearned);
-                if(allDone){cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;}
-                else{currentIndex=Math.min(p.currentIndex||0,cards.length-1);}
-            }else if(p.cards&&Array.isArray(p.cards)){
-                if(p.cards.length!==data.length||p.cards.every(c=>c.isLearned)){
-                    cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;
-                }else{
-                    const sm={};p.cards.forEach(c=>{sm[c.tr]=c;});
-                    cards=data.map(item=>({...item,isLearned:sm[item.tr]?sm[item.tr].isLearned:false,isUnknown:sm[item.tr]?sm[item.tr].isUnknown:false}));
-                    currentIndex=p.currentIndex||0;
-                }
-            }else{cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;}
-        }else{cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;}
-        document.getElementById('lessonTitle').innerText=lesson.name;
-        document.getElementById('lessonContent').innerText=lesson.subTitle||"";
-        document.getElementById('shuffleToggle').classList.remove('active');
-        showPage('app-screen');show();
-    });
-}
+        }
 
-// COMPLETION STARS
-function showCompletion(count){
-    ['star1','star2','star3'].forEach(id=>{document.getElementById(id).className='comp-star empty';});
-    for(let i=0;i<count;i++){
-        const el=document.getElementById('star'+(i+1));
-        setTimeout(()=>{el.className='comp-star filled';},300+i*350);
-    }
-    const hints=['','İlk yıldızı kazandın! 🎉','2. yıldız! Harika gidiyorsun 🔥','Tam 3 yıldız! Efsanesin 🌟'];
-    document.getElementById('completionHint').innerText=hints[count]||'';
-    document.getElementById('completion-overlay').style.display='flex';
-    createConfetti();
-}
-function closeCompletion(){document.getElementById('completion-overlay').style.display='none';goHome();}
-function createConfetti(){
-    const colors=['#38bdf8','#2dd4bf','#fb7185','#f97316','#fbbf24','#ffffff'];
-    const overlay=document.getElementById('completion-overlay');
-    for(let i=0;i<60;i++){
-        const c=document.createElement('div');c.className='confetti';
-        c.style.left=Math.random()*100+'vw';c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
-        c.style.animationDelay=Math.random()*2+'s';c.style.width=Math.random()*8+5+'px';c.style.height=c.style.width;
-        overlay.appendChild(c);setTimeout(()=>c.remove(),4000);
-    }
-}
+        function prevCard() {
+            if(currentCardIndex > 0) {
+                currentCardIndex--;
+                updateCard();
+            }
+        }
 
-// INIT
-fetchNoCache('data.json').then(res=>res.json()).then(data=>{
-    allModulesData=data;
-    const counts={module3:(data.module3||[]).length,module4:(data.module4||[]).length};
-    const moduleCards=document.querySelectorAll('.module-card');
-    const keys=['module3','module4'];
-    moduleCards.forEach((card,i)=>{const p=card.querySelector('p');if(p&&keys[i])p.innerText=`${counts[keys[i]]||0} Ders`;});
-});
-</script>
+        function showCompletion() {
+            const count = 3; 
+            const stars = [document.getElementById('star1'), document.getElementById('star2'), document.getElementById('star3')];
+            
+            stars.forEach(s => s.classList.remove('filled'));
+            
+            document.getElementById('completionHint').innerText = 'Bu dersi başarıyla tamamladın!';
+            document.getElementById('completion-overlay').style.display = 'flex';
+
+            stars.forEach((star, i) => {
+                setTimeout(() => {
+                    star.classList.add('filled');
+                }, 400 + (i * 400));
+            });
+
+            createConfetti();
+        }
+
+        function closeCompletion() {
+            document.getElementById('completion-overlay').style.display = 'none';
+            document.getElementById('flashcard-screen').style.display = 'none';
+            document.getElementById('path-screen').style.display = 'block';
+        }
+
+        function goHome() {
+            location.reload();
+        }
+
+        function createConfetti() {
+            const colors = ['#38bdf8', '#2dd4bf', '#fb7185', '#fbbf24', '#ffffff'];
+            const container = document.getElementById('completion-overlay');
+            for(let i=0; i<60; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.top = '-10px';
+                c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+                container.appendChild(c);
+                
+                const duration = Math.random() * 3 + 2;
+                c.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(100vh) rotate(${Math.random()*360}deg)`, opacity: 0 }
+                ], { duration: duration * 1000, easing: 'ease-out' });
+                
+                setTimeout(() => c.remove(), duration * 1000);
+            }
+        }
+    </script>
 </body>
 </html>
