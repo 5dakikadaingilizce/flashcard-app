@@ -32,7 +32,7 @@
   { "id": 31, "tr": "Evde çok iş var mı?", "en": "Is there a lot of work at home?" },
   { "id": 32, "tr": "Çok işin var mı?", "en": "Do you have a lot of work?" },
   { "id": 33, "tr": "Ne kadar işin var?", "en": "How much work do you have?" },
-  { "id": 34, "tr": "Hiç vakitleri yok.", "en": "They have no time " },
+  { "id": 34, "tr": "Hiç vakitleri yok.", "en": "They don't have any time / They have no time " },
   { "id": 35, "tr": "Hiç vaktim olmayacak.", "en": "I won't have any time." },
   { "id": 36, "tr": "Hiç vaktim yoktu.", "en": "I hadn't any time." },
   { "id": 37, "tr": "Ali’nin ne kadar vakti var?", "en": "How much time does Ali have?" },
