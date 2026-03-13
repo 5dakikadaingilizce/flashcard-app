@@ -1,249 +1,519 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>5 Dakikada İngilizce Flash Card - V.6.2</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-    <style>
-        :root { 
-            --bg-dark: #0f172a; --card-bg: rgba(30, 41, 59, 0.6); --primary: #38bdf8; 
-            --secondary: #2dd4bf; --accent: #fb7185; --text-main: #f8fafc; 
-            --logo-grad: linear-gradient(90deg, #ff4d4d, #f97316); 
-            --white-grad: linear-gradient(180deg, #ffffff, #94a3b8);
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --shadow-glow: 0 0 30px rgba(249, 115, 22, 0.15);
-        }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(circle at top right, #1e293b, #0f172a); min-height: 100dvh; display: flex; justify-content: center; align-items: center; color: var(--text-main); overflow: hidden; padding: 10px; box-sizing: border-box; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+<meta charset="UTF-8">
+<title>5 Dakikada İngilizce Flash Card - V.6.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+<style>
+:root {
+--bg-dark: #0f172a; --card-bg: rgba(30, 41, 59, 0.6); --primary: #38bdf8;
+--secondary: #2dd4bf; --accent: #fb7185; --text-main: #f8fafc;
+--logo-grad: linear-gradient(90deg, #ff4d4d, #f97316);
+--white-grad: linear-gradient(180deg, #ffffff, #94a3b8);
+--glass-border: rgba(255, 255, 255, 0.12);
+--shadow-glow: 0 0 30px rgba(249, 115, 22, 0.15);
+}
 
-        /* MODULE PAGE */
-        #module-page { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 500px; }
-        .module-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%; margin-top: 10px; }
-        .module-card { background: linear-gradient(145deg, rgba(30,41,59,0.85) 0%, rgba(15,23,42,0.95) 100%); backdrop-filter: blur(15px); padding: 24px 15px 20px; border-radius: 28px; border: 1px solid var(--glass-border); text-align: center; cursor: pointer; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05); position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
-        .module-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #ff4d4d, #f97316); opacity: 0; transition: opacity 0.3s ease; }
-        .module-card:hover { border-color: rgba(249,115,22,0.5); transform: translateY(-8px); box-shadow: 0 20px 40px -10px rgba(249,115,22,0.25), inset 0 1px 0 rgba(255,255,255,0.1); }
-        .module-card:hover::before { opacity: 1; }
-        .module-card .module-icon { width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; }
-        .module-card .module-icon img { width: 100%; height: 100%; object-fit: contain; animation: float3d 3s ease-in-out infinite; filter: drop-shadow(0 8px 20px rgba(249,115,22,0.35)); }
-        @keyframes float3d { 0% { transform: translateY(0px) rotateX(0deg); } 50% { transform: translateY(-10px) rotateX(6deg); } 100% { transform: translateY(0px) rotateX(0deg); } }
-        .module-card h2 { margin: 0; font-family: 'Poppins'; font-size: 1.3rem; font-weight: 900; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .module-card p { margin: 0; font-size: 11px; color: #94a3b8; -webkit-text-fill-color: #94a3b8; font-weight: 500; line-height: 1.4; }
+body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(circle at top right, #1e293b, #0f172a); min-height: 100dvh; display: flex; justify-content: center; align-items: center; color: var(--text-main); overflow: hidden; padding: 10px; box-sizing: border-box; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
 
-        /* ENTRY PAGE */
-        #entry-page { display: none; flex-direction: column; align-items: center; width: 100%; max-height: 95vh; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
-        #entry-page::-webkit-scrollbar { display: none; }
-        .main-title-white { font-family: 'Poppins'; font-size: 24px; font-weight: 900; background: var(--white-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
-        .select-lesson-title { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; margin: 5px 0 20px 0; font-weight: 900; font-family: 'Poppins'; filter: drop-shadow(0 0 15px rgba(249,115,22,0.3)); }
-        .back-to-modules-btn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 8px 16px; color: #94a3b8; font-size: 12px; font-weight: 700; cursor: pointer; margin-bottom: 16px; transition: all 0.3s; align-self: flex-start; }
-        .back-to-modules-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        .back-to-modules-btn .material-symbols-rounded { font-size: 16px; }
-        .entry-module-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; }
-        .entry-module-logo { width: 70px; height: 70px; object-fit: contain; animation: float3d 3s ease-in-out infinite; filter: drop-shadow(0 6px 16px rgba(249,115,22,0.3)); margin-bottom: 4px; }
+/* MODULE PAGE */
+#module-page { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 500px; }
 
-        /* DUOLINGO-STYLE NODE LESSON LIST */
-        #lesson-list-container { width: 100%; max-width: 360px; padding: 0 8px 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; position: relative; }
-        #lesson-list-container::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 4px; background: linear-gradient(180deg, rgba(249,115,22,0.35) 0%, rgba(249,115,22,0.04) 100%); border-radius: 4px; z-index: 0; }
+.module-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%; margin-top: 10px; }
 
-        .lesson-card { position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer; margin-bottom: 18px; z-index: 1; transition: transform 0.2s; }
-        .lesson-card:nth-child(5n+1) { align-self: center; }
-        .lesson-card:nth-child(5n+2) { align-self: flex-end; margin-right: 20px; }
-        .lesson-card:nth-child(5n+3) { align-self: flex-end; margin-right: 50px; }
-        .lesson-card:nth-child(5n+4) { align-self: flex-end; margin-right: 20px; }
-        .lesson-card:nth-child(5n+5) { align-self: center; }
+/* MODULE CARD - logo daha büyük, tıklanabilir */
+.module-card { background: linear-gradient(145deg, rgba(30,41,59,0.85) 0%, rgba(15,23,42,0.95) 100%); backdrop-filter: blur(15px); padding: 20px 15px 18px; border-radius: 28px; border: 1px solid var(--glass-border); text-align: center; cursor: pointer; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05); position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
 
-        .node-btn { width: 88px; height: 88px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex-shrink: 0; }
-        .node-btn:hover { transform: translateY(-4px) scale(1.05); }
+.module-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #ff4d4d, #f97316); opacity: 0; transition: opacity 0.3s ease; }
 
-        .node-logo { width: 68%; height: 68%; background-size: contain !important; background-repeat: no-repeat !important; background-position: center !important; display: block; }
+.module-card:hover { border-color: rgba(249,115,22,0.5); transform: translateY(-8px); box-shadow: 0 20px 40px -10px rgba(249,115,22,0.25), inset 0 1px 0 rgba(255,255,255,0.1); }
+.module-card:hover::before { opacity: 1; }
 
-        .lesson-card h3 { font-size: 11px; font-weight: 800; color: #f8fafc; text-align: center; max-width: 100px; font-family: 'Poppins'; line-height: 1.2; margin: 6px 0 2px 0 !important; }
+/* Logolar büyütüldü */
+.module-card .module-icon { width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.module-card .module-icon img { width: 100%; height: 100%; object-fit: contain; animation: float3d 3s ease-in-out infinite; filter: drop-shadow(0 8px 20px rgba(249,115,22,0.35)); transition: transform 0.2s; }
+.module-card .module-icon img:hover { transform: scale(1.08); }
 
-        .lesson-stars { display: flex; gap: 3px; font-size: 13px; line-height: 1; justify-content: center; }
+@keyframes float3d { 0% { transform: translateY(0px) rotateX(0deg); } 50% { transform: translateY(-10px) rotateX(6deg); } 100% { transform: translateY(0px) rotateX(0deg); } }
 
-        @keyframes floatAnim { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.module-card h2 { margin: 0; font-family: 'Poppins'; font-size: 1.3rem; font-weight: 900; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.module-card p { margin: 0; font-size: 11px; color: #94a3b8; -webkit-text-fill-color: #94a3b8; font-weight: 500; line-height: 1.4; }
 
-        .lesson-card.active .node-btn { width: 104px !important; height: 104px !important; background: #fbbf24 !important; box-shadow: 0 8px 0 #d97706, 0 16px 30px rgba(251,191,36,0.4) !important; animation: floatAnim 2.5s ease-in-out infinite; }
-        .lesson-card.completed .node-btn { opacity: 0.85; }
-        .lesson-card.disabled { cursor: not-allowed; }
-        .lesson-card.disabled .node-btn { background: #374151 !important; box-shadow: 0 8px 0 #1f2937 !important; opacity: 0.55; }
-        .lesson-card.disabled .node-logo { filter: grayscale(1) opacity(0.4); }
-        .lesson-card.disabled h3 { color: #4b5563; }
-        .lesson-card.disabled .lesson-stars { opacity: 0.3; }
+/* ENTRY PAGE */
+#entry-page { display: none; flex-direction: column; align-items: center; width: 100%; max-height: 95vh; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
+#entry-page::-webkit-scrollbar { display: none; }
 
-        .start-badge { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); background: white; color: #d97706; padding: 4px 12px; border-radius: 12px; font-weight: 900; font-size: 10px; box-shadow: 0 4px 0 #cbd5e1; z-index: 15; animation: bounce 1.5s infinite; white-space: nowrap; }
+.main-title-white { font-family: 'Poppins'; font-size: 24px; font-weight: 900; background: var(--white-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+.select-lesson-title { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; margin: 5px 0 20px 0; font-weight: 900; font-family: 'Poppins'; filter: drop-shadow(0 0 15px rgba(249,115,22,0.3)); }
 
-        /* APP SCREEN */
-        #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
-        .top-bar { display: flex; justify-content: space-between; margin-bottom: 12px; gap: 4px; width: 100%; background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); padding: 6px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); box-sizing: border-box; }
-        .nav-btn { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; height: 36px; padding: 0 4px; font-size: 9px; font-weight: 700; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 3px; white-space: nowrap; overflow: hidden; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
-        .nav-btn .material-symbols-rounded { font-size: 16px; transition: transform 0.2s; }
-        .nav-btn:hover { background: rgba(255,255,255,0.1); color: white; transform: translateY(-1px); }
-        .nav-btn.active { background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%); box-shadow: 0 4px 15px rgba(251,113,133,0.4); border-color: rgba(255,255,255,0.3); color: white; }
-        .app-box { background: linear-gradient(145deg, rgba(30,41,59,0.7) 0%, rgba(15,23,42,0.8) 100%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6), var(--shadow-glow); text-align: center; position: relative; overflow: hidden; }
-        .app-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); }
-        .app-logo-small { width: 50px; margin-bottom: 5px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
-        .app-brand-text { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 2px; letter-spacing: 0.5px; }
-        .lesson-title-grad { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 28px; font-family: 'Poppins'; margin: 0 0 4px 0; display: block !important; width: 100% !important; clear: both !important; line-height: 1.3 !important; filter: drop-shadow(0 0 20px rgba(249,115,22,0.2)); }
-        .lesson-content-desc { color: #94a3b8 !important; -webkit-text-fill-color: #94a3b8 !important; font-size: 13px !important; font-weight: 500 !important; margin: 0 0 15px 0 !important; display: block !important; width: 100% !important; clear: both !important; line-height: 1.4 !important; }
-        .status-tag { position: absolute; top: 15px; left: 15px; padding: 4px 12px; border-radius: 50px; font-size: 10px; font-weight: 900; font-family: 'Poppins'; letter-spacing: 1px; text-transform: uppercase; z-index: 20; display: none; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .tag-learned { background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%); color: #0f172a; display: block; }
-        .tag-unknown { background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%); color: white; display: block; }
-        .guide-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 10px 0; pointer-events: none; z-index: 50; transition: opacity 0.3s; }
-        .guide-item { display: flex; flex-direction: column; align-items: center; font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 13px; animation: guide-pulse 2s infinite ease-in-out; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        #guide-up { color: var(--secondary); margin-top: -5px; }
-        #guide-down { color: var(--accent); margin-bottom: -5px; }
-        .guide-item .material-symbols-rounded { font-size: 32px; margin: -2px 0; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); }
-        @keyframes guide-pulse { 0% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 0.6; transform: scale(1.05); } 100% { opacity: 0.2; transform: scale(0.95); } }
-        .card-container { perspective: 1000px; width: 100%; height: 210px; margin: 10px 0; position: relative; }
-        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275), top 0.3s, opacity 0.3s; z-index: 10; cursor: pointer; animation: cardEnter 0.4s ease-out; }
-        .card.flipped { transform: rotateY(180deg); }
-        .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); box-sizing: border-box; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1); }
-        .front { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: var(--secondary); font-size: 26px; font-weight: 800; }
-        .back { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--text-main); transform: rotateY(180deg); font-size: 22px; font-weight: 700; border-color: var(--primary); }
-        .swipe-note { position: absolute; left: 50%; transform: translateX(-50%); padding: 10px 30px; border-radius: 50px; font-family: 'Poppins'; font-weight: 900; font-size: 16px; opacity: 0; transition: all 0.2s; z-index: 60; pointer-events: none; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        #note-know { top: 40px; background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%); color: #0f172a; }
-        #note-dont { bottom: 40px; background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%); color: white; }
-        .controls-row { display: flex; gap: 8px; margin-bottom: 12px; }
-        .control-btn { flex: 1; background: rgba(51,65,85,0.6); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 14px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); backdrop-filter: blur(10px); }
-        .control-btn:hover { background: rgba(71,85,105,0.8); border-color: rgba(255,255,255,0.15); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-        .control-btn:active { transform: translateY(0); }
-        .control-btn .material-symbols-rounded { transition: transform 0.2s; }
-        .listen-row { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn-main { background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%); color: white; flex: 1; padding: 16px 8px; border-radius: 18px; font-size: 12px; font-weight: 900; border: none; font-family: 'Poppins'; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; animation: pulse-glow 2s infinite; box-shadow: 0 10px 30px -5px rgba(56,189,248,0.4); position: relative; overflow: hidden; transition: transform 0.2s; }
-        .btn-main::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
-        .btn-main:hover::before { left: 100%; }
-        .btn-main:hover { transform: translateY(-2px); }
-        .btn-main:active { transform: translateY(0); }
-        .btn-main .material-symbols-rounded { font-size: 17px; }
-        .btn-slow { background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #6d28d9 100%); box-shadow: 0 10px 30px -5px rgba(139,92,246,0.4); animation: pulse-glow-slow 2s infinite; }
-        .btn-slow .btn-emoji { font-size: 15px; line-height: 1; }
-        @keyframes pulse-glow { 0% { box-shadow: 0 0 0 0 rgba(56,189,248,0.7), 0 10px 30px -5px rgba(56,189,248,0.4); transform: scale(1); } 70% { box-shadow: 0 0 0 10px rgba(56,189,248,0), 0 15px 40px -5px rgba(56,189,248,0.5); transform: scale(1.01); } 100% { box-shadow: 0 0 0 0 rgba(56,189,248,0), 0 10px 30px -5px rgba(56,189,248,0.4); transform: scale(1); } }
-        @keyframes pulse-glow-slow { 0% { box-shadow: 0 0 0 0 rgba(139,92,246,0.7), 0 10px 30px -5px rgba(139,92,246,0.4); transform: scale(1); } 70% { box-shadow: 0 0 0 10px rgba(139,92,246,0), 0 15px 40px -5px rgba(139,92,246,0.5); transform: scale(1.01); } 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0), 0 10px 30px -5px rgba(139,92,246,0.4); transform: scale(1); } }
-        .stats { display: flex; justify-content: space-between; background: rgba(15,23,42,0.5); padding: 16px 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(10px); position: relative; overflow: hidden; }
-        .stats::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
-        .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
-        .stat-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.1), transparent); }
-        .stat-label-row { display: flex; align-items: center; gap: 3px; font-size: 7px; color: #64748b; font-weight: 800; margin-bottom: 4px; letter-spacing: 0.5px; }
-        .stat-label-row .material-symbols-rounded { font-size: 12px; }
-        .stat-val { font-weight: 900; font-size: 16px; color: var(--primary); font-variant-numeric: tabular-nums; text-shadow: 0 0 20px rgba(56,189,248,0.3); }
-        .v-tag { position: absolute; top: 10px; right: 10px; font-size: 10px; color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); font-weight: 600; letter-spacing: 0.5px; }
+.back-to-modules-btn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 8px 16px; color: #94a3b8; font-size: 12px; font-weight: 700; cursor: pointer; margin-bottom: 16px; transition: all 0.3s; align-self: flex-start; }
+.back-to-modules-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+.back-to-modules-btn .material-symbols-rounded { font-size: 16px; }
 
-        /* COMPLETION */
-        #completion-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.98); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(20px); text-align: center; padding: 20px; box-sizing: border-box; }
-        .trophy-icon { font-size: 72px; margin-bottom: 16px; animation: trophy-bounce 1s infinite alternate; filter: drop-shadow(0 0 30px rgba(249,115,22,0.5)); }
-        .congrats-title { font-family: 'Poppins'; font-size: 36px; font-weight: 900; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
-        .congrats-text { color: #94a3b8; font-size: 16px; margin-bottom: 24px; font-weight: 600; }
-        .completion-stars { display: flex; gap: 16px; margin-bottom: 20px; align-items: center; justify-content: center; }
-        .comp-star { font-size: 54px; line-height: 1; }
-        .comp-star.filled { animation: star-pop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) forwards; filter: drop-shadow(0 0 14px rgba(251,191,36,0.9)); }
-        .comp-star.empty { filter: grayscale(1) opacity(0.25); }
-        @keyframes star-pop { 0% { transform: scale(0.4) rotate(-20deg); } 60% { transform: scale(1.35) rotate(10deg); } 100% { transform: scale(1) rotate(0deg); } }
-        .completion-hint { font-size: 13px; color: #94a3b8; margin-bottom: 24px; font-weight: 600; min-height: 20px; }
-        @keyframes trophy-bounce { from { transform: translateY(0) scale(1); } to { transform: translateY(-12px) scale(1.08); } }
-        .confetti { position: absolute; opacity: 0; animation: confetti-fall 3s ease-in infinite; pointer-events: none; border-radius: 50%; }
-        @keyframes confetti-fall { 0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
-        @keyframes cardEnter { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes pageSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .page-anim { animation: pageSlideIn 0.35s ease-out; }
-    </style>
+.entry-module-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; }
+.entry-module-logo { width: 70px; height: 70px; object-fit: contain; animation: float3d 3s ease-in-out infinite; filter: drop-shadow(0 6px 16px rgba(249,115,22,0.3)); margin-bottom: 4px; }
+
+/* DUOLINGO-STYLE NODE LESSON LIST - Soldan sağa zigzag */
+#lesson-list-container {
+  width: 100%;
+  max-width: 380px;
+  padding: 0 8px 60px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+#lesson-list-container::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  background: linear-gradient(180deg, rgba(249,115,22,0.35) 0%, rgba(249,115,22,0.04) 100%);
+  border-radius: 4px;
+  z-index: 0;
+}
+
+/* Kenar animasyon logoları için wrapper */
+#lesson-list-container {
+  overflow: visible;
+}
+
+.lesson-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 18px;
+  z-index: 1;
+  transition: transform 0.2s;
+}
+
+/* Soldan sağa zigzag - Duolingo tarzı */
+.lesson-card:nth-child(5n+1) { align-self: center; }
+.lesson-card:nth-child(5n+2) { align-self: flex-end; margin-right: 30px; }
+.lesson-card:nth-child(5n+3) { align-self: flex-end; margin-right: 55px; }
+.lesson-card:nth-child(5n+4) { align-self: flex-end; margin-right: 30px; }
+.lesson-card:nth-child(5n+5) { align-self: center; }
+
+.node-btn { width: 88px; height: 88px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex-shrink: 0; }
+.node-btn:hover { transform: translateY(-4px) scale(1.05); }
+
+.node-logo { width: 68%; height: 68%; background-size: contain !important; background-repeat: no-repeat !important; background-position: center !important; display: block; }
+
+.lesson-card h3 { font-size: 11px; font-weight: 800; color: #f8fafc; text-align: center; max-width: 100px; font-family: 'Poppins'; line-height: 1.2; margin: 6px 0 2px 0 !important; }
+.lesson-stars { display: flex; gap: 3px; font-size: 13px; line-height: 1; justify-content: center; }
+
+@keyframes floatAnim { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+.lesson-card.active .node-btn { width: 104px !important; height: 104px !important; background: #fbbf24 !important; box-shadow: 0 8px 0 #d97706, 0 16px 30px rgba(251,191,36,0.4) !important; animation: floatAnim 2.5s ease-in-out infinite; }
+.lesson-card.completed .node-btn { opacity: 0.85; }
+.lesson-card.disabled { cursor: not-allowed; }
+.lesson-card.disabled .node-btn { background: #374151 !important; box-shadow: 0 8px 0 #1f2937 !important; opacity: 0.55; }
+.lesson-card.disabled .node-logo { filter: grayscale(1) opacity(0.4); }
+.lesson-card.disabled h3 { color: #4b5563; }
+.lesson-card.disabled .lesson-stars { opacity: 0.3; }
+
+.start-badge { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); background: white; color: #d97706; padding: 4px 12px; border-radius: 12px; font-weight: 900; font-size: 10px; box-shadow: 0 4px 0 #cbd5e1; z-index: 15; animation: bounce 1.5s infinite; white-space: nowrap; }
+
+/* DERS POPUP - Ders tıklandığında açılan kutucuk */
+#lesson-popup-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  z-index: 500;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
+#lesson-popup-overlay.active { display: flex; }
+
+#lesson-popup-box {
+  background: linear-gradient(145deg, rgba(30,41,59,0.98) 0%, rgba(15,23,42,0.99) 100%);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 28px 28px 24px 24px;
+  padding: 24px 24px 20px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+  animation: slideUpPopup 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+  position: relative;
+  text-align: center;
+}
+
+@keyframes slideUpPopup {
+  from { transform: translateY(100px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+#lesson-popup-box .popup-close {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  width: 32px; height: 32px;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  transition: all 0.2s;
+}
+#lesson-popup-box .popup-close:hover { background: rgba(255,255,255,0.15); color: white; }
+
+.popup-lesson-icon {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+}
+.popup-lesson-icon .node-logo-img {
+  width: 68%; height: 68%;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  display: block;
+}
+
+.popup-lesson-name {
+  font-family: 'Poppins';
+  font-size: 20px;
+  font-weight: 900;
+  background: var(--logo-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 6px;
+}
+
+.popup-lesson-sub {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 14px;
+  font-weight: 500;
+  min-height: 18px;
+}
+
+.popup-stars-row {
+  display: flex; gap: 6px; justify-content: center; margin-bottom: 18px; font-size: 22px;
+}
+
+.popup-start-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #f97316 0%, #ff4d4d 100%);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 900;
+  font-family: 'Poppins';
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 0 #c2410c, 0 12px 30px rgba(249,115,22,0.4);
+  transition: all 0.15s;
+  animation: pulse-glow-orange 2s infinite;
+}
+
+@keyframes pulse-glow-orange {
+  0% { box-shadow: 0 8px 0 #c2410c, 0 0 0 0 rgba(249,115,22,0.6); }
+  70% { box-shadow: 0 8px 0 #c2410c, 0 0 0 12px rgba(249,115,22,0); }
+  100% { box-shadow: 0 8px 0 #c2410c, 0 0 0 0 rgba(249,115,22,0); }
+}
+
+.popup-start-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #c2410c, 0 4px 15px rgba(249,115,22,0.3); }
+.popup-start-btn .material-symbols-rounded { font-size: 20px; }
+
+/* KENAR ANİMASYON LOGOLARI */
+.side-logo-anim {
+  position: fixed;
+  width: 48px;
+  height: 48px;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+  animation: sideBobble 4s ease-in-out infinite;
+}
+.side-logo-anim img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(249,115,22,0.3));
+}
+
+.side-logo-anim:nth-child(1) { left: 8px; top: 12%; animation-delay: 0s; }
+.side-logo-anim:nth-child(2) { left: 8px; top: 32%; animation-delay: 0.8s; }
+.side-logo-anim:nth-child(3) { left: 8px; top: 52%; animation-delay: 1.6s; }
+.side-logo-anim:nth-child(4) { left: 8px; top: 72%; animation-delay: 2.4s; }
+
+.side-logo-anim:nth-child(5) { right: 8px; top: 18%; animation-delay: 0.4s; }
+.side-logo-anim:nth-child(6) { right: 8px; top: 40%; animation-delay: 1.2s; }
+.side-logo-anim:nth-child(7) { right: 8px; top: 60%; animation-delay: 2.0s; }
+.side-logo-anim:nth-child(8) { right: 8px; top: 80%; animation-delay: 2.8s; }
+
+@keyframes sideBobble {
+  0%, 100% { transform: translateY(0px) rotate(-5deg); opacity: 0.13; }
+  50% { transform: translateY(-14px) rotate(5deg); opacity: 0.22; }
+}
+
+/* APP SCREEN */
+#app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
+
+.top-bar { display: flex; justify-content: space-between; margin-bottom: 12px; gap: 4px; width: 100%; background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); padding: 6px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); box-sizing: border-box; }
+
+.nav-btn { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; height: 36px; padding: 0 4px; font-size: 9px; font-weight: 700; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 3px; white-space: nowrap; overflow: hidden; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+.nav-btn .material-symbols-rounded { font-size: 16px; transition: transform 0.2s; }
+.nav-btn:hover { background: rgba(255,255,255,0.1); color: white; transform: translateY(-1px); }
+.nav-btn.active { background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%); box-shadow: 0 4px 15px rgba(251,113,133,0.4); border-color: rgba(255,255,255,0.3); color: white; }
+
+.app-box { background: linear-gradient(145deg, rgba(30,41,59,0.7) 0%, rgba(15,23,42,0.8) 100%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6), var(--shadow-glow); text-align: center; position: relative; overflow: hidden; }
+.app-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); }
+
+.app-logo-small { width: 50px; margin-bottom: 5px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
+.app-brand-text { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 2px; letter-spacing: 0.5px; }
+
+.lesson-title-grad { background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 28px; font-family: 'Poppins'; margin: 0 0 4px 0; display: block !important; width: 100% !important; clear: both !important; line-height: 1.3 !important; filter: drop-shadow(0 0 20px rgba(249,115,22,0.2)); }
+.lesson-content-desc { color: #94a3b8 !important; -webkit-text-fill-color: #94a3b8 !important; font-size: 13px !important; font-weight: 500 !important; margin: 0 0 15px 0 !important; display: block !important; width: 100% !important; clear: both !important; line-height: 1.4 !important; }
+
+.status-tag { position: absolute; top: 15px; left: 15px; padding: 4px 12px; border-radius: 50px; font-size: 10px; font-weight: 900; font-family: 'Poppins'; letter-spacing: 1px; text-transform: uppercase; z-index: 20; display: none; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+.tag-learned { background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%); color: #0f172a; display: block; }
+.tag-unknown { background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%); color: white; display: block; }
+
+.guide-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 10px 0; pointer-events: none; z-index: 50; transition: opacity 0.3s; }
+.guide-item { display: flex; flex-direction: column; align-items: center; font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 13px; animation: guide-pulse 2s infinite ease-in-out; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+#guide-up { color: var(--secondary); margin-top: -5px; }
+#guide-down { color: var(--accent); margin-bottom: -5px; }
+.guide-item .material-symbols-rounded { font-size: 32px; margin: -2px 0; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); }
+@keyframes guide-pulse { 0% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 0.6; transform: scale(1.05); } 100% { opacity: 0.2; transform: scale(0.95); } }
+
+.card-container { perspective: 1000px; width: 100%; height: 210px; margin: 10px 0; position: relative; }
+.card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275), top 0.3s, opacity 0.3s; z-index: 10; cursor: pointer; animation: cardEnter 0.4s ease-out; }
+.card.flipped { transform: rotateY(180deg); }
+
+.face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); box-sizing: border-box; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1); }
+.front { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: var(--secondary); font-size: 26px; font-weight: 800; }
+.back { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--text-main); transform: rotateY(180deg); font-size: 22px; font-weight: 700; border-color: var(--primary); }
+
+.swipe-note { position: absolute; left: 50%; transform: translateX(-50%); padding: 10px 30px; border-radius: 50px; font-family: 'Poppins'; font-weight: 900; font-size: 16px; opacity: 0; transition: all 0.2s; z-index: 60; pointer-events: none; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+#note-know { top: 40px; background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%); color: #0f172a; }
+#note-dont { bottom: 40px; background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%); color: white; }
+
+.controls-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.control-btn { flex: 1; background: rgba(51,65,85,0.6); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 14px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); backdrop-filter: blur(10px); }
+.control-btn:hover { background: rgba(71,85,105,0.8); border-color: rgba(255,255,255,0.15); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+.control-btn:active { transform: translateY(0); }
+.control-btn .material-symbols-rounded { transition: transform 0.2s; }
+
+.listen-row { display: flex; gap: 10px; margin-bottom: 15px; }
+.btn-main { background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%); color: white; flex: 1; padding: 16px 8px; border-radius: 18px; font-size: 12px; font-weight: 900; border: none; font-family: 'Poppins'; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; animation: pulse-glow 2s infinite; box-shadow: 0 10px 30px -5px rgba(56,189,248,0.4); position: relative; overflow: hidden; transition: transform 0.2s; }
+.btn-main::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
+.btn-main:hover::before { left: 100%; }
+.btn-main:hover { transform: translateY(-2px); }
+.btn-main:active { transform: translateY(0); }
+.btn-main .material-symbols-rounded { font-size: 17px; }
+.btn-slow { background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #6d28d9 100%); box-shadow: 0 10px 30px -5px rgba(139,92,246,0.4); animation: pulse-glow-slow 2s infinite; }
+.btn-slow .btn-emoji { font-size: 15px; line-height: 1; }
+
+@keyframes pulse-glow { 0% { box-shadow: 0 0 0 0 rgba(56,189,248,0.7), 0 10px 30px -5px rgba(56,189,248,0.4); transform: scale(1); } 70% { box-shadow: 0 0 0 10px rgba(56,189,248,0), 0 15px 40px -5px rgba(56,189,248,0.5); transform: scale(1.01); } 100% { box-shadow: 0 0 0 0 rgba(56,189,248,0), 0 10px 30px -5px rgba(56,189,248,0.4); transform: scale(1); } }
+@keyframes pulse-glow-slow { 0% { box-shadow: 0 0 0 0 rgba(139,92,246,0.7), 0 10px 30px -5px rgba(139,92,246,0.4); transform: scale(1); } 70% { box-shadow: 0 0 0 10px rgba(139,92,246,0), 0 15px 40px -5px rgba(139,92,246,0.5); transform: scale(1.01); } 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0), 0 10px 30px -5px rgba(139,92,246,0.4); transform: scale(1); } }
+
+.stats { display: flex; justify-content: space-between; background: rgba(15,23,42,0.5); padding: 16px 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(10px); position: relative; overflow: hidden; }
+.stats::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
+.stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+.stat-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.1), transparent); }
+.stat-label-row { display: flex; align-items: center; gap: 3px; font-size: 7px; color: #64748b; font-weight: 800; margin-bottom: 4px; letter-spacing: 0.5px; }
+.stat-label-row .material-symbols-rounded { font-size: 12px; }
+.stat-val { font-weight: 900; font-size: 16px; color: var(--primary); font-variant-numeric: tabular-nums; text-shadow: 0 0 20px rgba(56,189,248,0.3); }
+
+.v-tag { position: absolute; top: 10px; right: 10px; font-size: 10px; color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); font-weight: 600; letter-spacing: 0.5px; }
+
+/* COMPLETION */
+#completion-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.98); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(20px); text-align: center; padding: 20px; box-sizing: border-box; }
+
+.trophy-icon { font-size: 72px; margin-bottom: 16px; animation: trophy-bounce 1s infinite alternate; filter: drop-shadow(0 0 30px rgba(249,115,22,0.5)); }
+.congrats-title { font-family: 'Poppins'; font-size: 36px; font-weight: 900; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+.congrats-text { color: #94a3b8; font-size: 16px; margin-bottom: 24px; font-weight: 600; }
+
+.completion-stars { display: flex; gap: 16px; margin-bottom: 20px; align-items: center; justify-content: center; }
+.comp-star { font-size: 54px; line-height: 1; }
+.comp-star.filled { animation: star-pop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) forwards; filter: drop-shadow(0 0 14px rgba(251,191,36,0.9)); }
+.comp-star.empty { filter: grayscale(1) opacity(0.25); }
+@keyframes star-pop { 0% { transform: scale(0.4) rotate(-20deg); } 60% { transform: scale(1.35) rotate(10deg); } 100% { transform: scale(1) rotate(0deg); } }
+
+.completion-hint { font-size: 13px; color: #94a3b8; margin-bottom: 24px; font-weight: 600; min-height: 20px; }
+@keyframes trophy-bounce { from { transform: translateY(0) scale(1); } to { transform: translateY(-12px) scale(1.08); } }
+
+.confetti { position: absolute; opacity: 0; animation: confetti-fall 3s ease-in infinite; pointer-events: none; border-radius: 50%; }
+@keyframes confetti-fall { 0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+/* Tamamlama butonu - daha uygun boyut */
+.completion-more-btn {
+  background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  padding: 14px 32px;
+  font-size: 14px;
+  font-weight: 900;
+  font-family: 'Poppins';
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 6px 0 #0369a1, 0 10px 25px rgba(56,189,248,0.4);
+  transition: all 0.15s;
+  animation: pulse-glow 2s infinite;
+  width: auto;
+  min-width: 200px;
+  max-width: 260px;
+}
+.completion-more-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #0369a1; }
+.completion-more-btn .material-symbols-rounded { font-size: 18px; }
+
+@keyframes cardEnter { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes pageSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.page-anim { animation: pageSlideIn 0.35s ease-out; }
+</style>
 </head>
 <body>
-<div class="v-tag">V.6.2</div>
+
+<div class="v-tag">V.6.3</div>
+
+<!-- Kenar animasyon logoları (tüm sayfalarda görünür) -->
+<div class="side-logo-anim" id="sideL1"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
+<div class="side-logo-anim" id="sideL2"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
+<div class="side-logo-anim" id="sideL3"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
+<div class="side-logo-anim" id="sideL4"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
+<div class="side-logo-anim" id="sideR1"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
+<div class="side-logo-anim" id="sideR2"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
+<div class="side-logo-anim" id="sideR3"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
+<div class="side-logo-anim" id="sideR4"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
 
 <!-- MODULE PAGE -->
 <div id="module-page" class="page-anim">
-    <img src="logo.png" style="width:80px;margin-bottom:10px;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.3));" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
-    <div class="main-title-white">5 Dakikada İngilizce</div>
-    <div class="select-lesson-title" style="margin-bottom:24px;">Select Module</div>
-    <div class="module-grid">
-        <div class="module-card" onclick="selectModule('module3')">
-            <div class="module-icon">
-                <img src="module3logo.png" alt="Module 3" onerror="this.outerHTML='<div style=\'font-size:52px;animation:float3d 3s ease-in-out infinite\'>📗</div>'">
-            </div>
-            <h2>Module #3</h2>
-            <p>Yükleniyor...</p>
-        </div>
-        <div class="module-card" onclick="selectModule('module4')">
-            <div class="module-icon">
-                <img src="module4logo.png" alt="Module 4" onerror="this.outerHTML='<div style=\'font-size:52px;animation:float3d 3s ease-in-out infinite\'>📘</div>'">
-            </div>
-            <h2>Module #4</h2>
-            <p>Yükleniyor...</p>
-        </div>
+  <img src="logo.png" style="width:80px;margin-bottom:10px;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.3));" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
+  <div class="main-title-white">5 Dakikada İngilizce</div>
+  <div class="select-lesson-title" style="margin-bottom:24px;">Select Module</div>
+  <div class="module-grid">
+    <div class="module-card" onclick="selectModule('module3')">
+      <div class="module-icon" onclick="selectModule('module3')">
+        <img src="module3logo.png" alt="Module 3" onerror="this.outerHTML='<div style=\'font-size:62px;animation:float3d 3s ease-in-out infinite\'>📗</div>'">
+      </div>
+      <h2>Module #3</h2>
+      <p>Yükleniyor...</p>
     </div>
+    <div class="module-card" onclick="selectModule('module4')">
+      <div class="module-icon" onclick="selectModule('module4')">
+        <img src="module4logo.png" alt="Module 4" onerror="this.outerHTML='<div style=\'font-size:62px;animation:float3d 3s ease-in-out infinite\'>📘</div>'">
+      </div>
+      <h2>Module #4</h2>
+      <p>Yükleniyor...</p>
+    </div>
+  </div>
 </div>
 
 <!-- LESSON LIST PAGE -->
 <div id="entry-page">
-    <div class="entry-module-header">
-        <img id="entryModuleLogo" class="entry-module-logo" src="" alt="" onerror="this.style.display='none'">
-        <div class="main-title-white">5 Dakikada İngilizce</div>
-    </div>
-    <div id="moduleTitle" class="select-lesson-title">Module Flash Cards</div>
-    <button class="back-to-modules-btn" onclick="goToModulePage()">
-        <span class="material-symbols-rounded">arrow_back_ios_new</span> Select Module
+  <div class="entry-module-header">
+    <img id="entryModuleLogo" class="entry-module-logo" src="" alt="" onerror="this.style.display='none'">
+    <div class="main-title-white">5 Dakikada İngilizce</div>
+  </div>
+  <div id="moduleTitle" class="select-lesson-title">Module Flash Cards</div>
+  <button class="back-to-modules-btn" onclick="goToModulePage()">
+    <span class="material-symbols-rounded">arrow_back_ios_new</span> Select Module
+  </button>
+  <div id="lesson-list-container"></div>
+</div>
+
+<!-- DERS POPUP -->
+<div id="lesson-popup-overlay" onclick="closePopupOnOverlay(event)">
+  <div id="lesson-popup-box">
+    <button class="popup-close" onclick="closeLessonPopup()">
+      <span class="material-symbols-rounded">close</span>
     </button>
-    <div id="lesson-list-container"></div>
+    <div class="popup-lesson-icon" id="popupLessonIcon">
+      <div class="node-logo-img" id="popupLogoDiv"></div>
+    </div>
+    <div class="popup-lesson-name" id="popupLessonName">Ders</div>
+    <div class="popup-lesson-sub" id="popupLessonSub"></div>
+    <div class="popup-stars-row" id="popupStars"></div>
+    <button class="popup-start-btn" onclick="startPopupLesson()">
+      <span class="material-symbols-rounded">play_arrow</span>
+      BAŞLAT
+    </button>
+  </div>
 </div>
 
 <!-- APP SCREEN -->
 <div id="app-screen">
-    <div class="top-bar">
-        <button class="nav-btn" onclick="goHome()"><span class="material-symbols-rounded">home</span> HOME</button>
-        <button id="trVoiceToggle" class="nav-btn" onclick="toggleTRVoice()"><span class="material-symbols-rounded">volume_up</span> AUTO TR</button>
-        <button id="shuffleToggle" class="nav-btn" onclick="toggleShuffle()"><span class="material-symbols-rounded">shuffle</span> SHUFFLE</button>
-        <button class="nav-btn" onclick="resetLesson()"><span class="material-symbols-rounded">restart_alt</span> RESET</button>
+  <div class="top-bar">
+    <button class="nav-btn" onclick="goHome()"><span class="material-symbols-rounded">home</span> HOME</button>
+    <button id="trVoiceToggle" class="nav-btn" onclick="toggleTRVoice()"><span class="material-symbols-rounded">volume_up</span> AUTO TR</button>
+    <button id="shuffleToggle" class="nav-btn" onclick="toggleShuffle()"><span class="material-symbols-rounded">shuffle</span> SHUFFLE</button>
+    <button class="nav-btn" onclick="resetLesson()"><span class="material-symbols-rounded">restart_alt</span> RESET</button>
+  </div>
+  <div class="app-box">
+    <img src="logo.png" class="app-logo-small" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
+    <div class="app-brand-text">5 Dakikada İngilizce</div>
+    <div id="lessonTitle" class="lesson-title-grad">#Lesson</div>
+    <div id="lessonContent" class="lesson-content-desc"></div>
+    <div id="note-know" class="swipe-note">I KNOW ✅</div>
+    <div id="note-dont" class="swipe-note">I DON'T KNOW ❌</div>
+    <div class="card-container" id="swipeArea">
+      <div class="guide-container" id="guideLayer">
+        <div id="guide-up" class="guide-item"><span class="material-symbols-rounded">keyboard_double_arrow_up</span><span>I KNOW</span></div>
+        <div id="guide-down" class="guide-item"><span>I DON'T KNOW</span><span class="material-symbols-rounded">keyboard_double_arrow_down</span></div>
+      </div>
+      <div class="card" id="mainCard" onclick="handleFlip(event)">
+        <div class="face front"><div id="tagFront" class="status-tag"></div><span id="trDisplay">...</span></div>
+        <div class="face back"><div id="tagBack" class="status-tag"></div><span id="engDisplay">...</span></div>
+      </div>
     </div>
-    <div class="app-box">
-        <img src="logo.png" class="app-logo-small" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
-        <div class="app-brand-text">5 Dakikada İngilizce</div>
-        <div id="lessonTitle" class="lesson-title-grad">#Lesson</div>
-        <div id="lessonContent" class="lesson-content-desc"></div>
-        <div id="note-know" class="swipe-note">I KNOW ✅</div>
-        <div id="note-dont" class="swipe-note">I DON'T KNOW ❌</div>
-        <div class="card-container" id="swipeArea">
-            <div class="guide-container" id="guideLayer">
-                <div id="guide-up" class="guide-item"><span class="material-symbols-rounded">keyboard_double_arrow_up</span><span>I KNOW</span></div>
-                <div id="guide-down" class="guide-item"><span>I DON'T KNOW</span><span class="material-symbols-rounded">keyboard_double_arrow_down</span></div>
-            </div>
-            <div class="card" id="mainCard" onclick="handleFlip(event)">
-                <div class="face front"><div id="tagFront" class="status-tag"></div><span id="trDisplay">...</span></div>
-                <div class="face back"><div id="tagBack" class="status-tag"></div><span id="engDisplay">...</span></div>
-            </div>
-        </div>
-        <div class="controls-row">
-            <button class="control-btn" onclick="goBack()"><span class="material-symbols-rounded">arrow_back_ios_new</span> BACK</button>
-            <button class="control-btn" onclick="goNext()">NEXT <span class="material-symbols-rounded">arrow_forward_ios</span></button>
-        </div>
-        <div class="listen-row">
-            <button class="btn-main" onclick="speakEN()"><span class="material-symbols-rounded">record_voice_over</span> LISTEN EN</button>
-            <button class="btn-main btn-slow" onclick="speakENSlow()"><span class="btn-emoji">🐌</span> LISTEN SLOW EN</button>
-        </div>
-        <div class="stats">
-            <div class="stat-item"><div class="stat-label-row">ORDER <span class="material-symbols-rounded">assistant_navigation</span></div><span id="orderCount" class="stat-val">0</span></div>
-            <div class="stat-item"><div class="stat-label-row">REMAIN <span class="material-symbols-rounded">layers</span></div><span id="remainCount" class="stat-val">0</span></div>
-            <div class="stat-item"><div class="stat-label-row">LEARNED <span class="material-symbols-rounded" style="color:var(--secondary)">task_alt</span></div><span id="correctCount" class="stat-val" style="color:var(--secondary)">0</span></div>
-            <div class="stat-item"><div class="stat-label-row">UNKNOWN <span class="material-symbols-rounded" style="color:var(--accent)">cancel</span></div><span id="wrongCount" class="stat-val" style="color:var(--accent)">0</span></div>
-        </div>
+    <div class="controls-row">
+      <button class="control-btn" onclick="goBack()"><span class="material-symbols-rounded">arrow_back_ios_new</span> BACK</button>
+      <button class="control-btn" onclick="goNext()">NEXT <span class="material-symbols-rounded">arrow_forward_ios</span></button>
     </div>
+    <div class="listen-row">
+      <button class="btn-main" onclick="speakEN()"><span class="material-symbols-rounded">record_voice_over</span> LISTEN EN</button>
+      <button class="btn-main btn-slow" onclick="speakENSlow()"><span class="btn-emoji">🐌</span> LISTEN SLOW EN</button>
+    </div>
+    <div class="stats">
+      <div class="stat-item"><div class="stat-label-row">ORDER <span class="material-symbols-rounded">assistant_navigation</span></div><span id="orderCount" class="stat-val">0</span></div>
+      <div class="stat-item"><div class="stat-label-row">REMAIN <span class="material-symbols-rounded">layers</span></div><span id="remainCount" class="stat-val">0</span></div>
+      <div class="stat-item"><div class="stat-label-row">LEARNED <span class="material-symbols-rounded" style="color:var(--secondary)">task_alt</span></div><span id="correctCount" class="stat-val" style="color:var(--secondary)">0</span></div>
+      <div class="stat-item"><div class="stat-label-row">UNKNOWN <span class="material-symbols-rounded" style="color:var(--accent)">cancel</span></div><span id="wrongCount" class="stat-val" style="color:var(--accent)">0</span></div>
+    </div>
+  </div>
 </div>
 
 <!-- COMPLETION -->
 <div id="completion-overlay">
-    <div class="trophy-icon">🏆</div>
-    <div class="congrats-title">COMPLETED!</div>
-    <div class="congrats-text">Tebrikler, bu dersi bitirdin!</div>
-    <div class="completion-stars">
-        <span class="comp-star empty" id="star1">⭐</span>
-        <span class="comp-star empty" id="star2">⭐</span>
-        <span class="comp-star empty" id="star3">⭐</span>
-    </div>
-    <div class="completion-hint" id="completionHint"></div>
-    <button class="btn-main" onclick="closeCompletion()" style="max-width:280px;">
-        <span class="material-symbols-rounded">library_books</span> MORE LESSONS
-    </button>
+  <div class="trophy-icon">🏆</div>
+  <div class="congrats-title">COMPLETED!</div>
+  <div class="congrats-text">Tebrikler, bu dersi bitirdin!</div>
+  <div class="completion-stars">
+    <span class="comp-star empty" id="star1">⭐</span>
+    <span class="comp-star empty" id="star2">⭐</span>
+    <span class="comp-star empty" id="star3">⭐</span>
+  </div>
+  <div class="completion-hint" id="completionHint"></div>
+  <button class="completion-more-btn" onclick="closeCompletion()">
+    <span class="material-symbols-rounded">library_books</span> MORE LESSONS
+  </button>
 </div>
 
 <script>
@@ -251,37 +521,40 @@ let cards=[], startY=0, currentY=0, isDragging=false, hasMoved=false;
 let activeLesson=null, originalData=[], currentIndex=0;
 let autoTRVoice=localStorage.getItem('auto_tr_voice')==='true';
 let shuffleMode=false, audioCtx=null, allModulesData=null, activeModuleKey=null;
+let pendingLesson=null; // Popup için bekleyen ders
 
 function initAudio(){
-    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    if(audioCtx.state==='suspended'){
-        audioCtx.resume();
-        const b=audioCtx.createBuffer(1,1,22050),s=audioCtx.createBufferSource();
-        s.buffer=b;s.connect(audioCtx.destination);s.start(0);
-    }
+  if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended'){
+    audioCtx.resume();
+    const b=audioCtx.createBuffer(1,1,22050),s=audioCtx.createBufferSource();
+    s.buffer=b;s.connect(audioCtx.destination);s.start(0);
+  }
 }
+
 function _playSound(type){
-    initAudio();if(!audioCtx)return;
-    audioCtx.resume().then(()=>{
-        try{
-            const g=audioCtx.createGain(),o=audioCtx.createOscillator();
-            o.connect(g);g.connect(audioCtx.destination);const t=audioCtx.currentTime;
-            if(type==='up'){o.frequency.setValueAtTime(600,t);o.frequency.exponentialRampToValueAtTime(1200,t+0.1);g.gain.setValueAtTime(0.3,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.15);o.start(t);o.stop(t+0.15);}
-            else{o.frequency.setValueAtTime(300,t);o.frequency.exponentialRampToValueAtTime(150,t+0.15);g.gain.setValueAtTime(0.3,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.2);o.start(t);o.stop(t+0.2);}
-        }catch(e){}
-    });
+  initAudio();if(!audioCtx)return;
+  audioCtx.resume().then(()=>{
+    try{
+      const g=audioCtx.createGain(),o=audioCtx.createOscillator();
+      o.connect(g);g.connect(audioCtx.destination);const t=audioCtx.currentTime;
+      if(type==='up'){o.frequency.setValueAtTime(600,t);o.frequency.exponentialRampToValueAtTime(1200,t+0.1);g.gain.setValueAtTime(0.3,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.15);o.start(t);o.stop(t+0.15);}
+      else{o.frequency.setValueAtTime(300,t);o.frequency.exponentialRampToValueAtTime(150,t+0.15);g.gain.setValueAtTime(0.3,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.2);o.start(t);o.stop(t+0.2);}
+    }catch(e){}
+  });
 }
+
 document.addEventListener('touchstart',initAudio,{passive:true});
 document.addEventListener('mousedown',initAudio);
 
 function fetchNoCache(url){return fetch(`${url}?v=${Date.now()}`);}
 
 function showPage(pageId){
-    ['module-page','entry-page','app-screen'].forEach(id=>{
-        const el=document.getElementById(id);if(el)el.style.display='none';
-    });
-    const target=document.getElementById(pageId);
-    if(target){target.style.display='flex';target.classList.remove('page-anim');void target.offsetWidth;target.classList.add('page-anim');}
+  ['module-page','entry-page','app-screen'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.style.display='none';
+  });
+  const target=document.getElementById(pageId);
+  if(target){target.style.display='flex';target.classList.remove('page-anim');void target.offsetWidth;target.classList.add('page-anim');}
 }
 
 // STARS
@@ -290,138 +563,187 @@ function renderStarsHTML(count){let h='';for(let i=0;i<3;i++)h+=i<count?'⭐':'�
 
 // MODULE NAV
 function selectModule(moduleKey){
-    initAudio();if(!allModulesData)return;
-    const lessons=allModulesData[moduleKey];if(!lessons)return;
-    activeModuleKey=moduleKey;
-    const moduleNames={module3:'Module #3 Flash Cards',module4:'Module #4 Flash Cards'};
-    const moduleLogos={module3:'module3logo.png',module4:'module4logo.png'};
-    document.getElementById('moduleTitle').innerText=moduleNames[moduleKey]||moduleKey;
-    const entryLogo=document.getElementById('entryModuleLogo');
-    entryLogo.src=moduleLogos[moduleKey]||'';
-    entryLogo.style.display=moduleLogos[moduleKey]?'block':'none';
-    buildSnakeLayout(lessons);
-    showPage('entry-page');
+  initAudio();if(!allModulesData)return;
+  const lessons=allModulesData[moduleKey];if(!lessons)return;
+  activeModuleKey=moduleKey;
+  const moduleNames={module3:'Module #3 Flash Cards',module4:'Module #4 Flash Cards'};
+  const moduleLogos={module3:'module3logo.png',module4:'module4logo.png'};
+  document.getElementById('moduleTitle').innerText=moduleNames[moduleKey]||moduleKey;
+  const entryLogo=document.getElementById('entryModuleLogo');
+  entryLogo.src=moduleLogos[moduleKey]||'';
+  entryLogo.style.display=moduleLogos[moduleKey]?'block':'none';
+  buildSnakeLayout(lessons);
+  showPage('entry-page');
 }
 
 function buildSnakeLayout(lessons){
-    const container=document.getElementById('lesson-list-container');
-    container.innerHTML='';
+  const container=document.getElementById('lesson-list-container');
+  container.innerHTML='';
+  const rainbowColors=[
+    {bg:'#38bdf8',shadow:'#0284c7'},
+    {bg:'#2dd4bf',shadow:'#0f766e'},
+    {bg:'#a855f7',shadow:'#7e22ce'},
+    {bg:'#fb7185',shadow:'#e11d48'},
+    {bg:'#4ade80',shadow:'#16a34a'},
+    {bg:'#60a5fa',shadow:'#2563eb'},
+    {bg:'#f97316',shadow:'#c2410c'},
+    {bg:'#e879f9',shadow:'#a21caf'},
+  ];
 
-    const rainbowColors=[
-        {bg:'#38bdf8',shadow:'#0284c7'},
-        {bg:'#2dd4bf',shadow:'#0f766e'},
-        {bg:'#a855f7',shadow:'#7e22ce'},
-        {bg:'#fb7185',shadow:'#e11d48'},
-        {bg:'#4ade80',shadow:'#16a34a'},
-        {bg:'#60a5fa',shadow:'#2563eb'},
-        {bg:'#f97316',shadow:'#c2410c'},
-        {bg:'#e879f9',shadow:'#a21caf'},
-    ];
+  lessons.forEach((lesson,i)=>{
+    const starCount=getStarCount(lesson.name);
+    const colorSet=rainbowColors[i%rainbowColors.length];
+    const logoFile=lesson.logo?`logos/${lesson.logo}`:null;
+    const div=document.createElement('div');
+    div.className='lesson-card';
+    // Artık popup açıyor, direkt derse gitmiyor
+    div.onclick=()=>openLessonPopup(lesson, colorSet, logoFile);
 
-    lessons.forEach((lesson,i)=>{
-        const starCount=getStarCount(lesson.name);
-        const colorSet=rainbowColors[i%rainbowColors.length];
-        const logoFile=lesson.logo?`logos/${lesson.logo}`:null;
+    const nodeLogo=logoFile
+      ?`<div class="node-logo" style="background-image:url('${logoFile}');"></div>`
+      :`<div style="font-size:26px;display:flex;align-items:center;justify-content:center;width:60%;height:60%;">${i+1}</div>`;
 
-        const div=document.createElement('div');
-        div.className='lesson-card';
-        div.onclick=()=>loadLesson(lesson);
+    div.innerHTML=`
+      <div class="node-btn" style="background:${colorSet.bg};box-shadow:0 8px 0 ${colorSet.shadow},0 12px 24px rgba(0,0,0,0.3);">
+        ${nodeLogo}
+      </div>
+      <h3>${lesson.name}</h3>
+      <div class="lesson-stars">${renderStarsHTML(starCount)}</div>
+    `;
+    container.appendChild(div);
+  });
 
-        const nodeLogo=logoFile
-            ?`<div class="node-logo" style="background-image:url('${logoFile}');"></div>`
-            :`<div style="font-size:26px;display:flex;align-items:center;justify-content:center;width:60%;height:60%;">${i+1}</div>`;
+  // Active ve completed'i işaretle
+  const allCards=container.querySelectorAll('.lesson-card');
+  let activeFound=false;
+  lessons.forEach((lesson,i)=>{
+    const starCount=getStarCount(lesson.name);
+    const card=allCards[i];
+    if(starCount>0){
+      card.classList.add('completed');
+    } else if(!activeFound){
+      card.classList.add('active');
+      activeFound=true;
+      const badge=document.createElement('div');
+      badge.className='start-badge';
+      badge.innerText='HADİ!';
+      card.appendChild(badge);
+    }
+  });
+}
 
-        div.innerHTML=`
-            <div class="node-btn" style="background:${colorSet.bg};box-shadow:0 8px 0 ${colorSet.shadow},0 12px 24px rgba(0,0,0,0.3);">
-                ${nodeLogo}
-            </div>
-            <h3>${lesson.name}</h3>
-            <div class="lesson-stars">${renderStarsHTML(starCount)}</div>
-        `;
-        container.appendChild(div);
-    });
+// DERS POPUP
+function openLessonPopup(lesson, colorSet, logoFile){
+  initAudio();
+  pendingLesson=lesson;
 
-    // Active ve completed'i işaretle
-    const allCards=container.querySelectorAll('.lesson-card');
-    let activeFound=false;
-    lessons.forEach((lesson,i)=>{
-        const starCount=getStarCount(lesson.name);
-        const card=allCards[i];
-        if(starCount>0){
-            card.classList.add('completed');
-        } else if(!activeFound){
-            card.classList.add('active');
-            activeFound=true;
-            const badge=document.createElement('div');
-            badge.className='start-badge';
-            badge.innerText='HADİ!';
-            card.appendChild(badge);
-        }
-    });
+  // Popup içeriğini doldur
+  const iconDiv=document.getElementById('popupLessonIcon');
+  iconDiv.style.background=colorSet?colorSet.bg:'#38bdf8';
+  iconDiv.style.boxShadow=colorSet?`0 6px 0 ${colorSet.shadow},0 10px 20px rgba(0,0,0,0.3)`:'';
+
+  const logoDiv=document.getElementById('popupLogoDiv');
+  if(logoFile){
+    logoDiv.style.backgroundImage=`url('${logoFile}')`;
+    logoDiv.style.width='68%';
+    logoDiv.style.height='68%';
+  } else {
+    logoDiv.style.backgroundImage='none';
+    logoDiv.innerText='';
+  }
+
+  document.getElementById('popupLessonName').innerText=lesson.name;
+  document.getElementById('popupLessonSub').innerText=lesson.subTitle||'';
+  const starCount=getStarCount(lesson.name);
+  document.getElementById('popupStars').innerHTML=renderStarsHTML(starCount);
+
+  document.getElementById('lesson-popup-overlay').classList.add('active');
+}
+
+function closeLessonPopup(){
+  document.getElementById('lesson-popup-overlay').classList.remove('active');
+  pendingLesson=null;
+}
+
+function closePopupOnOverlay(e){
+  if(e.target===document.getElementById('lesson-popup-overlay')){
+    closeLessonPopup();
+  }
+}
+
+function startPopupLesson(){
+  if(!pendingLesson)return;
+  const lesson=pendingLesson;
+  closeLessonPopup();
+  loadLesson(lesson);
 }
 
 function goToModulePage(){saveProgress();showPage('module-page');}
 
 // VOICE
 if(autoTRVoice)document.getElementById('trVoiceToggle').classList.add('active');
+
 function toggleTRVoice(){
-    initAudio();autoTRVoice=!autoTRVoice;localStorage.setItem('auto_tr_voice',autoTRVoice);
-    const btn=document.getElementById('trVoiceToggle');
-    if(autoTRVoice){btn.classList.add('active');speakTR();}else{btn.classList.remove('active');window.speechSynthesis.cancel();}
+  initAudio();autoTRVoice=!autoTRVoice;localStorage.setItem('auto_tr_voice',autoTRVoice);
+  const btn=document.getElementById('trVoiceToggle');
+  if(autoTRVoice){btn.classList.add('active');speakTR();}else{btn.classList.remove('active');window.speechSynthesis.cancel();}
 }
+
 function speakTR(){
-    if(!cards.length||!autoTRVoice||!cards[currentIndex])return;
-    window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].tr);u.lang='tr-TR';window.speechSynthesis.speak(u);
+  if(!cards.length||!autoTRVoice||!cards[currentIndex])return;
+  window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].tr);u.lang='tr-TR';window.speechSynthesis.speak(u);
 }
+
 function speakEN(){
-    initAudio();if(!cards.length||!cards[currentIndex])return;
-    window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=1.0;window.speechSynthesis.speak(u);
+  initAudio();if(!cards.length||!cards[currentIndex])return;
+  window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=1.0;window.speechSynthesis.speak(u);
 }
+
 function speakENSlow(){
-    initAudio();if(!cards.length||!cards[currentIndex])return;
-    window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=0.5;window.speechSynthesis.speak(u);
+  initAudio();if(!cards.length||!cards[currentIndex])return;
+  window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=0.5;window.speechSynthesis.speak(u);
 }
 
 // SHUFFLE
 function toggleShuffle(){
-    initAudio();shuffleMode=!shuffleMode;const btn=document.getElementById('shuffleToggle');
-    if(shuffleMode){btn.classList.add('active');cards=[...cards].sort(()=>Math.random()-0.5);}
-    else{
-        btn.classList.remove('active');
-        const sm={};cards.forEach(c=>{sm[c.tr]={isLearned:c.isLearned,isUnknown:c.isUnknown};});
-        cards=originalData.map(c=>({...c,isLearned:sm[c.tr]?sm[c.tr].isLearned:false,isUnknown:sm[c.tr]?sm[c.tr].isUnknown:false}));
-    }
-    currentIndex=0;show();
+  initAudio();shuffleMode=!shuffleMode;const btn=document.getElementById('shuffleToggle');
+  if(shuffleMode){btn.classList.add('active');cards=[...cards].sort(()=>Math.random()-0.5);}
+  else{
+    btn.classList.remove('active');
+    const sm={};cards.forEach(c=>{sm[c.tr]={isLearned:c.isLearned,isUnknown:c.isUnknown};});
+    cards=originalData.map(c=>({...c,isLearned:sm[c.tr]?sm[c.tr].isLearned:false,isUnknown:sm[c.tr]?sm[c.tr].isUnknown:false}));
+  }
+  currentIndex=0;show();
 }
 
 function show(){
-    if(!cards.length)return;
-    if(currentIndex>=cards.length)currentIndex=0;
-    if(currentIndex<0)currentIndex=cards.length-1;
-    mainCard.classList.remove('flipped');
-    mainCard.style.cssText="top:0;opacity:1;transform:rotateY(0deg);";
-    document.getElementById('trDisplay').innerText=cards[currentIndex].tr;
-    document.getElementById('engDisplay').innerText=cards[currentIndex].en;
-    const tagF=document.getElementById('tagFront'),tagB=document.getElementById('tagBack');
-    tagF.className="status-tag";tagB.className="status-tag";tagF.style.display=tagB.style.display="none";
-    if(cards[currentIndex].isLearned){
-        tagF.innerText=tagB.innerText="LEARNED ✅";tagF.classList.add("tag-learned");tagB.classList.add("tag-learned");tagF.style.display=tagB.style.display="block";
-    }else if(cards[currentIndex].isUnknown){
-        tagF.innerText=tagB.innerText="UNKNOWN ❌";tagF.classList.add("tag-unknown");tagB.classList.add("tag-unknown");tagF.style.display=tagB.style.display="block";
-    }
-    const lc=cards.filter(c=>c.isLearned).length,uc=cards.filter(c=>c.isUnknown).length;
-    document.getElementById('remainCount').innerText=cards.length;
-    document.getElementById('correctCount').innerText=lc;
-    document.getElementById('wrongCount').innerText=uc;
-    document.getElementById('orderCount').innerText=(currentIndex+1);
-    if(autoTRVoice)setTimeout(speakTR,300);
-    document.getElementById('guideLayer').style.opacity="1";
+  if(!cards.length)return;
+  if(currentIndex>=cards.length)currentIndex=0;
+  if(currentIndex<0)currentIndex=cards.length-1;
+  mainCard.classList.remove('flipped');
+  mainCard.style.cssText="top:0;opacity:1;transform:rotateY(0deg);";
+  document.getElementById('trDisplay').innerText=cards[currentIndex].tr;
+  document.getElementById('engDisplay').innerText=cards[currentIndex].en;
+  const tagF=document.getElementById('tagFront'),tagB=document.getElementById('tagBack');
+  tagF.className="status-tag";tagB.className="status-tag";tagF.style.display=tagB.style.display="none";
+  if(cards[currentIndex].isLearned){
+    tagF.innerText=tagB.innerText="LEARNED ✅";tagF.classList.add("tag-learned");tagB.classList.add("tag-learned");tagF.style.display=tagB.style.display="block";
+  }else if(cards[currentIndex].isUnknown){
+    tagF.innerText=tagB.innerText="UNKNOWN ❌";tagF.classList.add("tag-unknown");tagB.classList.add("tag-unknown");tagF.style.display=tagB.style.display="block";
+  }
+  const lc=cards.filter(c=>c.isLearned).length,uc=cards.filter(c=>c.isUnknown).length;
+  document.getElementById('remainCount').innerText=cards.length;
+  document.getElementById('correctCount').innerText=lc;
+  document.getElementById('wrongCount').innerText=uc;
+  document.getElementById('orderCount').innerText=(currentIndex+1);
+  if(autoTRVoice)setTimeout(speakTR,300);
+  document.getElementById('guideLayer').style.opacity="1";
 }
 
 function handleFlip(event){
-    if(hasMoved)return;initAudio();
-    mainCard.classList.toggle('flipped');
-    mainCard.style.transform=`rotateY(${mainCard.classList.contains('flipped')?180:0}deg)`;
+  if(hasMoved)return;initAudio();
+  mainCard.classList.toggle('flipped');
+  mainCard.style.transform=`rotateY(${mainCard.classList.contains('flipped')?180:0}deg)`;
 }
 
 // SWIPE
@@ -429,26 +751,27 @@ const area=document.getElementById('swipeArea');
 const mainCard=document.getElementById('mainCard');
 const startAction=(y)=>{initAudio();startY=y;isDragging=true;hasMoved=false;mainCard.style.transition="none";};
 const moveAction=(y)=>{
-    if(!isDragging)return;currentY=y-startY;
-    if(Math.abs(currentY)>10){hasMoved=true;document.getElementById('guideLayer').style.opacity="0";}
-    const rotY=mainCard.classList.contains('flipped')?180:0;
-    mainCard.style.top=currentY+"px";
-    mainCard.style.transform=`rotateY(${rotY}deg) rotateX(${-currentY/20}deg)`;
-    document.getElementById('note-know').style.opacity=currentY<-50?"1":"0";
-    document.getElementById('note-dont').style.opacity=currentY>50?"1":"0";
+  if(!isDragging)return;currentY=y-startY;
+  if(Math.abs(currentY)>10){hasMoved=true;document.getElementById('guideLayer').style.opacity="0";}
+  const rotY=mainCard.classList.contains('flipped')?180:0;
+  mainCard.style.top=currentY+"px";
+  mainCard.style.transform=`rotateY(${rotY}deg) rotateX(${-currentY/20}deg)`;
+  document.getElementById('note-know').style.opacity=currentY<-50?"1":"0";
+  document.getElementById('note-dont').style.opacity=currentY>50?"1":"0";
 };
 const endAction=()=>{
-    if(!isDragging)return;isDragging=false;
-    if(hasMoved){
-        mainCard.style.transition="0.4s cubic-bezier(0.175,0.885,0.32,1.275)";
-        if(currentY<-120)handleChoice(true);
-        else if(currentY>120)handleChoice(false);
-        else{resetCard();document.getElementById('guideLayer').style.opacity="1";}
-    }else{document.getElementById('guideLayer').style.opacity="1";}
-    document.getElementById('note-know').style.opacity="0";
-    document.getElementById('note-dont').style.opacity="0";
-    currentY=0;
+  if(!isDragging)return;isDragging=false;
+  if(hasMoved){
+    mainCard.style.transition="0.4s cubic-bezier(0.175,0.885,0.32,1.275)";
+    if(currentY<-120)handleChoice(true);
+    else if(currentY>120)handleChoice(false);
+    else{resetCard();document.getElementById('guideLayer').style.opacity="1";}
+  }else{document.getElementById('guideLayer').style.opacity="1";}
+  document.getElementById('note-know').style.opacity="0";
+  document.getElementById('note-dont').style.opacity="0";
+  currentY=0;
 };
+
 area.addEventListener('touchstart',(e)=>startAction(e.touches[0].clientY),{passive:true});
 area.addEventListener('touchmove',(e)=>moveAction(e.touches[0].clientY),{passive:true});
 area.addEventListener('touchend',endAction);
@@ -457,108 +780,115 @@ window.onmousemove=(e)=>moveAction(e.clientY);
 window.onmouseup=endAction;
 
 function handleChoice(isCorrect){
-    if(isCorrect){
-        _playSound('up');cards[currentIndex].isLearned=true;cards[currentIndex].isUnknown=false;
-        mainCard.style.top="-1000px";mainCard.style.opacity="0";
-        setTimeout(()=>{
-            const lc=cards.filter(c=>c.isLearned).length;
-            if(lc===cards.length){
-                const ck='completion_count_'+activeLesson.name;
-                const prev=parseInt(localStorage.getItem(ck)||'0');
-                const newCount=Math.min(prev+1,3);
-                localStorage.setItem(ck,newCount);
-                localStorage.removeItem('lesson_progress_'+activeLesson.name);
-                showCompletion(newCount);
-            }else{
-                let nextIdx=(currentIndex+1)%cards.length;
-                while(cards[nextIdx].isLearned)nextIdx=(nextIdx+1)%cards.length;
-                currentIndex=nextIdx;saveProgress();show();
-            }
-        },200);
-    }else{
-        _playSound('down');cards[currentIndex].isUnknown=true;cards[currentIndex].isLearned=false;
-        mainCard.style.top="1000px";mainCard.style.opacity="0";
-        setTimeout(()=>{currentIndex=(currentIndex+1)%cards.length;saveProgress();show();},200);
-    }
+  if(isCorrect){
+    _playSound('up');cards[currentIndex].isLearned=true;cards[currentIndex].isUnknown=false;
+    mainCard.style.top="-1000px";mainCard.style.opacity="0";
+    setTimeout(()=>{
+      const lc=cards.filter(c=>c.isLearned).length;
+      if(lc===cards.length){
+        const ck='completion_count_'+activeLesson.name;
+        const prev=parseInt(localStorage.getItem(ck)||'0');
+        const newCount=Math.min(prev+1,3);
+        localStorage.setItem(ck,newCount);
+        localStorage.removeItem('lesson_progress_'+activeLesson.name);
+        showCompletion(newCount);
+      }else{
+        let nextIdx=(currentIndex+1)%cards.length;
+        while(cards[nextIdx].isLearned)nextIdx=(nextIdx+1)%cards.length;
+        currentIndex=nextIdx;saveProgress();show();
+      }
+    },200);
+  }else{
+    _playSound('down');cards[currentIndex].isUnknown=true;cards[currentIndex].isLearned=false;
+    mainCard.style.top="1000px";mainCard.style.opacity="0";
+    setTimeout(()=>{currentIndex=(currentIndex+1)%cards.length;saveProgress();show();},200);
+  }
 }
+
 function resetCard(){mainCard.style.top="0";mainCard.style.transform=`rotateY(${mainCard.classList.contains('flipped')?180:0}deg)`;}
 function goNext(){initAudio();currentIndex=(currentIndex+1)%cards.length;show();}
 function goBack(){initAudio();currentIndex=(currentIndex-1+cards.length)%cards.length;show();}
+
 function goHome(){
-    saveProgress();
-    if(activeModuleKey&&allModulesData)buildSnakeLayout(allModulesData[activeModuleKey]);
-    showPage('entry-page');
+  saveProgress();
+  if(activeModuleKey&&allModulesData)buildSnakeLayout(allModulesData[activeModuleKey]);
+  showPage('entry-page');
 }
+
 function saveProgress(){
-    if(!activeLesson||cards.length===0)return;
-    const so=cards.map(c=>({tr:c.tr,isLearned:c.isLearned,isUnknown:c.isUnknown}));
-    localStorage.setItem('lesson_progress_'+activeLesson.name,JSON.stringify({state:so,currentIndex}));
+  if(!activeLesson||cards.length===0)return;
+  const so=cards.map(c=>({tr:c.tr,isLearned:c.isLearned,isUnknown:c.isUnknown}));
+  localStorage.setItem('lesson_progress_'+activeLesson.name,JSON.stringify({state:so,currentIndex}));
 }
+
 function resetLesson(){
-    initAudio();
-    if(confirm("Reset?")){localStorage.removeItem('lesson_progress_'+activeLesson.name);loadLesson(activeLesson);}
+  initAudio();
+  if(confirm("Reset?")){localStorage.removeItem('lesson_progress_'+activeLesson.name);loadLesson(activeLesson);}
 }
+
 function loadLesson(lesson){
-    initAudio();activeLesson=lesson;shuffleMode=false;
-    fetchNoCache(lesson.file).then(res=>res.json()).then(data=>{
-        originalData=data;
-        const saved=localStorage.getItem('lesson_progress_'+lesson.name);
-        if(saved){
-            const p=JSON.parse(saved);
-            if(p.state&&Array.isArray(p.state)){
-                const sm={};p.state.forEach(s=>{sm[s.tr]=s;});
-                cards=data.map(item=>({...item,isLearned:sm[item.tr]?sm[item.tr].isLearned:false,isUnknown:sm[item.tr]?sm[item.tr].isUnknown:false}));
-                const allDone=cards.every(c=>c.isLearned);
-                if(allDone){cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;}
-                else{currentIndex=Math.min(p.currentIndex||0,cards.length-1);}
-            }else if(p.cards&&Array.isArray(p.cards)){
-                if(p.cards.length!==data.length||p.cards.every(c=>c.isLearned)){
-                    cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;
-                }else{
-                    const sm={};p.cards.forEach(c=>{sm[c.tr]=c;});
-                    cards=data.map(item=>({...item,isLearned:sm[item.tr]?sm[item.tr].isLearned:false,isUnknown:sm[item.tr]?sm[item.tr].isUnknown:false}));
-                    currentIndex=p.currentIndex||0;
-                }
-            }else{cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;}
-        }else{cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;}
-        document.getElementById('lessonTitle').innerText=lesson.name;
-        document.getElementById('lessonContent').innerText=lesson.subTitle||"";
-        document.getElementById('shuffleToggle').classList.remove('active');
-        showPage('app-screen');show();
-    });
+  initAudio();activeLesson=lesson;shuffleMode=false;
+  fetchNoCache(lesson.file).then(res=>res.json()).then(data=>{
+    originalData=data;
+    const saved=localStorage.getItem('lesson_progress_'+lesson.name);
+    if(saved){
+      const p=JSON.parse(saved);
+      if(p.state&&Array.isArray(p.state)){
+        const sm={};p.state.forEach(s=>{sm[s.tr]=s;});
+        cards=data.map(item=>({...item,isLearned:sm[item.tr]?sm[item.tr].isLearned:false,isUnknown:sm[item.tr]?sm[item.tr].isUnknown:false}));
+        const allDone=cards.every(c=>c.isLearned);
+        if(allDone){cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;}
+        else{currentIndex=Math.min(p.currentIndex||0,cards.length-1);}
+      }else if(p.cards&&Array.isArray(p.cards)){
+        if(p.cards.length!==data.length||p.cards.every(c=>c.isLearned)){
+          cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;
+        }else{
+          const sm={};p.cards.forEach(c=>{sm[c.tr]=c;});
+          cards=data.map(item=>({...item,isLearned:sm[item.tr]?sm[item.tr].isLearned:false,isUnknown:sm[item.tr]?sm[item.tr].isUnknown:false}));
+          currentIndex=p.currentIndex||0;
+        }
+      }else{cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;}
+    }else{cards=data.map(item=>({...item,isLearned:false,isUnknown:false}));currentIndex=0;}
+    document.getElementById('lessonTitle').innerText=lesson.name;
+    document.getElementById('lessonContent').innerText=lesson.subTitle||"";
+    document.getElementById('shuffleToggle').classList.remove('active');
+    showPage('app-screen');show();
+  });
 }
 
 // COMPLETION STARS
 function showCompletion(count){
-    ['star1','star2','star3'].forEach(id=>{document.getElementById(id).className='comp-star empty';});
-    for(let i=0;i<count;i++){
-        const el=document.getElementById('star'+(i+1));
-        setTimeout(()=>{el.className='comp-star filled';},300+i*350);
-    }
-    const hints=['','İlk yıldızı kazandın! 🎉','2. yıldız! Harika gidiyorsun 🔥','Tam 3 yıldız! Efsanesin 🌟'];
-    document.getElementById('completionHint').innerText=hints[count]||'';
-    document.getElementById('completion-overlay').style.display='flex';
-    createConfetti();
+  ['star1','star2','star3'].forEach(id=>{document.getElementById(id).className='comp-star empty';});
+  for(let i=0;i<count;i++){
+    const el=document.getElementById('star'+(i+1));
+    setTimeout(()=>{el.className='comp-star filled';},300+i*350);
+  }
+  const hints=['','İlk yıldızı kazandın! 🎉','2. yıldız! Harika gidiyorsun 🔥','Tam 3 yıldız! Efsanesin 🌟'];
+  document.getElementById('completionHint').innerText=hints[count]||'';
+  document.getElementById('completion-overlay').style.display='flex';
+  createConfetti();
 }
+
 function closeCompletion(){document.getElementById('completion-overlay').style.display='none';goHome();}
+
 function createConfetti(){
-    const colors=['#38bdf8','#2dd4bf','#fb7185','#f97316','#fbbf24','#ffffff'];
-    const overlay=document.getElementById('completion-overlay');
-    for(let i=0;i<60;i++){
-        const c=document.createElement('div');c.className='confetti';
-        c.style.left=Math.random()*100+'vw';c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
-        c.style.animationDelay=Math.random()*2+'s';c.style.width=Math.random()*8+5+'px';c.style.height=c.style.width;
-        overlay.appendChild(c);setTimeout(()=>c.remove(),4000);
-    }
+  const colors=['#38bdf8','#2dd4bf','#fb7185','#f97316','#fbbf24','#ffffff'];
+  const overlay=document.getElementById('completion-overlay');
+  for(let i=0;i<60;i++){
+    const c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'vw';c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDelay=Math.random()*2+'s';c.style.width=Math.random()*8+5+'px';c.style.height=c.style.width;
+    overlay.appendChild(c);setTimeout(()=>c.remove(),4000);
+  }
 }
 
 // INIT
 fetchNoCache('data.json').then(res=>res.json()).then(data=>{
-    allModulesData=data;
-    const counts={module3:(data.module3||[]).length,module4:(data.module4||[]).length};
-    const moduleCards=document.querySelectorAll('.module-card');
-    const keys=['module3','module4'];
-    moduleCards.forEach((card,i)=>{const p=card.querySelector('p');if(p&&keys[i])p.innerText=`${counts[keys[i]]||0} Ders`;});
+  allModulesData=data;
+  const counts={module3:(data.module3||[]).length,module4:(data.module4||[]).length};
+  const moduleCards=document.querySelectorAll('.module-card');
+  const keys=['module3','module4'];
+  moduleCards.forEach((card,i)=>{const p=card.querySelector('p');if(p&&keys[i])p.innerText=`${counts[keys[i]]||0} Ders`;});
 });
 </script>
 </body>
