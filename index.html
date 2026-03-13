@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>5 Dakikada İngilizce Flash Card - V.6.8</title>
+<title>5 Dakikada İngilizce Flash Card - V.6.9</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -293,11 +293,78 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 @keyframes cardEnter { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes pageSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 .page-anim { animation: pageSlideIn 0.35s ease-out; }
+
+/* V.6.9: Changelog Toast */
+#changelog-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 16px;
+  max-width: 280px;
+  background: linear-gradient(145deg, rgba(15,23,42,0.97), rgba(30,41,59,0.97));
+  border: 1px solid rgba(56,189,248,0.3);
+  border-radius: 18px;
+  padding: 14px 16px;
+  z-index: 9999;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  animation: toastSlideIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  display: none;
+}
+#changelog-toast.show { display: block; }
+@keyframes toastSlideIn {
+  from { opacity: 0; transform: translateX(120px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.toast-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.toast-version {
+  font-family: 'Poppins';
+  font-weight: 900;
+  font-size: 13px;
+  background: var(--logo-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.toast-close {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  border-radius: 8px;
+  color: #94a3b8;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.toast-close:hover { background: rgba(255,255,255,0.15); color: white; }
+.toast-notes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.toast-notes li {
+  font-size: 11px;
+  color: #cbd5e1;
+  font-weight: 500;
+  line-height: 1.4;
+  padding-left: 4px;
+}
 </style>
 </head>
 <body>
 
-<div class="v-tag">V.6.8</div>
+<div class="v-tag">V.6.9</div>
 
 <!-- MODULE PAGE -->
 <div id="module-page" class="page-anim">
@@ -391,6 +458,15 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
   <button class="completion-more-btn" onclick="closeCompletion()">
     <span class="material-symbols-rounded">library_books</span> MORE LESSONS
   </button>
+</div>
+
+<!-- V.6.9: Changelog Toast -->
+<div id="changelog-toast">
+  <div class="toast-header">
+    <span class="toast-version" id="toast-version-text">V.6.9</span>
+    <button class="toast-close" onclick="closeChangelog()">✕</button>
+  </div>
+  <ul class="toast-notes" id="toast-notes-list"></ul>
 </div>
 
 <script>
@@ -772,6 +848,30 @@ function createConfetti(){
   }
 }
 
+// V.6.9: Changelog — sadece bu 2 satırı güncelle her versiyonda
+const VERSION = '6.9';
+const VERSION_NOTES = [
+  '✅ Kelime tıklayınca seslendirme eklendi',
+  '✅ Swipe sırasında yeşil/kırmızı glow efekti',
+  '✅ Swipe watermark (KNOW/UNKNOWN) eklendi',
+  '🐛 "I" öznesi mobil telaffuz düzeltildi',
+  '🗑️ Tooltip çevirisi kaldırıldı',
+];
+
+function showChangelog() {
+  const seen = localStorage.getItem('changelog_seen_v' + VERSION);
+  if (seen) return;
+  document.getElementById('toast-version-text').innerText = 'V.' + VERSION + ' — Yenilikler';
+  const list = document.getElementById('toast-notes-list');
+  list.innerHTML = VERSION_NOTES.map(n => `<li>${n}</li>`).join('');
+  document.getElementById('changelog-toast').classList.add('show');
+  localStorage.setItem('changelog_seen_v' + VERSION, '1');
+}
+
+function closeChangelog() {
+  document.getElementById('changelog-toast').classList.remove('show');
+}
+
 // INIT
 fetchNoCache('data.json').then(res=>res.json()).then(data=>{
   allModulesData=data;
@@ -779,6 +879,7 @@ fetchNoCache('data.json').then(res=>res.json()).then(data=>{
   const moduleCards=document.querySelectorAll('.module-card');
   const keys=['module3','module4'];
   moduleCards.forEach((card,i)=>{const p=card.querySelector('p');if(p&&keys[i])p.innerText=`${counts[keys[i]]||0} Ders`;});
+  setTimeout(showChangelog, 800); // V.6.9: sayfa yüklendikten kısa süre sonra göster
 });
 </script>
 </body>
