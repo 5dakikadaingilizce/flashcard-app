@@ -376,27 +376,38 @@ function getStarCount(lessonName){return Math.min(parseInt(localStorage.getItem(
 function renderStarsHTML(count){let h='';for(let i=0;i<3;i++)h+=i<count?'⭐':'☆';return h;}
 
 // MODULE NAV
-function selectModule(moduleKey){
-  initAudio();if(!allModulesData)return;
-  const lessons=allModulesData[moduleKey];if(!lessons)return;
-  activeModuleKey=moduleKey;
-  const moduleNames={module3:'Module #3',module4:'Module #4'};
-  const moduleLogos={module3:'module3logo.png',module4:'module4logo.png'};
-  
-} else {
-  titleText.innerText=moduleNames[moduleKey]||moduleKey;
-  titleText.style.display='block';
-  titleLogo.style.display='none';
-}
-const moduleLogoMap={module3:'module3logokurdele.png',module4:'module4logokurdele.png'};
-const headerDiv=document.getElementById('moduleLogoHeader');
-if(moduleLogoMap[moduleKey]){
-  headerDiv.innerHTML=`<img src="${moduleLogoMap[moduleKey]}" style="width:300px;margin:-10px 0 16px 0;filter:drop-shadow(0 4px 15px rgba(0,0,0,0.4));" onerror="this.outerHTML='<div class=\\'select-lesson-title\\'>Module</div>'">`;
-}
+function selectModule(moduleKey) {
+  initAudio();
+  if (!allModulesData) return;
+  const lessons = allModulesData[moduleKey];
+  if (!lessons) return;
+  activeModuleKey = moduleKey;
 
-  const entryLogo=document.getElementById('entryModuleLogo');
-  entryLogo.src=moduleLogos[moduleKey]||'';
-  entryLogo.style.display=moduleLogos[moduleKey]?'block':'none';
+  const moduleNames = { module3: 'Module #3', module4: 'Module #4' };
+  const moduleLogos = { module3: 'module3logo.png', module4: 'module4logo.png' };
+
+  // Hata buradaydı: Fonksiyon burada kapanıyordu, şimdi devam ediyor.
+  if (moduleLogos[moduleKey]) {
+    titleText.style.display = 'none';
+    titleLogo.src = moduleLogos[moduleKey];
+    titleLogo.style.display = 'block';
+  } else {
+    titleText.innerText = moduleNames[moduleKey] || moduleKey;
+    titleText.style.display = 'block';
+    titleLogo.style.display = 'none';
+  }
+
+  const moduleLogoMap = { module3: 'module3logokurdele.png', module4: 'module4logokurdele.png' };
+  const headerDiv = document.getElementById('moduleLogoHeader');
+
+  if (moduleLogoMap[moduleKey]) {
+    headerDiv.innerHTML = `<img src="${moduleLogoMap[moduleKey]}" style="width:300px;margin:-10px 0 16px 0;filter:drop-shadow(0 4px 15px rgba(0,0,0,0.4));" onerror="this.outerHTML='<div class=\\'select-lesson-title\\'>Module</div>'">`;
+  }
+
+  const entryLogo = document.getElementById('entryModuleLogo');
+  entryLogo.src = moduleLogos[moduleKey] || '';
+  entryLogo.style.display = moduleLogos[moduleKey] ? 'block' : 'none';
+  
   buildSnakeLayout(lessons);
   showPage('entry-page');
 }
