@@ -265,7 +265,8 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
     <img id="entryModuleLogo" class="entry-module-logo" src="" alt="" onerror="this.style.display='none'">
     <div class="main-title-white">5 Dakikada İngilizce</div>
   </div>
-  <div id="moduleTitle" class="select-lesson-title">Module Flash Cards</div>
+<div id="moduleTitle" class="select-lesson-title" style="display:none;">Module Flash Cards</div>
+<img id="moduleTitleLogo" src="" style="width:300px;margin:-10px 0 16px 0;filter:drop-shadow(0 4px 15px rgba(0,0,0,0.4));display:none;" onerror="this.style.display='none';document.getElementById('moduleTitle').style.display='block';">
   <button class="back-to-modules-btn" onclick="goToModulePage()">
     <span class="material-symbols-rounded">arrow_back_ios_new</span> Select Module
   </button>
@@ -381,7 +382,18 @@ function selectModule(moduleKey){
   activeModuleKey=moduleKey;
   const moduleNames={module3:'Module #3',module4:'Module #4'};
   const moduleLogos={module3:'module3logo.png',module4:'module4logo.png'};
-  document.getElementById('moduleTitle').innerText=moduleNames[moduleKey]||moduleKey;
+const moduleLogoMap={module3:'module3logokurdele.png',module4:'module4logokurdele.png'};
+const titleLogo=document.getElementById('moduleTitleLogo');
+const titleText=document.getElementById('moduleTitle');
+if(moduleLogoMap[moduleKey]){
+  titleLogo.src=moduleLogoMap[moduleKey];
+  titleLogo.style.display='block';
+  titleText.style.display='none';
+} else {
+  titleText.innerText=moduleNames[moduleKey]||moduleKey;
+  titleText.style.display='block';
+  titleLogo.style.display='none';
+}
 const moduleLogoMap={module3:'module3logokurdele.png',module4:'module4logokurdele.png'};
 const headerDiv=document.getElementById('moduleLogoHeader');
 if(moduleLogoMap[moduleKey]){
