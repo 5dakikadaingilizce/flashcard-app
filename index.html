@@ -55,7 +55,7 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 .entry-module-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; }
 .entry-module-logo { width: 70px; height: 70px; object-fit: contain; animation: float3d 3s ease-in-out infinite; filter: drop-shadow(0 6px 16px rgba(249,115,22,0.3)); margin-bottom: 4px; }
 
-/* DUOLINGO-STYLE NODE LESSON LIST - Soldan sağa zigzag */
+/* DUOLINGO-STYLE NODE LESSON LIST - S kıvrımı */
 #lesson-list-container {
   width: 100%;
   max-width: 380px;
@@ -63,24 +63,8 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
-}
-
-#lesson-list-container::before {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  background: linear-gradient(180deg, rgba(249,115,22,0.35) 0%, rgba(249,115,22,0.04) 100%);
-  border-radius: 4px;
-  z-index: 0;
-}
-
-/* Kenar animasyon logoları için wrapper */
-#lesson-list-container {
   overflow: visible;
 }
 
@@ -90,17 +74,18 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   z-index: 1;
   transition: transform 0.2s;
 }
 
-/* Soldan sağa zigzag - Duolingo tarzı */
-.lesson-card:nth-child(5n+1) { align-self: center; }
-.lesson-card:nth-child(5n+2) { align-self: flex-end; margin-right: 30px; }
-.lesson-card:nth-child(5n+3) { align-self: flex-end; margin-right: 55px; }
-.lesson-card:nth-child(5n+4) { align-self: flex-end; margin-right: 30px; }
-.lesson-card:nth-child(5n+5) { align-self: center; }
+/* S şekli: sol → sağ → sağ → sol → sol → sağ → ... */
+/* 5'li grup: sol-kenar, sol-orta, orta, sağ-orta, sağ-kenar */
+.lesson-card:nth-child(5n+1) { align-self: flex-start; margin-left: 10px; }
+.lesson-card:nth-child(5n+2) { align-self: flex-start; margin-left: 55px; }
+.lesson-card:nth-child(5n+3) { align-self: center; }
+.lesson-card:nth-child(5n+4) { align-self: flex-end; margin-right: 55px; }
+.lesson-card:nth-child(5n+5) { align-self: flex-end; margin-right: 10px; }
 
 .node-btn { width: 88px; height: 88px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex-shrink: 0; }
 .node-btn:hover { transform: translateY(-4px) scale(1.05); }
@@ -108,6 +93,7 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 .node-logo { width: 68%; height: 68%; background-size: contain !important; background-repeat: no-repeat !important; background-position: center !important; display: block; }
 
 .lesson-card h3 { font-size: 11px; font-weight: 800; color: #f8fafc; text-align: center; max-width: 100px; font-family: 'Poppins'; line-height: 1.2; margin: 6px 0 2px 0 !important; }
+.lesson-sub { font-size: 9px; color: #64748b; text-align: center; max-width: 100px; line-height: 1.3; margin: 0 0 3px 0; font-weight: 500; min-height: 0; }
 .lesson-stars { display: flex; gap: 3px; font-size: 13px; line-height: 1; justify-content: center; }
 
 @keyframes floatAnim { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
@@ -123,151 +109,6 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 
 .start-badge { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); background: white; color: #d97706; padding: 4px 12px; border-radius: 12px; font-weight: 900; font-size: 10px; box-shadow: 0 4px 0 #cbd5e1; z-index: 15; animation: bounce 1.5s infinite; white-space: nowrap; }
 
-/* DERS POPUP - Ders tıklandığında açılan kutucuk */
-#lesson-popup-overlay {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(6px);
-  z-index: 500;
-  display: none;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 20px;
-  box-sizing: border-box;
-}
-
-#lesson-popup-overlay.active { display: flex; }
-
-#lesson-popup-box {
-  background: linear-gradient(145deg, rgba(30,41,59,0.98) 0%, rgba(15,23,42,0.99) 100%);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 28px 28px 24px 24px;
-  padding: 24px 24px 20px;
-  width: 100%;
-  max-width: 380px;
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
-  animation: slideUpPopup 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
-  position: relative;
-  text-align: center;
-}
-
-@keyframes slideUpPopup {
-  from { transform: translateY(100px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-#lesson-popup-box .popup-close {
-  position: absolute;
-  top: 12px; right: 12px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 50%;
-  width: 32px; height: 32px;
-  color: #94a3b8;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  transition: all 0.2s;
-}
-#lesson-popup-box .popup-close:hover { background: rgba(255,255,255,0.15); color: white; }
-
-.popup-lesson-icon {
-  width: 60px; height: 60px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 12px;
-}
-.popup-lesson-icon .node-logo-img {
-  width: 68%; height: 68%;
-  background-size: contain !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-  display: block;
-}
-
-.popup-lesson-name {
-  font-family: 'Poppins';
-  font-size: 20px;
-  font-weight: 900;
-  background: var(--logo-grad);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 6px;
-}
-
-.popup-lesson-sub {
-  font-size: 12px;
-  color: #94a3b8;
-  margin-bottom: 14px;
-  font-weight: 500;
-  min-height: 18px;
-}
-
-.popup-stars-row {
-  display: flex; gap: 6px; justify-content: center; margin-bottom: 18px; font-size: 22px;
-}
-
-.popup-start-btn {
-  width: 100%;
-  background: linear-gradient(135deg, #f97316 0%, #ff4d4d 100%);
-  color: white;
-  border: none;
-  border-radius: 18px;
-  padding: 16px;
-  font-size: 15px;
-  font-weight: 900;
-  font-family: 'Poppins';
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 8px 0 #c2410c, 0 12px 30px rgba(249,115,22,0.4);
-  transition: all 0.15s;
-  animation: pulse-glow-orange 2s infinite;
-}
-
-@keyframes pulse-glow-orange {
-  0% { box-shadow: 0 8px 0 #c2410c, 0 0 0 0 rgba(249,115,22,0.6); }
-  70% { box-shadow: 0 8px 0 #c2410c, 0 0 0 12px rgba(249,115,22,0); }
-  100% { box-shadow: 0 8px 0 #c2410c, 0 0 0 0 rgba(249,115,22,0); }
-}
-
-.popup-start-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #c2410c, 0 4px 15px rgba(249,115,22,0.3); }
-.popup-start-btn .material-symbols-rounded { font-size: 20px; }
-
-/* KENAR ANİMASYON LOGOLARI */
-.side-logo-anim {
-  position: fixed;
-  width: 48px;
-  height: 48px;
-  opacity: 0.18;
-  pointer-events: none;
-  z-index: 0;
-  animation: sideBobble 4s ease-in-out infinite;
-}
-.side-logo-anim img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(249,115,22,0.3));
-}
-
-.side-logo-anim:nth-child(1) { left: 8px; top: 12%; animation-delay: 0s; }
-.side-logo-anim:nth-child(2) { left: 8px; top: 32%; animation-delay: 0.8s; }
-.side-logo-anim:nth-child(3) { left: 8px; top: 52%; animation-delay: 1.6s; }
-.side-logo-anim:nth-child(4) { left: 8px; top: 72%; animation-delay: 2.4s; }
-
-.side-logo-anim:nth-child(5) { right: 8px; top: 18%; animation-delay: 0.4s; }
-.side-logo-anim:nth-child(6) { right: 8px; top: 40%; animation-delay: 1.2s; }
-.side-logo-anim:nth-child(7) { right: 8px; top: 60%; animation-delay: 2.0s; }
-.side-logo-anim:nth-child(8) { right: 8px; top: 80%; animation-delay: 2.8s; }
-
-@keyframes sideBobble {
-  0%, 100% { transform: translateY(0px) rotate(-5deg); opacity: 0.13; }
-  50% { transform: translateY(-14px) rotate(5deg); opacity: 0.22; }
-}
 
 /* APP SCREEN */
 #app-screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
@@ -393,16 +234,6 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 
 <div class="v-tag">V.6.3</div>
 
-<!-- Kenar animasyon logoları (tüm sayfalarda görünür) -->
-<div class="side-logo-anim" id="sideL1"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
-<div class="side-logo-anim" id="sideL2"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
-<div class="side-logo-anim" id="sideL3"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
-<div class="side-logo-anim" id="sideL4"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
-<div class="side-logo-anim" id="sideR1"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
-<div class="side-logo-anim" id="sideR2"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
-<div class="side-logo-anim" id="sideR3"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
-<div class="side-logo-anim" id="sideR4"><img src="logo.png" alt="" onerror="this.style.display='none'"></div>
-
 <!-- MODULE PAGE -->
 <div id="module-page" class="page-anim">
   <img src="logo.png" style="width:80px;margin-bottom:10px;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.3));" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
@@ -437,25 +268,6 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
     <span class="material-symbols-rounded">arrow_back_ios_new</span> Select Module
   </button>
   <div id="lesson-list-container"></div>
-</div>
-
-<!-- DERS POPUP -->
-<div id="lesson-popup-overlay" onclick="closePopupOnOverlay(event)">
-  <div id="lesson-popup-box">
-    <button class="popup-close" onclick="closeLessonPopup()">
-      <span class="material-symbols-rounded">close</span>
-    </button>
-    <div class="popup-lesson-icon" id="popupLessonIcon">
-      <div class="node-logo-img" id="popupLogoDiv"></div>
-    </div>
-    <div class="popup-lesson-name" id="popupLessonName">Ders</div>
-    <div class="popup-lesson-sub" id="popupLessonSub"></div>
-    <div class="popup-stars-row" id="popupStars"></div>
-    <button class="popup-start-btn" onclick="startPopupLesson()">
-      <span class="material-symbols-rounded">play_arrow</span>
-      BAŞLAT
-    </button>
-  </div>
 </div>
 
 <!-- APP SCREEN -->
@@ -521,7 +333,6 @@ let cards=[], startY=0, currentY=0, isDragging=false, hasMoved=false;
 let activeLesson=null, originalData=[], currentIndex=0;
 let autoTRVoice=localStorage.getItem('auto_tr_voice')==='true';
 let shuffleMode=false, audioCtx=null, allModulesData=null, activeModuleKey=null;
-let pendingLesson=null; // Popup için bekleyen ders
 
 function initAudio(){
   if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
@@ -596,8 +407,7 @@ function buildSnakeLayout(lessons){
     const logoFile=lesson.logo?`logos/${lesson.logo}`:null;
     const div=document.createElement('div');
     div.className='lesson-card';
-    // Artık popup açıyor, direkt derse gitmiyor
-    div.onclick=()=>openLessonPopup(lesson, colorSet, logoFile);
+    div.onclick=()=>loadLesson(lesson);
 
     const nodeLogo=logoFile
       ?`<div class="node-logo" style="background-image:url('${logoFile}');"></div>`
@@ -608,6 +418,7 @@ function buildSnakeLayout(lessons){
         ${nodeLogo}
       </div>
       <h3>${lesson.name}</h3>
+      <div class="lesson-sub">${lesson.subTitle||''}</div>
       <div class="lesson-stars">${renderStarsHTML(starCount)}</div>
     `;
     container.appendChild(div);
@@ -630,52 +441,6 @@ function buildSnakeLayout(lessons){
       card.appendChild(badge);
     }
   });
-}
-
-// DERS POPUP
-function openLessonPopup(lesson, colorSet, logoFile){
-  initAudio();
-  pendingLesson=lesson;
-
-  // Popup içeriğini doldur
-  const iconDiv=document.getElementById('popupLessonIcon');
-  iconDiv.style.background=colorSet?colorSet.bg:'#38bdf8';
-  iconDiv.style.boxShadow=colorSet?`0 6px 0 ${colorSet.shadow},0 10px 20px rgba(0,0,0,0.3)`:'';
-
-  const logoDiv=document.getElementById('popupLogoDiv');
-  if(logoFile){
-    logoDiv.style.backgroundImage=`url('${logoFile}')`;
-    logoDiv.style.width='68%';
-    logoDiv.style.height='68%';
-  } else {
-    logoDiv.style.backgroundImage='none';
-    logoDiv.innerText='';
-  }
-
-  document.getElementById('popupLessonName').innerText=lesson.name;
-  document.getElementById('popupLessonSub').innerText=lesson.subTitle||'';
-  const starCount=getStarCount(lesson.name);
-  document.getElementById('popupStars').innerHTML=renderStarsHTML(starCount);
-
-  document.getElementById('lesson-popup-overlay').classList.add('active');
-}
-
-function closeLessonPopup(){
-  document.getElementById('lesson-popup-overlay').classList.remove('active');
-  pendingLesson=null;
-}
-
-function closePopupOnOverlay(e){
-  if(e.target===document.getElementById('lesson-popup-overlay')){
-    closeLessonPopup();
-  }
-}
-
-function startPopupLesson(){
-  if(!pendingLesson)return;
-  const lesson=pendingLesson;
-  closeLessonPopup();
-  loadLesson(lesson);
 }
 
 function goToModulePage(){saveProgress();showPage('module-page');}
