@@ -382,13 +382,7 @@ function selectModule(moduleKey){
   activeModuleKey=moduleKey;
   const moduleNames={module3:'Module #3',module4:'Module #4'};
   const moduleLogos={module3:'module3logo.png',module4:'module4logo.png'};
-const moduleLogoMap={module3:'module3logokurdele.png',module4:'module4logokurdele.png'};
-const titleLogo=document.getElementById('moduleTitleLogo');
-const titleText=document.getElementById('moduleTitle');
-if(moduleLogoMap[moduleKey]){
-  titleLogo.src=moduleLogoMap[moduleKey];
-  titleLogo.style.display='block';
-  titleText.style.display='none';
+  
 } else {
   titleText.innerText=moduleNames[moduleKey]||moduleKey;
   titleText.style.display='block';
