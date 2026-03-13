@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>5 Dakikada İngilizce Flash Card - V.6.6</title>
+<title>5 Dakikada İngilizce Flash Card - V.6.7</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -174,43 +174,46 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
   border-bottom-color: #38bdf8;
 }
 
-/* Tooltip */
-.word-tooltip {
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(15, 23, 42, 0.97);
-  border: 1px solid rgba(56, 189, 248, 0.4);
-  border-radius: 10px;
-  padding: 6px 12px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #38bdf8;
-  white-space: nowrap;
-  z-index: 999;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  pointer-events: none;
-  animation: tooltipPop 0.15s ease-out;
-}
-.word-tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 5px solid transparent;
-  border-top-color: rgba(56, 189, 248, 0.4);
-}
-@keyframes tooltipPop {
-  from { opacity: 0; transform: translateX(-50%) scale(0.85); }
-  to   { opacity: 1; transform: translateX(-50%) scale(1); }
-}
 /* --------------------------------------------- */
 
-.swipe-note { position: absolute; left: 50%; transform: translateX(-50%); padding: 10px 30px; border-radius: 50px; font-family: 'Poppins'; font-weight: 900; font-size: 16px; opacity: 0; transition: all 0.2s; z-index: 60; pointer-events: none; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-#note-know { top: 40px; background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%); color: #0f172a; }
-#note-dont { bottom: 40px; background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%); color: white; }
+/* V.6.7: Swipe watermark — silik büyük yazı kart üzerinde */
+.swipe-note {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  font-family: 'Poppins';
+  font-weight: 900;
+  font-size: 52px;
+  letter-spacing: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 60;
+  pointer-events: none;
+  border-radius: 16px;
+  border: 4px solid;
+  padding: 6px 20px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+#note-know {
+  color: rgba(45, 212, 191, 0.85);
+  border-color: rgba(45, 212, 191, 0.85);
+  text-shadow: 0 0 20px rgba(45,212,191,0.4);
+  transform: translate(-50%, -50%) rotate(-15deg);
+}
+#note-dont {
+  color: rgba(251, 113, 133, 0.85);
+  border-color: rgba(251, 113, 133, 0.85);
+  text-shadow: 0 0 20px rgba(251,113,133,0.4);
+  transform: translate(-50%, -50%) rotate(15deg);
+}
+/* V.6.7: Kart kenar glow */
+#mainCard.glow-know {
+  box-shadow: 0 0 0 3px rgba(45,212,191,0.6), 0 0 40px 10px rgba(45,212,191,0.25) !important;
+}
+#mainCard.glow-dont {
+  box-shadow: 0 0 0 3px rgba(251,113,133,0.6), 0 0 40px 10px rgba(251,113,133,0.25) !important;
+}
 
 .controls-row { display: flex; gap: 8px; margin-bottom: 12px; }
 .control-btn { flex: 1; background: rgba(51,65,85,0.6); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 14px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); backdrop-filter: blur(10px); }
@@ -292,7 +295,7 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 </head>
 <body>
 
-<div class="v-tag">V.6.6</div>
+<div class="v-tag">V.6.7</div>
 
 <!-- MODULE PAGE -->
 <div id="module-page" class="page-anim">
@@ -347,8 +350,8 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
     <div id="note-dont" class="swipe-note">I DON'T KNOW ❌</div>
     <div class="card-container" id="swipeArea">
       <div class="guide-container" id="guideLayer">
-        <div id="guide-up" class="guide-item"><span class="material-symbols-rounded">keyboard_double_arrow_up</span><span>I KNOW</span></div>
-        <div id="guide-down" class="guide-item"><span>I DON'T KNOW</span><span class="material-symbols-rounded">keyboard_double_arrow_down</span></div>
+        <div id="guide-up" class="guide-item"><span class="material-symbols-rounded">keyboard_double_arrow_up</span></div>
+        <div id="guide-down" class="guide-item"><span class="material-symbols-rounded">keyboard_double_arrow_down</span></div>
       </div>
       <div class="card" id="mainCard" onclick="handleFlip(event)">
         <div class="face front"><div id="tagFront" class="status-tag"></div><span id="trDisplay">...</span></div>
@@ -529,13 +532,11 @@ function speakENSlow(){
   window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(cards[currentIndex].en);u.lang='en-US';u.rate=0.4;window.speechSynthesis.speak(u);
 }
 
-// --- V.6.5: Tek kelime seslendirme + tooltip ---
+// --- V.6.7: Tek kelime seslendirme — tooltip yok, sadece renk ---
 let activeTooltipSpan = null;
 
 function closeTooltip() {
   if (activeTooltipSpan) {
-    const tip = activeTooltipSpan.querySelector('.word-tooltip');
-    if (tip) tip.remove();
     activeTooltipSpan.classList.remove('active-word');
     activeTooltipSpan = null;
   }
@@ -543,63 +544,23 @@ function closeTooltip() {
 
 function speakWord(word, spanEl) {
   initAudio();
-  // Noktalama temizle
   const clean = word.replace(/[^a-zA-Z'\u2019\-]/g, '');
   if (!clean) return;
 
-  // Eğer aynı span'a tıklandıysa kapat
-  if (activeTooltipSpan === spanEl) {
-    closeTooltip();
-    return;
-  }
-
-  // Öncekini kapat
+  // Aynı span'a tıklandıysa kapat
+  if (activeTooltipSpan === spanEl) { closeTooltip(); return; }
   closeTooltip();
 
-  // Seslendirme — "I" büyük harf gönderince mobilde "capital I" diyor, küçük "i" ile gönderiyoruz
+  // "I" büyük harf → mobilde "capital" dememesi için küçük "i"
   window.speechSynthesis.cancel();
   const speakText = clean === 'I' ? 'i' : clean;
   const u = new SpeechSynthesisUtterance(speakText);
-  u.lang = 'en-US';
-  u.rate = 0.8;
+  u.lang = 'en-US'; u.rate = 0.8;
   window.speechSynthesis.speak(u);
 
-  // Aktif span işaretle
+  // Aktif span mavi yap
   spanEl.classList.add('active-word');
   activeTooltipSpan = spanEl;
-
-  // Tooltip — önce yükleniyor göster
-  const tooltip = document.createElement('div');
-  tooltip.className = 'word-tooltip';
-  tooltip.innerText = '...';
-  spanEl.appendChild(tooltip);
-
-  // Google Translate ücretsiz endpoint, CORS olursa MyMemory fallback
-  const gtUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=${encodeURIComponent(clean)}`;
-  const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=en|tr`;
-
-  fetch(gtUrl)
-    .then(r => r.json())
-    .then(data => {
-      if (activeTooltipSpan !== spanEl) return;
-      const tr = data && data[0] && data[0][0] && data[0][0][0];
-      if (tr) tooltip.innerText = tr;
-      else tooltip.innerText = '?';
-    })
-    .catch(() => {
-      // Google Translate CORS hatası — MyMemory fallback
-      fetch(mmUrl)
-        .then(r => r.json())
-        .then(data => {
-          if (activeTooltipSpan !== spanEl) return;
-          const tr = data && data.responseData && data.responseData.translatedText;
-          if (tr) tooltip.innerText = tr;
-          else tooltip.innerText = '?';
-        })
-        .catch(() => {
-          if (activeTooltipSpan === spanEl) tooltip.innerText = '?';
-        });
-    });
 }
 // -----------------------------------------------
 
@@ -669,8 +630,21 @@ const moveAction=(y)=>{
   const rotY=mainCard.classList.contains('flipped')?180:0;
   mainCard.style.top=currentY+"px";
   mainCard.style.transform=`rotateY(${rotY}deg) rotateX(${-currentY/20}deg)`;
-  document.getElementById('note-know').style.opacity=currentY<-50?"1":"0";
-  document.getElementById('note-dont').style.opacity=currentY>50?"1":"0";
+  // V.6.7: watermark + glow
+  const prog=Math.min(Math.abs(currentY)/120,1);
+  if(currentY<-20){
+    document.getElementById('note-know').style.opacity=prog*0.9;
+    document.getElementById('note-dont').style.opacity=0;
+    mainCard.classList.add('glow-know');mainCard.classList.remove('glow-dont');
+  }else if(currentY>20){
+    document.getElementById('note-dont').style.opacity=prog*0.9;
+    document.getElementById('note-know').style.opacity=0;
+    mainCard.classList.add('glow-dont');mainCard.classList.remove('glow-know');
+  }else{
+    document.getElementById('note-know').style.opacity=0;
+    document.getElementById('note-dont').style.opacity=0;
+    mainCard.classList.remove('glow-know','glow-dont');
+  }
 };
 const endAction=()=>{
   if(!isDragging)return;isDragging=false;
@@ -682,6 +656,7 @@ const endAction=()=>{
   }else{document.getElementById('guideLayer').style.opacity="1";}
   document.getElementById('note-know').style.opacity="0";
   document.getElementById('note-dont').style.opacity="0";
+  mainCard.classList.remove('glow-know','glow-dont'); // V.6.7
   currentY=0;
 };
 
