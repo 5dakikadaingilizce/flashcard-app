@@ -2,11 +2,11 @@
   {
     "id": 2,
     "date": "14 Mart 2026",
-    "version": "7.1",
+    "version": "7.3",
     "items": [
-      "Güncelleme bildirim paneli eklendi",
-      "İngilizce kart paneline her bir kelime için seslendirme eklendi",
-      "Görsel iyileştirmeler yapıldı."
+      "Güncelleme bildirim paneli eklendi.",
+      "İngilizce kart paneline her bir kelime için seslendirme eklendi.",
+      "Tasarımda revizyonlar yapıldı."
   
     ]
   },
@@ -15,8 +15,8 @@
     "date": "13 Mart 2026",
     "version": "6.3",
     "items": [
-      "Listen Slow EN butonu eklendi",
-      "4.Modul için lesson#11 eklendi"
+      "Listen Slow EN butonu eklendi.",
+      "4.Modul için lesson#11 eklendi."
     ]
   }
 ]
