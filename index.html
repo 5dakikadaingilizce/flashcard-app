@@ -237,16 +237,10 @@ body::before {
 @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
 .lesson-card.active .node-btn {
-  width: 104px !important;
-  height: 84px !important;
-  background: linear-gradient(135deg, #eab308, #facc15) !important;
-  box-shadow: 0 8px 0 #a16207, 0 16px 35px rgba(234,179,8,0.5) !important;
   animation: floatAnim 2.5s ease-in-out infinite;
 }
 .lesson-card.completed .node-btn { 
-  background: linear-gradient(135deg, #eab308, #facc15) !important;
-  box-shadow: 0 8px 0 #a16207, 0 12px 25px rgba(234,179,8,0.4) !important;
-  opacity: 0.95;
+  opacity: 0.85;
 }
 .lesson-card.disabled { cursor: not-allowed; }
 .lesson-card.disabled .node-btn { background: #374151 !important; box-shadow: 0 8px 0 #1f2937 !important; opacity: 0.55; }
