@@ -964,6 +964,7 @@ function showPage(pageId){
   });
   const target=document.getElementById(pageId);
   if(target){target.style.display='flex';target.classList.remove('page-anim');void target.offsetWidth;target.classList.add('page-anim');}
+  document.getElementById('v-tag-el').style.display = pageId === 'app-screen' ? 'none' : 'block';
 }
 
 // STARS
