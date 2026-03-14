@@ -4,11 +4,10 @@
     "date": "14 Mart 2026",
     "version": "7.1",
     "items": [
-      "Bildirim paneli eklendi",
-      "Kelime tıklayınca seslendirme eklendi",
-      "Swipe sırasında yeşil/kırmızı glow efekti eklendi",
-      "Swipe watermark (KNOW / UNKNOWN) eklendi",
-      "I öznesi mobil telaffuz düzeltildi"
+      "Güncelleme bildirim paneli eklendi",
+      "İngilizce kart paneline her bir kelime için seslendirme eklendi",
+      "Görsel iyileştirmeler yapıldı."
+  
     ]
   },
   {
@@ -16,8 +15,8 @@
     "date": "13 Mart 2026",
     "version": "6.3",
     "items": [
-      "Buraya yazdığın şey",
-      "Buraya yazdığın şey 2"
+      "Listen Slow EN butonu eklendi",
+      "4.Modul için lesson#11 eklendi"
     ]
   }
 ]
