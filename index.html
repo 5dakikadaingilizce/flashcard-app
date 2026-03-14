@@ -243,7 +243,11 @@ body::before {
   box-shadow: 0 8px 0 #7c3aed, 0 16px 35px rgba(139,92,246,0.5) !important; 
   animation: floatAnim 2.5s ease-in-out infinite; 
 }
-.lesson-card.completed .node-btn { opacity: 0.85; }
+.lesson-card.completed .node-btn { 
+  background: linear-gradient(135deg, #eab308, #facc15) !important;
+  box-shadow: 0 8px 0 #a16207, 0 12px 25px rgba(234,179,8,0.4) !important;
+  opacity: 0.95;
+}
 .lesson-card.disabled { cursor: not-allowed; }
 .lesson-card.disabled .node-btn { background: #374151 !important; box-shadow: 0 8px 0 #1f2937 !important; opacity: 0.55; }
 .lesson-card.disabled .node-logo { filter: grayscale(1) opacity(0.4); }
