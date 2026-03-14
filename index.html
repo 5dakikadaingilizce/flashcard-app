@@ -1005,16 +1005,14 @@ function selectModule(moduleKey){
 function buildSnakeLayout(lessons){
   const container=document.getElementById('lesson-list-container');
   container.innerHTML='';
-  const rainbowColors=[
-    {bg:'linear-gradient(135deg, #7c3aed, #a855f7)',shadow:'#5b21b6'},
-    {bg:'linear-gradient(135deg, #06b6d4, #22d3ee)',shadow:'#0e7490'},
-    {bg:'linear-gradient(135deg, #ec4899, #f472b6)',shadow:'#be185d'},
-    {bg:'linear-gradient(135deg, #8b5cf6, #a78bfa)',shadow:'#6d28d9'},
-    {bg:'linear-gradient(135deg, #14b8a6, #2dd4bf)',shadow:'#0f766e'},
-    {bg:'linear-gradient(135deg, #6366f1, #818cf8)',shadow:'#4338ca'},
-    {bg:'linear-gradient(135deg, #f43f5e, #fb7185)',shadow:'#be123c'},
-    {bg:'linear-gradient(135deg, #a855f7, #c084fc)',shadow:'#7e22ce'},
-  ];
+const rainbowColors=[
+  {bg:'linear-gradient(135deg, #7c3aed, #a855f7)',shadow:'#5b21b6'},  // Mor
+  {bg:'linear-gradient(135deg, #06b6d4, #22d3ee)',shadow:'#0e7490'},  // Turkuaz
+  {bg:'linear-gradient(135deg, #f43f5e, #fb7185)',shadow:'#be123c'},  // Kirmizi
+  {bg:'linear-gradient(135deg, #f97316, #fb923c)',shadow:'#c2410c'},  // Turuncu
+  {bg:'linear-gradient(135deg, #22c55e, #4ade80)',shadow:'#15803d'},  // Yesil
+  {bg:'linear-gradient(135deg, #3b82f6, #60a5fa)',shadow:'#1d4ed8'},  // Mavi
+];
 
   lessons.forEach((lesson,i)=>{
     const starCount=getStarCount(lesson.name);
