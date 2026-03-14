@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>5 Dakikada İngilizce Flash Card - V.7.2</title>
+<title>5 Dakikada İngilizce Flash Card - V.7.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&family=Raleway:wght@700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -255,8 +255,8 @@ body::before {
   top: -26px; 
   left: 50%; 
   transform: translateX(-50%); 
-  background: linear-gradient(135deg, #c084fc, #a855f7); 
-  color: white; 
+  background: white; 
+  color: #7c3aed; 
   padding: 4px 12px; 
   border-radius: 12px; 
   font-weight: 900; 
@@ -307,8 +307,8 @@ body::before {
 .nav-btn .material-symbols-rounded { font-size: 16px; transition: transform 0.2s; }
 .nav-btn:hover { background: rgba(139,92,246,0.2); color: white; transform: translateY(-1px); }
 .nav-btn.active { 
-  background: var(--gradient-accent); 
-  box-shadow: 0 4px 20px rgba(236,72,153,0.4); 
+  background: linear-gradient(135deg, #ef4444, #dc2626); 
+  box-shadow: 0 4px 20px rgba(239,68,68,0.5); 
   border-color: rgba(255,255,255,0.3); 
   color: white; 
 }
@@ -401,7 +401,7 @@ body::before {
 }
 .front { 
   background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #1a0a2e 100%); 
-  color: var(--secondary); 
+  color: #96EF18; 
   font-size: 26px; 
   font-weight: 800; 
 }
@@ -797,7 +797,7 @@ body::before {
 </head>
 <body>
 
-<div class="v-tag">V.7.2</div>
+<div class="v-tag" id="v-tag-el">V.7.3</div>
 
 <!-- MODULE PAGE -->
 <div id="module-page" class="page-anim">
@@ -1309,7 +1309,7 @@ function getLastReadTime(){ return parseInt(localStorage.getItem('changelog_last
 function openChangelog(){
   fetchNoCache('changelog.json').then(r=>r.json()).then(data=>{
     // Banner'a otomatik en son versiyonu yaz
-    const latestVersion = data.length > 0 && data[0].version ? `V.${data[0].version}` : '';
+    const latestVersion = 'V.' + APP_VERSION;
     document.getElementById('banner-refresh-text').innerText =
       `Güncel sürüm: ${latestVersion} — En güncel sürümü kullanmak için lütfen sayfayı yenileyin!`;
     const list = document.getElementById('sheet-list');
@@ -1362,6 +1362,15 @@ function initChangelog(){
     updateBadge(data);
   }).catch(()=>{});
 }
+
+// V.7.3: Merkezi versiyon — sadece bunu değiştir
+const APP_VERSION = '7.3';
+
+// V-tag ve diğer yerleri güncelle
+document.addEventListener('DOMContentLoaded', () => {
+  const vtag = document.getElementById('v-tag-el');
+  if(vtag) vtag.innerText = 'V.' + APP_VERSION;
+});
 
 // INIT
 fetchNoCache('data.json').then(res=>res.json()).then(data=>{
