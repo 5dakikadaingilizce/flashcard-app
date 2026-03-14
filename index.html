@@ -945,19 +945,21 @@ function getLastReadTime(){ return parseInt(localStorage.getItem('changelog_last
 function openChangelog(){
   fetchNoCache('changelog.json').then(r=>r.json()).then(data=>{
     const list = document.getElementById('sheet-list');
-    list.innerHTML = data.map(item=>{
-      const icon = TYPE_ICONS[item.type]||'📌';
+    list.innerHTML = data.map(entry=>{
+      const version = entry.version ? `<span style="font-size:10px;background:rgba(249,115,22,0.15);color:#fb923c;padding:2px 8px;border-radius:6px;font-weight:700;margin-left:6px;">V.${entry.version}</span>` : '';
+      const subItems = (entry.items||[]).map(i=>`<div style="display:flex;gap:6px;align-items:flex-start;padding:3px 0;"><span style="color:#475569;font-size:12px;margin-top:1px;">•</span><span style="font-size:12px;color:#cbd5e1;font-weight:500;line-height:1.4;">${i}</span></div>`).join('');
       return `<div class="cl-item">
-        <span class="cl-icon">${icon}</span>
+        <span class="cl-icon">▸</span>
         <div class="cl-content">
-          <div class="cl-text">${item.text}</div>
-          <div class="cl-date">${item.date}</div>
+          <div style="display:flex;align-items:center;margin-bottom:6px;">
+            <span style="font-size:11px;color:#64748b;font-weight:700;">${entry.date}</span>${version}
+          </div>
+          ${subItems}
         </div>
       </div>`;
     }).join('');
     document.getElementById('changelog-overlay').classList.add('show');
     document.getElementById('changelog-sheet').classList.add('show');
-    // Okundu işaretle
     localStorage.setItem('changelog_last_read', Date.now());
     updateBadge([]);
   }).catch(()=>{
