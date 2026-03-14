@@ -983,7 +983,7 @@ function showPage(pageId){
 
 // STARS
 function getStarCount(lessonName){return Math.min(parseInt(localStorage.getItem('completion_count_'+lessonName)||'0'),3);}
-function renderStarsHTML(count){let h='';for(let i=0;i<3;i++)h+=i<count?'⭐':'☆';return h;}
+function renderStarsHTML(count){let h='';for(let i=0;i<3;i++)h+=i<count?'<span class="material-symbols-rounded" style="font-size: 18px;">star</span>':'<span class="material-symbols-rounded" style="font-size: 18px;">star_outline</span>';return h;}
 
 // MODULE NAV
 function selectModule(moduleKey){
