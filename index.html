@@ -403,19 +403,19 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 /* Yenile banner */
 .sheet-refresh-banner {
   margin: 0 16px 10px;
-  background: rgba(56,189,248,0.08);
-  border: 1px solid rgba(56,189,248,0.2);
+  background: rgba(234,179,8,0.08);
+  border: 1px solid rgba(234,179,8,0.25);
   border-radius: 12px;
   padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 11px;
-  color: #7dd3fc;
+  color: #fde68a;
   font-weight: 600;
   flex-shrink: 0;
 }
-.sheet-refresh-banner .material-symbols-rounded { font-size: 16px; color: #38bdf8; }
+.sheet-refresh-banner .banner-icon { font-size: 16px; flex-shrink: 0; }
 /* Changelog listesi */
 .sheet-list {
   overflow-y: auto;
@@ -552,8 +552,8 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
     <button class="sheet-close" onclick="closeChangelog()">✕</button>
   </div>
   <div class="sheet-refresh-banner">
-    <span class="material-symbols-rounded">refresh</span>
-    En güncel sürümü kullanmak için sayfayı yenileyin
+    <span class="banner-icon">⚠️</span>
+    <span id="banner-refresh-text">En güncel sürümü kullanmak için sayfayı yenileyin</span>
   </div>
   <div class="sheet-list" id="sheet-list"></div>
 </div>
@@ -944,6 +944,10 @@ function getLastReadTime(){ return parseInt(localStorage.getItem('changelog_last
 
 function openChangelog(){
   fetchNoCache('changelog.json').then(r=>r.json()).then(data=>{
+    // Banner'a otomatik en son versiyonu yaz
+    const latestVersion = data.length > 0 && data[0].version ? `V.${data[0].version}` : '';
+    document.getElementById('banner-refresh-text').innerText =
+      `Güncel sürüm: ${latestVersion} — En güncel sürümü kullanmak için sayfayı yenileyin`;
     const list = document.getElementById('sheet-list');
     list.innerHTML = data.map(entry=>{
       const version = entry.version ? `<span style="font-size:10px;background:rgba(249,115,22,0.15);color:#fb923c;padding:2px 8px;border-radius:6px;font-weight:700;margin-left:6px;">V.${entry.version}</span>` : '';
