@@ -38,7 +38,7 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 
 @keyframes float3d { 0% { transform: translateY(0px) rotateX(0deg); } 50% { transform: translateY(-10px) rotateX(6deg); } 100% { transform: translateY(0px) rotateX(0deg); } }
 
-.module-card h2 { margin: 0; font-family: 'Raleway'; font-size: 1.3rem; font-weight: 900; background: var(--logo-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.module-card h2 { margin: 0; font-family: 'Raleway'; font-size: 1.3rem; font-weight: 900; background: linear-gradient(90deg, #fb923c, #f97316, #ea580c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .module-card p { margin: 0; font-size: 11px; color: #94a3b8; -webkit-text-fill-color: #94a3b8; font-weight: 500; line-height: 1.4; }
 
 /* ENTRY PAGE */
@@ -47,19 +47,14 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 
 .main-title-white { font-family: 'Poppins'; font-size: 24px; font-weight: 900; background: var(--white-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
 .select-lesson-title {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50px;
-  padding: 8px 28px;
-  color: #ffffff;
-  -webkit-text-fill-color: #ffffff;
-  font-size: 22px;
+  background: linear-gradient(90deg, #fb923c, #f97316, #ea580c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 26px;
   margin: 5px 0 20px 0;
   font-weight: 900;
-  font-family: 'Poppins';
-  letter-spacing: 0.5px;
+  font-family: 'Raleway';
+  filter: drop-shadow(0 0 15px rgba(249,115,22,0.3));
 }
 
 .back-to-modules-btn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 8px 16px; color: #94a3b8; font-size: 12px; font-weight: 700; cursor: pointer; margin-bottom: 16px; transition: all 0.3s; align-self: flex-start; }
