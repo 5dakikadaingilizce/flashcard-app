@@ -1,7 +1,7 @@
 [
   {
-    "id": 1,
-    "date": "14 Mar 2026",
+    "id": 2,
+    "date": "14 Mart 2026",
     "version": "7.1",
     "items": [
       "Bildirim paneli eklendi",
@@ -9,6 +9,15 @@
       "Swipe sırasında yeşil/kırmızı glow efekti eklendi",
       "Swipe watermark (KNOW / UNKNOWN) eklendi",
       "I öznesi mobil telaffuz düzeltildi"
+    ]
+  },
+  {
+    "id": 1,
+    "date": "13 Mart 2026",
+    "version": "6.3",
+    "items": [
+      "Buraya yazdığın şey",
+      "Buraya yazdığın şey 2"
     ]
   }
 ]
