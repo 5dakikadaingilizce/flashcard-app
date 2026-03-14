@@ -52,20 +52,21 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 .back-to-modules-btn:hover { background: rgba(255,255,255,0.1); color: white; }
 .back-to-modules-btn .material-symbols-rounded { font-size: 16px; }
 
-.entry-module-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; }
-.entry-module-logo { width: 70px; height: 70px; object-fit: contain; animation: float3d 3s ease-in-out infinite; filter: drop-shadow(0 6px 16px rgba(249,115,22,0.3)); margin-bottom: 4px; }
+/* Entry page logo — sabit (animasyon yok) + büyük */
+.entry-module-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; position: relative; width: 100%; }
+.entry-module-logo { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 6px 16px rgba(249,115,22,0.3)); margin-bottom: 4px; }
 
-/* DUOLINGO-STYLE NODE LESSON LIST - S kıvrımı */
+
+/* 3'lü grid ders listesi */
 #lesson-list-container {
   width: 100%;
   max-width: 380px;
   padding: 0 8px 60px;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
   position: relative;
-  overflow: visible;
 }
 
 .lesson-card {
@@ -74,20 +75,18 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  margin-bottom: 14px;
   z-index: 1;
   transition: transform 0.2s;
 }
 
-/* S şekli: sol → sağ → sağ → sol → sol → sağ → ... */
-/* 5'li grup: sol-kenar, sol-orta, orta, sağ-orta, sağ-kenar */
-.lesson-card:nth-child(5n+1) { align-self: flex-start; margin-left: 10px; }
-.lesson-card:nth-child(5n+2) { align-self: flex-start; margin-left: 55px; }
-.lesson-card:nth-child(5n+3) { align-self: center; }
-.lesson-card:nth-child(5n+4) { align-self: flex-end; margin-right: 55px; }
-.lesson-card:nth-child(5n+5) { align-self: flex-end; margin-right: 10px; }
+/* S şekli kaldırıldı — grid kullanılıyor */
+.lesson-card:nth-child(5n+1) { align-self: unset; margin-left: 0; }
+.lesson-card:nth-child(5n+2) { align-self: unset; margin-left: 0; }
+.lesson-card:nth-child(5n+3) { align-self: unset; }
+.lesson-card:nth-child(5n+4) { align-self: unset; margin-right: 0; }
+.lesson-card:nth-child(5n+5) { align-self: unset; margin-right: 0; }
 
-.node-btn { width: 88px; height: 88px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex-shrink: 0; }
+.node-btn { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); flex-shrink: 0; }
 .node-btn:hover { transform: translateY(-4px) scale(1.05); }
 
 .node-logo { width: 68%; height: 68%; background-size: contain !important; background-repeat: no-repeat !important; background-position: center !important; display: block; }
@@ -99,7 +98,7 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 @keyframes floatAnim { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
 @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-.lesson-card.active .node-btn { width: 104px !important; height: 104px !important; background: #fbbf24 !important; box-shadow: 0 8px 0 #d97706, 0 16px 30px rgba(251,191,36,0.4) !important; animation: floatAnim 2.5s ease-in-out infinite; }
+.lesson-card.active .node-btn { width: 84px !important; height: 84px !important; background: #fbbf24 !important; box-shadow: 0 8px 0 #d97706, 0 16px 30px rgba(251,191,36,0.4) !important; animation: floatAnim 2.5s ease-in-out infinite; }
 .lesson-card.completed .node-btn { opacity: 0.85; }
 .lesson-card.disabled { cursor: not-allowed; }
 .lesson-card.disabled .node-btn { background: #374151 !important; box-shadow: 0 8px 0 #1f2937 !important; opacity: 0.55; }
@@ -384,8 +383,9 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
   font-family: 'Poppins';
   font-weight: 900;
   font-size: 16px;
-  color: #ffffff;
-  -webkit-text-fill-color: #ffffff;
+  background: var(--logo-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .sheet-close {
   background: rgba(255,255,255,0.08);
@@ -472,7 +472,14 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 </div>
 
 <!-- LESSON LIST PAGE -->
-<div id="entry-page">
+<div id="entry-page" style="position:relative;">
+  <!-- Bildirim butonu sağ üste sabit -->
+  <div style="position:absolute;top:12px;right:12px;z-index:10;">
+    <button class="notif-btn" onclick="openChangelog()" style="position:relative;">
+      <span class="material-symbols-rounded">notifications</span>
+      <span class="notif-badge" id="notif-badge-entry">0</span>
+    </button>
+  </div>
   <div class="entry-module-header">
     <img id="entryModuleLogo" class="entry-module-logo" src="" alt="" onerror="this.style.display='none'">
     <div class="main-title-white">5 Dakikada İngilizce</div>
@@ -547,12 +554,12 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 <div id="changelog-sheet">
   <div class="sheet-handle"></div>
   <div class="sheet-header">
-   <span class="sheet-title">🔔 What's New</span>
+    <span class="sheet-title">📋 Güncelleme Notları</span>
     <button class="sheet-close" onclick="closeChangelog()">✕</button>
   </div>
   <div class="sheet-refresh-banner">
     <span class="banner-icon">⚠️</span>
-    <span id="banner-refresh-text">En güncel sürümü kullanmak için lütfen sayfayı yenileyin!</span>
+    <span id="banner-refresh-text">En güncel sürümü kullanmak için sayfayı yenileyin</span>
   </div>
   <div class="sheet-list" id="sheet-list"></div>
 </div>
@@ -946,7 +953,7 @@ function openChangelog(){
     // Banner'a otomatik en son versiyonu yaz
     const latestVersion = data.length > 0 && data[0].version ? `V.${data[0].version}` : '';
     document.getElementById('banner-refresh-text').innerText =
-      `Güncel sürüm: ${latestVersion} — En güncel sürümü kullanmak için lütfen sayfayı yenileyin!`;
+      `Güncel sürüm: ${latestVersion} — En güncel sürümü kullanmak için sayfayı yenileyin`;
     const list = document.getElementById('sheet-list');
     list.innerHTML = data.map(entry=>{
       const version = entry.version ? `<span style="font-size:10px;background:rgba(249,115,22,0.15);color:#fb923c;padding:2px 8px;border-radius:6px;font-weight:700;margin-left:6px;">V.${entry.version}</span>` : '';
@@ -979,14 +986,16 @@ function closeChangelog(){
 }
 
 function updateBadge(data){
-  const lastRead = getLastReadTime();
   const unread = data.filter(item=>{
-    // id bazlı okunmamış sayısı — id > son okunan id
     return item.id > (parseInt(localStorage.getItem('changelog_last_id')||'0'));
   }).length;
-  const badge = document.getElementById('notif-badge');
-  if(unread>0){ badge.innerText=unread; badge.classList.add('show'); }
-  else{ badge.classList.remove('show'); }
+  // Her iki sayfadaki badge'i güncelle
+  ['notif-badge','notif-badge-entry'].forEach(id=>{
+    const badge = document.getElementById(id);
+    if(!badge) return;
+    if(unread>0){ badge.innerText=unread; badge.classList.add('show'); }
+    else{ badge.classList.remove('show'); }
+  });
   if(data.length>0) localStorage.setItem('changelog_last_id', Math.max(...data.map(d=>d.id)));
 }
 
@@ -1004,7 +1013,7 @@ fetchNoCache('data.json').then(res=>res.json()).then(data=>{
   const keys=['module3','module4'];
   moduleCards.forEach((card,i)=>{const p=card.querySelector('p');if(p&&keys[i])p.innerText=`${counts[keys[i]]||0} Ders`;});
 });
-initChangelog(); // V.7.0
+initChangelog();
 </script>
 </body>
 </html>
