@@ -1,32 +1,14 @@
 [
   {
-    "id": 5,
-    "date": "14 Mar 2026",
-    "type": "feature",
-    "text": "Swipe sırasında yeşil/kırmızı glow efekti eklendi"
-  },
-  {
-    "id": 4,
-    "date": "14 Mar 2026",
-    "type": "feature",
-    "text": "Swipe watermark (KNOW / UNKNOWN) eklendi"
-  },
-  {
-    "id": 3,
-    "date": "14 Mar 2026",
-    "type": "feature",
-    "text": "İngilizce kart — kelime kelime tıklayınca seslendirme eklendi"
-  },
-  {
-    "id": 2,
-    "date": "14 Mar 2026",
-    "type": "fix",
-    "text": "\"I\" öznesi mobilde yanlış telaffuz ediliyordu, düzeltildi"
-  },
-  {
     "id": 1,
-    "date": "13 Mar 2026",
-    "type": "content",
-    "text": "Module #4 dersleri eklendi"
+    "date": "14 Mar 2026",
+    "version": "7.1",
+    "items": [
+      "Bildirim paneli eklendi",
+      "Kelime tıklayınca seslendirme eklendi",
+      "Swipe sırasında yeşil/kırmızı glow efekti eklendi",
+      "Swipe watermark (KNOW / UNKNOWN) eklendi",
+      "I öznesi mobil telaffuz düzeltildi"
+    ]
   }
 ]
