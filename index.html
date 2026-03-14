@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>5 Dakikada İngilizce Flash Card - V.6.9</title>
+<title>5 Dakikada İngilizce Flash Card - V.7.0</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -294,80 +294,163 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
 @keyframes pageSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 .page-anim { animation: pageSlideIn 0.35s ease-out; }
 
-/* V.6.9: Changelog Toast */
-#changelog-toast {
-  position: fixed;
-  bottom: 24px;
-  right: 16px;
-  max-width: 280px;
-  background: linear-gradient(145deg, rgba(15,23,42,0.97), rgba(30,41,59,0.97));
-  border: 1px solid rgba(56,189,248,0.3);
-  border-radius: 18px;
-  padding: 14px 16px;
-  z-index: 9999;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
-  backdrop-filter: blur(20px);
-  animation: toastSlideIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+/* V.7.0: Bildirim butonu */
+.notif-btn-wrap {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+}
+.notif-btn {
+  position: relative;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #94a3b8;
+}
+.notif-btn:hover { background: rgba(255,255,255,0.12); color: white; }
+.notif-btn .material-symbols-rounded { font-size: 22px; }
+.notif-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  font-weight: 900;
+  font-family: 'Poppins';
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
   display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 2px 8px rgba(239,68,68,0.5);
+  border: 2px solid #0f172a;
 }
-#changelog-toast.show { display: block; }
-@keyframes toastSlideIn {
-  from { opacity: 0; transform: translateX(120px); }
-  to   { opacity: 1; transform: translateX(0); }
+.notif-badge.show { display: flex; }
+
+/* V.7.0: Bottom Sheet */
+#changelog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9998;
+  display: none;
+  backdrop-filter: blur(4px);
 }
-.toast-header {
+#changelog-overlay.show { display: block; }
+#changelog-sheet {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  max-height: 75vh;
+  background: linear-gradient(180deg, #1e293b, #0f172a);
+  border-radius: 28px 28px 0 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  box-shadow: 0 -20px 60px rgba(0,0,0,0.5);
+}
+#changelog-sheet.show { transform: translateY(0); }
+.sheet-handle {
+  width: 40px; height: 4px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+  margin: 12px auto 0;
+  flex-shrink: 0;
+}
+.sheet-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  padding: 14px 20px 10px;
+  flex-shrink: 0;
 }
-.toast-version {
+.sheet-title {
   font-family: 'Poppins';
   font-weight: 900;
-  font-size: 13px;
+  font-size: 16px;
   background: var(--logo-grad);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.toast-close {
+.sheet-close {
   background: rgba(255,255,255,0.08);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   color: #94a3b8;
   cursor: pointer;
-  width: 24px;
-  height: 24px;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+.sheet-close:hover { background: rgba(255,255,255,0.15); color: white; }
+/* Yenile banner */
+.sheet-refresh-banner {
+  margin: 0 16px 10px;
+  background: rgba(56,189,248,0.08);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: 12px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  transition: background 0.2s;
+  gap: 8px;
+  font-size: 11px;
+  color: #7dd3fc;
+  font-weight: 600;
   flex-shrink: 0;
 }
-.toast-close:hover { background: rgba(255,255,255,0.15); color: white; }
-.toast-notes {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.sheet-refresh-banner .material-symbols-rounded { font-size: 16px; color: #38bdf8; }
+/* Changelog listesi */
+.sheet-list {
+  overflow-y: auto;
+  padding: 0 16px 24px;
+  flex: 1;
+  scrollbar-width: none;
+}
+.sheet-list::-webkit-scrollbar { display: none; }
+.cl-item {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  align-items: flex-start;
 }
-.toast-notes li {
-  font-size: 11px;
-  color: #cbd5e1;
-  font-weight: 500;
-  line-height: 1.4;
-  padding-left: 4px;
-}
+.cl-item:last-child { border-bottom: none; }
+.cl-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.cl-content { flex: 1; }
+.cl-text { font-size: 13px; color: #e2e8f0; font-weight: 600; line-height: 1.4; }
+.cl-date { font-size: 10px; color: #475569; margin-top: 2px; font-weight: 500; }
 </style>
 </head>
 <body>
 
-<div class="v-tag">V.6.9</div>
+<div class="v-tag">V.7.0</div>
 
 <!-- MODULE PAGE -->
 <div id="module-page" class="page-anim">
+  <!-- V.7.0: Bildirim butonu -->
+  <div class="notif-btn-wrap">
+    <button class="notif-btn" onclick="openChangelog()">
+      <span class="material-symbols-rounded">notifications</span>
+      <span class="notif-badge" id="notif-badge">0</span>
+    </button>
+  </div>
   <img src="logo.png" style="width:80px;margin-bottom:10px;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.3));" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
   <div class="main-title-white">5 Dakikada İngilizce</div>
   <div class="select-lesson-title" style="margin-bottom:24px;">Select Module</div>
@@ -460,13 +543,19 @@ body { margin: 0; font-family: 'Inter', sans-serif; background: radial-gradient(
   </button>
 </div>
 
-<!-- V.6.9: Changelog Toast -->
-<div id="changelog-toast">
-  <div class="toast-header">
-    <span class="toast-version" id="toast-version-text">V.6.9</span>
-    <button class="toast-close" onclick="closeChangelog()">✕</button>
+<!-- V.7.0: Changelog Bottom Sheet -->
+<div id="changelog-overlay" onclick="closeChangelog()"></div>
+<div id="changelog-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title">📋 Güncelleme Notları</span>
+    <button class="sheet-close" onclick="closeChangelog()">✕</button>
   </div>
-  <ul class="toast-notes" id="toast-notes-list"></ul>
+  <div class="sheet-refresh-banner">
+    <span class="material-symbols-rounded">refresh</span>
+    En güncel sürümü kullanmak için sayfayı yenileyin
+  </div>
+  <div class="sheet-list" id="sheet-list"></div>
 </div>
 
 <script>
@@ -848,28 +937,58 @@ function createConfetti(){
   }
 }
 
-// V.6.9: Changelog — sadece bu 2 satırı güncelle her versiyonda
-const VERSION = '6.9';
-const VERSION_NOTES = [
-  '✅ Kelime tıklayınca seslendirme eklendi',
-  '✅ Swipe sırasında yeşil/kırmızı glow efekti',
-  '✅ Swipe watermark (KNOW/UNKNOWN) eklendi',
-  '🐛 "I" öznesi mobil telaffuz düzeltildi',
-  '🗑️ Tooltip çevirisi kaldırıldı',
-];
+// V.7.0: Changelog — changelog.json'dan çeker
+const TYPE_ICONS = { feature:'✅', fix:'🐛', content:'📚', update:'🔄' };
 
-function showChangelog() {
-  const seen = localStorage.getItem('changelog_seen_v' + VERSION);
-  if (seen) return;
-  document.getElementById('toast-version-text').innerText = 'V.' + VERSION + ' — Yenilikler';
-  const list = document.getElementById('toast-notes-list');
-  list.innerHTML = VERSION_NOTES.map(n => `<li>${n}</li>`).join('');
-  document.getElementById('changelog-toast').classList.add('show');
-  localStorage.setItem('changelog_seen_v' + VERSION, '1');
+function getLastReadTime(){ return parseInt(localStorage.getItem('changelog_last_read')||'0'); }
+
+function openChangelog(){
+  fetchNoCache('changelog.json').then(r=>r.json()).then(data=>{
+    const list = document.getElementById('sheet-list');
+    list.innerHTML = data.map(item=>{
+      const icon = TYPE_ICONS[item.type]||'📌';
+      return `<div class="cl-item">
+        <span class="cl-icon">${icon}</span>
+        <div class="cl-content">
+          <div class="cl-text">${item.text}</div>
+          <div class="cl-date">${item.date}</div>
+        </div>
+      </div>`;
+    }).join('');
+    document.getElementById('changelog-overlay').classList.add('show');
+    document.getElementById('changelog-sheet').classList.add('show');
+    // Okundu işaretle
+    localStorage.setItem('changelog_last_read', Date.now());
+    updateBadge([]);
+  }).catch(()=>{
+    const list = document.getElementById('sheet-list');
+    list.innerHTML = '<div class="cl-item"><span class="cl-icon">⚠️</span><div class="cl-content"><div class="cl-text">changelog.json bulunamadı</div></div></div>';
+    document.getElementById('changelog-overlay').classList.add('show');
+    document.getElementById('changelog-sheet').classList.add('show');
+  });
 }
 
-function closeChangelog() {
-  document.getElementById('changelog-toast').classList.remove('show');
+function closeChangelog(){
+  document.getElementById('changelog-overlay').classList.remove('show');
+  document.getElementById('changelog-sheet').classList.remove('show');
+}
+
+function updateBadge(data){
+  const lastRead = getLastReadTime();
+  const unread = data.filter(item=>{
+    // id bazlı okunmamış sayısı — id > son okunan id
+    return item.id > (parseInt(localStorage.getItem('changelog_last_id')||'0'));
+  }).length;
+  const badge = document.getElementById('notif-badge');
+  if(unread>0){ badge.innerText=unread; badge.classList.add('show'); }
+  else{ badge.classList.remove('show'); }
+  if(data.length>0) localStorage.setItem('changelog_last_id', Math.max(...data.map(d=>d.id)));
+}
+
+function initChangelog(){
+  fetchNoCache('changelog.json').then(r=>r.json()).then(data=>{
+    updateBadge(data);
+  }).catch(()=>{});
 }
 
 // INIT
@@ -879,8 +998,8 @@ fetchNoCache('data.json').then(res=>res.json()).then(data=>{
   const moduleCards=document.querySelectorAll('.module-card');
   const keys=['module3','module4'];
   moduleCards.forEach((card,i)=>{const p=card.querySelector('p');if(p&&keys[i])p.innerText=`${counts[keys[i]]||0} Ders`;});
-  setTimeout(showChangelog, 800); // V.6.9: sayfa yüklendikten kısa süre sonra göster
 });
+initChangelog(); // V.7.0
 </script>
 </body>
 </html>
