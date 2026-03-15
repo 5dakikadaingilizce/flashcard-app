@@ -985,7 +985,7 @@ function showPage(pageId){
 // STARS — V.7.4: key'e modül adı eklendi, her modülün yıldızları ayrı tutulur
 function starKey(lessonName){ return 'completion_count_' + activeModuleKey + '_' + lessonName; }
 function getStarCount(lessonName){ return Math.min(parseInt(localStorage.getItem(starKey(lessonName))||'0'),3); }
-function renderStarsHTML(count){let h='';for(let i=0;i<3;i++)h+=i<count?'<span class="material-symbols-rounded" style="font-size: 18px;">star</span>':'<span class="material-symbols-rounded" style="font-size: 18px;">star_outline</span>';return h;}
+function renderStarsHTML(count){let h='';for(let i=0;i<3;i++)h+=i<count?'⭐':'☆';return h;}
 
 // MODULE NAV
 function selectModule(moduleKey){
