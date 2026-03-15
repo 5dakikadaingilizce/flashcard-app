@@ -982,8 +982,9 @@ function showPage(pageId){
   document.getElementById('v-tag-el').style.display = pageId === 'app-screen' ? 'none' : 'block';
 }
 
-// STARS
-function getStarCount(lessonName){return Math.min(parseInt(localStorage.getItem('completion_count_'+lessonName)||'0'),3);}
+// STARS — V.7.4: key'e modül adı eklendi, her modülün yıldızları ayrı tutulur
+function starKey(lessonName){ return 'completion_count_' + activeModuleKey + '_' + lessonName; }
+function getStarCount(lessonName){ return Math.min(parseInt(localStorage.getItem(starKey(lessonName))||'0'),3); }
 function renderStarsHTML(count){let h='';for(let i=0;i<3;i++)h+=i<count?'<span class="material-symbols-rounded" style="font-size: 18px;">star</span>':'<span class="material-symbols-rounded" style="font-size: 18px;">star_outline</span>';return h;}
 
 // MODULE NAV
@@ -1236,11 +1237,12 @@ function handleChoice(isCorrect){
     setTimeout(()=>{
       const lc=cards.filter(c=>c.isLearned).length;
       if(lc===cards.length){
-        const ck='completion_count_'+activeLesson.name;
+        // V.7.4: key'e modül adı eklendi
+        const ck=starKey(activeLesson.name);
         const prev=parseInt(localStorage.getItem(ck)||'0');
         const newCount=Math.min(prev+1,3);
         localStorage.setItem(ck,newCount);
-        localStorage.removeItem('lesson_progress_'+activeLesson.name);
+        localStorage.removeItem('lesson_progress_'+activeModuleKey+'_'+activeLesson.name);
         showCompletion(newCount);
       }else{
         let nextIdx=(currentIndex+1)%cards.length;
@@ -1268,19 +1270,25 @@ function goHome(){
 function saveProgress(){
   if(!activeLesson||cards.length===0)return;
   const so=cards.map(c=>({tr:c.tr,isLearned:c.isLearned,isUnknown:c.isUnknown}));
-  localStorage.setItem('lesson_progress_'+activeLesson.name,JSON.stringify({state:so,currentIndex}));
+  // V.7.4: progress key'e de modül adı eklendi
+  localStorage.setItem('lesson_progress_'+activeModuleKey+'_'+activeLesson.name,JSON.stringify({state:so,currentIndex}));
 }
 
 function resetLesson(){
   initAudio();
-  if(confirm("Reset?")){localStorage.removeItem('lesson_progress_'+activeLesson.name);loadLesson(activeLesson);}
+  if(confirm("Reset?")){
+    // V.7.4: progress key'e de modül adı eklendi
+    localStorage.removeItem('lesson_progress_'+activeModuleKey+'_'+activeLesson.name);
+    loadLesson(activeLesson);
+  }
 }
 
 function loadLesson(lesson){
   initAudio();activeLesson=lesson;shuffleMode=false;
   fetchNoCache(lesson.file).then(res=>res.json()).then(data=>{
     originalData=data;
-    const saved=localStorage.getItem('lesson_progress_'+lesson.name);
+    // V.7.4: progress key'e de modül adı eklendi
+    const saved=localStorage.getItem('lesson_progress_'+activeModuleKey+'_'+lesson.name);
     if(saved){
       const p=JSON.parse(saved);
       if(p.state&&Array.isArray(p.state)){
@@ -1394,7 +1402,7 @@ function initChangelog(){
   }).catch(()=>{});
 }
 
-// V.7.3: Merkezi versiyon — sadece bunu değiştir
+// V.7.4: Merkezi versiyon
 const APP_VERSION = '7.3';
 
 // V-tag ve diğer yerleri güncelle
