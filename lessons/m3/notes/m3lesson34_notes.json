@@ -50,35 +50,30 @@
         {
           "tag": "used to + V1",
           "color": "teal",
-          "text": "I used to smoke. → Eskiden sigara içerdim. (artık içmiyorum)"
-        },
-        {
-          "tag": "used to + V1 — Soru",
-          "color": "teal",
-          "text": "Did you use to smoke? → Eskiden sigara içer miydin?"
+          "text": "I used to smoke. → Eskiden sigara içerdim. (artık içmiyorum) \n  I didn't use to smoke. → Sigara içmezdim. (artık içiyorum) \n Did you use to smoke? → Eskiden sigara içer miydin?"
         },
         {
           "tag": "get used to + V-ing",
           "color": "pink",
-          "text": "I am getting used to waking up early. → Erken kalkmaya alışıyorum. \n I got used to waking up early. → Erken kalkmaya alıştım."
+          "text": "I am getting used to waking up early. → Erken kalkmaya alışıyorum. \n I got used to waking up early. → Erken kalkmaya alıştım. \n  Did you get used to waking up early? → Erken kalkmaya alıştın mı? "
         },
 
       {
         "tag": "get used to + noun ",
         "color": "pink",
-        "text": "Ali is getting used to his new job. → Ali yeni işine alışıyor."
+        "text": "Ali is getting used to his new job. → Ali yeni işine alışıyor. \n  Ali got used to his new job. → Ali yeni işine alıştı. \n  Did Ali get used to his new job? → Ali yeni işine alıştı mı ?"
         },
         
         {
           "tag": "be used to +V-ing",
           "color": "amber",
-          "text": "I am used to waking up early. → Erken kalkmaya alışkınım."
+          "text": "I am used to waking up early. → Erken kalkmaya alışkınım. \n I was used to waking up early. → Erken kalkmaya alışkınımdım.  \n Are you used to waking up early? → Erken kalkmaya alışkın mısın? "
         },
 
          {
           "tag": "be used to + noun",
           "color": "amber",
-          "text": "I am used to the noise in the neighborhood. → Mahalledeki gürültüye alışkınım."
+         "text": "I am used to the noise in the neighborhood. → Mahalledeki gürültüye alışkınım.\nI was used to the noise in the neighborhood. → Mahalledeki gürültüye alışkındım.\nAre you used to the noise in the neighborhood? → Mahalledeki gürültüye alışkın mısın?"
         }
         
       ]
