@@ -24,6 +24,7 @@
     { "id": 10, "name": "Lesson #10", "subTitle": " THAT #RELATIVE CLAUSE", "file": "lessons/m4/lesson10.json", "logo": "lessonlogo10.svg" },
     { "id": 11, "name": "Lesson #10 +plus", "subTitle": " THAT #RELATIVE CLAUSE (+,-,?,Wh)", "file": "lessons/m4/lesson10plus.json", "logo": "lessonlogo10+.svg" },
     { "id": 12, "name": "Lesson #11", "subTitle": " Herşey Ortaya Karışık-1", "file": "lessons/m4/lesson11.json", "logo": "lessonlogo11.svg" },
-    { "id": 13, "name": "Lesson #12", "subTitle": " Herşey Ortaya Karışık-2", "file": "lessons/m4/lesson12.json", "logo": "lessonlogo12.svg" }
+    { "id": 13, "name": "Lesson #12", "subTitle": " Herşey Ortaya Karışık-2", "file": "lessons/m4/lesson12.json", "logo": "lessonlogo12.svg" },
+    { "id": 14, "name": "Lesson #13", "subTitle": " GET TO KNOW EACHOTHER QUESTIONS", "file": "lessons/m4/lesson13.json", "logo": "lessonlogo13.svg" }
   ]
 }
