@@ -1,1 +1,73 @@
-
+{
+  "title": "use / used to / get used to / be used to",
+  "tabs": [
+    {
+      "label": "Konu",
+      "type": "text",
+      "items": [
+        {
+          "heading": "USE",
+          "color": "purple",
+          "content": "kullanmak"
+        },
+        {
+          "heading": "USED TO",
+          "color": "teal",
+          "content": "Geçmişte yapılan ama artık yapılmayan alışkanlıkları anlatır. Türkçede '-ırdı / -erdi / -ardı' ile karşılanır. Sadece geçmiş zaman için kullanılır."
+        },
+        {
+          "heading": "GET USED TO",
+          "color": "pink",
+          "content": "Bir şeye alışma sürecini anlatır. Devam eden bir değişimi ifade eder. Türkçede 'alışmak' anlamına gelir."
+        },
+        {
+          "heading": "BE USED TO",
+          "color": "amber",
+          "content": "Bir şeye zaten alışkın olma durumunu anlatır. Tamamlanmış bir alışkanlığı ifade eder. Türkçede 'alışkın olmak' anlamına gelir."
+        }
+      ]
+    },
+    {
+      "label": "Yapı",
+      "type": "table",
+      "headers": ["Yapı", "Anlam", "Sonrası"],
+      "rows": [
+        ["use", "Kullanmak (normal fiil)", "V1"],
+        ["used to", "Geçmiş alışkanlık (-ırdı)", "V1"],
+        ["get used to", "Alışmak (süreç)", "V1-ing"],
+        ["be used to", "Alışkın olmak (durum)", "V1-ing"]
+      ]
+    },
+    {
+      "label": "Örnekler",
+      "type": "examples",
+      "items": [
+        {
+          "tag": "use + V1",
+          "color": "purple",
+          "text": "I use my phone every day. → Her gün telefonumu kullanıyorum."
+        },
+        {
+          "tag": "used to + V1",
+          "color": "teal",
+          "text": "I used to smoke. → Sigara içerdim. (artık içmiyorum)"
+        },
+        {
+          "tag": "used to + V1 — Soru",
+          "color": "teal",
+          "text": "Did you use to smoke? → Sigara içer miydin?"
+        },
+        {
+          "tag": "get used to + V1-ing",
+          "color": "pink",
+          "text": "I am getting used to waking up early. → Erken kalkmaya alışıyorum."
+        },
+        {
+          "tag": "be used to + V1-ing",
+          "color": "amber",
+          "text": "I am used to waking up early. → Erken kalkmaya alışkınım."
+        }
+      ]
+    }
+  ]
+}
