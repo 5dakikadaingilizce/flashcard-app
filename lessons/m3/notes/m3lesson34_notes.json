@@ -30,12 +30,12 @@
     {
       "label": "Yapı",
       "type": "table",
-      "headers": ["Yapı", "Anlam", "Sonrası"],
+      "headers": ["Yapı", "+", "Anlamı"],
       "rows": [
-        ["use", "Kullanmak (normal fiil)", "V1"],
-        ["used to", "Geçmiş alışkanlık (-ırdı)", "V1"],
-        ["get used to", "Alışmak (süreç)", "V1-ing"],
-        ["be used to", "Alışkın olmak (durum)", "V1-ing"]
+        ["use", "+ something", "Kullanmak"],
+        ["used to", "+ V1", "Eskiden yapmak"],
+        ["get used to", "+ noun / +V-ing", "Süreç içinde bir şeye alışmak"],
+        ["be used to", "+ noun / +V-ing", "Hali hazırda bir şeye alışkın olmak"]
       ]
     },
     {
@@ -43,7 +43,7 @@
       "type": "examples",
       "items": [
         {
-          "tag": "use + V1",
+          "tag": "use + something",
           "color": "purple",
           "text": "I use my phone every day. → Her gün telefonumu kullanıyorum."
         },
@@ -58,12 +58,12 @@
           "text": "Did you use to smoke? → Sigara içer miydin?"
         },
         {
-          "tag": "get used to + V1-ing",
+          "tag": "get used to + noun / V-ing",
           "color": "pink",
           "text": "I am getting used to waking up early. → Erken kalkmaya alışıyorum."
         },
         {
-          "tag": "be used to + V1-ing",
+          "tag": "be used to + noun / V-ing",
           "color": "amber",
           "text": "I am used to waking up early. → Erken kalkmaya alışkınım."
         }
