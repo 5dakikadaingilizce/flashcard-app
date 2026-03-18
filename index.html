@@ -92,7 +92,7 @@ onAuthStateChanged(auth, async (user) => {
 // ── Oturum süresi takibi ──
 let _sessionStart = null;
 let _sessionInterval = null;
-function startSessionTracking(uid) {
+window.startSessionTracking = function(uid) {
   _sessionStart = Date.now();
   _sessionInterval = setInterval(async () => {
     const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
@@ -100,7 +100,7 @@ function startSessionTracking(uid) {
     await updateDoc(uRef, { totalStudySeconds: increment(30) }).catch(() => {});
   }, 30000); // Her 30 saniyede bir güncelle
 }
-function stopSessionTracking() {
+window.stopSessionTracking = function() {
   if (_sessionInterval) clearInterval(_sessionInterval);
   _sessionStart = null;
 }
@@ -1400,7 +1400,7 @@ return `<div style="display:grid;grid-template-columns:110px 90px 50px 50px 60px
         <div style="text-align:center"><div style="font-size:18px;font-weight:900;color:#22d3ee;">${totalStars}</div><div style="font-size:9px;color:#a78bfa;font-weight:700;">YILDIZ</div></div>
       </div>
       <div style="font-size:10px;color:#7c3aed;font-weight:600;margin-bottom:4px;">📅 ${createdAt} · 🕐 ${lastSeen} · ${u.lastDevice==='mobile'?'📱 Mobil':'🖥️ Web'}</div>
-      ${u.lessons&&u.lessons.length>0?`<div onclick="event.stopPropagation();toggleLessons(this)" style="font-size:11px;color:#7c3aed;margin-top:8px;cursor:pointer;font-weight:700;">▸ ${mod3.length+mod4.length} ders detayı</div><div class="admin-lessons-list">${lessonsHTML}</div>`:''}
+      ${u.lessons&&u.lessons.length>0?`<div onclick="event.stopPropagation();toggleLessons(this)" style="font-size:11px;color:#7c3aed;margin-top:8px;cursor:pointer;font-weight:700;">▸ ${(u.lessons||[]).filter(l=>(l.lastCardIndex||0)>0||(l.completedCount||0)>0||(l.totalLessonSeconds||0)>30).length} ders detayı</div><div class="admin-lessons-list">${lessonsHTML}</div>`:''}
     </div>`;
   }).join('');
 }
