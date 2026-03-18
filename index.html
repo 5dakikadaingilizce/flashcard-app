@@ -85,25 +85,10 @@ onAuthStateChanged(auth, async (user) => {
     window._isAdmin = false;
     window._userDisplayName = null;
     showLoginPage();
-    stopSessionTracking();
   }
 });
 
-// ── Oturum süresi takibi ──
-let _sessionStart = null;
-let _sessionInterval = null;
-window.startSessionTracking = function(uid) {
-  _sessionStart = Date.now();
-  _sessionInterval = setInterval(async () => {
-    const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
-    const uRef = doc(db, "users", uid);
-    await updateDoc(uRef, { totalStudySeconds: increment(30) }).catch(() => {});
-  }, 30000); // Her 30 saniyede bir güncelle
-}
-window.stopSessionTracking = function() {
-  if (_sessionInterval) clearInterval(_sessionInterval);
-  _sessionStart = null;
-}
+
 
 // ── Ders analytics ──
 window.trackLessonOpen = async function(lessonName, moduleKey) {
@@ -181,7 +166,6 @@ window.setUserRole = async function(uid, role) {
 
 // ── Çıkış ──
 window.doSignOut = async function() {
-  stopSessionTracking();
   await signOut(auth);
 };
 
@@ -931,7 +915,6 @@ function buildSnakeLayout(lessons){
 
 function goToModulePage(){
   saveProgress();
-  window.stopSessionTracking&&window.stopSessionTracking();
   if(window._lessonStart&&activeLesson&&activeModuleKey){
     const secs=Math.floor((Date.now()-window._lessonStart)/1000);
     window.trackLessonTime&&window.trackLessonTime(activeLesson.name,activeModuleKey,secs);
@@ -1085,7 +1068,6 @@ function goBack(){initAudio();currentIndex=(currentIndex-1+cards.length)%cards.l
 
 function goHome(){
   saveProgress();
-  window.stopSessionTracking&&window.stopSessionTracking();
   if(window._lessonStart&&activeLesson&&activeModuleKey){
     const secs=Math.floor((Date.now()-window._lessonStart)/1000);
     window.trackLessonTime&&window.trackLessonTime(activeLesson.name,activeModuleKey,secs);
@@ -1145,7 +1127,6 @@ function loadLesson(lesson){
     const notesBtn=document.getElementById('notes-btn');
     if(lesson.notes){notesBtn.style.display='flex';}else{notesBtn.style.display='none';}
     showPage('app-screen');show();
-    if(window._currentUser) window.startSessionTracking&&window.startSessionTracking(window._currentUser.uid);
     window._lessonStart=Date.now();
     window.trackLessonOpen&&window.trackLessonOpen(lesson.name,activeModuleKey);
   });
@@ -1161,7 +1142,6 @@ function showCompletion(count){
   createConfetti();
 }
 function closeCompletion(){
-  window.stopSessionTracking&&window.stopSessionTracking();
   if(window._lessonStart&&activeLesson&&activeModuleKey){
     const secs=Math.floor((Date.now()-window._lessonStart)/1000);
     window.trackLessonTime&&window.trackLessonTime(activeLesson.name,activeModuleKey,secs);
