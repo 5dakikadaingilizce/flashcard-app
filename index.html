@@ -78,7 +78,7 @@ onAuthStateChanged(auth, async (user) => {
 
     // FIX 2: Kullanıcı adını göster (web/mobil aynı)
     const nameEl = document.getElementById('user-display-name');
-    if (nameEl) nameEl.innerText = '👤 ' + window._userDisplayName;
+if (nameEl) nameEl.innerText = '👋 Hoş Geldin, ' + window._userDisplayName + '!';
 
   } else {
     window._currentUser = null;
@@ -603,7 +603,7 @@ body::before {
 <div id="app-wrapper" style="display:none; flex-direction:column; align-items:center; width:100%; position:relative; z-index:1;">
 
   <!-- Kullanıcı bilgi barı -->
-  <div class="user-info-bar">
+   <div class="user-info-bar" id="user-info-bar-wrap"> 
     <div class="user-info-name" id="user-display-name">👤 Kullanıcı</div>
     <div class="user-info-right">
       <button id="admin-nav-btn" onclick="openAdminPanel()">
@@ -798,6 +798,11 @@ function showPage(pageId){
   ['module-page','entry-page','app-screen','admin-page'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.style.display='none';
   });
+  // BUNU EKLE:
+  const ubar=document.getElementById('user-info-bar-wrap');
+  if(ubar) ubar.style.display = pageId==='app-screen' ? 'none' : 'flex';
+
+  
   const target=document.getElementById(pageId);
   if(target){target.style.display='flex';target.classList.remove('page-anim');void target.offsetWidth;target.classList.add('page-anim');}
   document.getElementById('v-tag-el').style.display=pageId==='app-screen'?'none':'block';
