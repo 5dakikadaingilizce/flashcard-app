@@ -1320,7 +1320,7 @@ async function loadAdminPanel(){
     const createdAt=u.createdAt?.toDate?u.createdAt.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
     const lessonsHTML=(u.lessons||[]).map(l=>`
       <div class="admin-lesson-row">
-        <span class="admin-lesson-name">${l.lessonName}</span>
+        <span class="admin-lesson-name">${l.lessonName} <span style="font-size:9px;background:rgba(139,92,246,0.2);color:#c4b5fd;padding:2px 6px;border-radius:6px;margin-left:4px;">${l.moduleKey||''}</span></span>
         <div class="admin-lesson-stats">
           <div class="admin-lesson-stat"><span>AÇILDI</span>${l.openCount||0}x</div>
           <div class="admin-lesson-stat"><span>BİTİRDİ</span>${l.completedCount||0}x</div>
