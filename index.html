@@ -1226,9 +1226,9 @@ async function openProfile(){
     }).join(''):'<div style="padding:16px;color:#a78bfa;font-size:12px;text-align:center;">Henüz tamamlanan ders yok.</div>';
     body.innerHTML=`
       <div class="profile-stat-grid">
-        <div class="profile-stat-card"><div class="profile-stat-val">${totalMins}</div><div class="profile-stat-lbl">DAKİKA</div></div>
-        <div class="profile-stat-card"><div class="profile-stat-val">${totalCompleted}</div><div class="profile-stat-lbl">DERS</div></div>
-        <div class="profile-stat-card"><div class="profile-stat-val">${totalStars}</div><div class="profile-stat-lbl">YILDIZ</div></div>
+        <div class="profile-stat-card"><div class="profile-stat-val">${totalMins}</div><div class="profile-stat-lbl">Total Minutes</div></div>
+        <div class="profile-stat-card"><div class="profile-stat-val">${totalCompleted}</div><div class="profile-stat-lbl"> Completed Lessons</div></div>
+        <div class="profile-stat-card"><div class="profile-stat-val">${totalStars}</div><div class="profile-stat-lbl">Total Stars</div></div>
       </div>
       <div style="padding:0 16px 10px;font-size:11px;color:#7c3aed;font-weight:600;">🕐 Son giriş: ${lastSeen}</div>
       <div class="profile-section-title">📚 Ders Geçmişi</div>
