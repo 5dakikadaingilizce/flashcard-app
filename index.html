@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>5 Dakikada İngilizce Flash Card - V.7.8</title>
+<title>5 Dakikada İngilizce Flash Card - V.7.9</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&family=Raleway:wght@700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -74,14 +74,11 @@ onAuthStateChanged(auth, async (user) => {
 
     // Login ekranını gizle, uygulamayı göster
     hideLoginPage();
-   // Cihaz bilgisini kaydet
-const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-const device = isMobile ? 'mobile' : 'web';
-updateDoc(uRef, { lastDevice: device }).catch(()=>{});
+    startSessionTracking(user.uid);
 
     // FIX 2: Kullanıcı adını göster (web/mobil aynı)
     const nameEl = document.getElementById('user-display-name');
-   if (nameEl) nameEl.innerText = '👋 Hoş Geldin, ' + window._userDisplayName + '!';
+    if (nameEl) nameEl.innerText = '👤 ' + window._userDisplayName;
 
   } else {
     window._currentUser = null;
@@ -95,14 +92,15 @@ updateDoc(uRef, { lastDevice: device }).catch(()=>{});
 // ── Oturum süresi takibi ──
 let _sessionStart = null;
 let _sessionInterval = null;
-window.startSessionTracking = function(uid) {
+function startSessionTracking(uid) {
   _sessionStart = Date.now();
   _sessionInterval = setInterval(async () => {
+    const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
     const uRef = doc(db, "users", uid);
     await updateDoc(uRef, { totalStudySeconds: increment(30) }).catch(() => {});
-  }, 30000);
+  }, 30000); // Her 30 saniyede bir güncelle
 }
-window.stopSessionTracking = function() {
+function stopSessionTracking() {
   if (_sessionInterval) clearInterval(_sessionInterval);
   _sessionStart = null;
 }
@@ -116,9 +114,9 @@ window.trackLessonOpen = async function(lessonName, moduleKey) {
     const lRef = doc(db, "users", uid, "lessons", key);
     const snap = await getDoc(lRef);
     if (!snap.exists()) {
-      await setDoc(lRef, { lessonName, moduleKey, openCount: 1, lastOpened: serverTimestamp(), completedCount: 0, lastCardIndex: 0 });
+      await setDoc(lRef, { lessonName, moduleKey, openCount: 1, lastOpened: serverTimestamp(), completedCount: 0, lastCardIndex: 0, totalLessonSeconds: 0, lastLessonStart: serverTimestamp() });
     } else {
-      await updateDoc(lRef, { openCount: increment(1), lastOpened: serverTimestamp() });
+      await updateDoc(lRef, { openCount: increment(1), lastOpened: serverTimestamp(), lastLessonStart: serverTimestamp() });
     }
   } catch(e) {}
 };
@@ -142,6 +140,17 @@ window.trackLessonComplete = async function(lessonName, moduleKey, starCount) {
     await updateDoc(lRef, { completedCount: increment(1), lastCompleted: serverTimestamp(), lastStarCount: starCount });
     const uRef = doc(db, "users", uid);
     await updateDoc(uRef, { totalLessonsCompleted: increment(1) });
+  } catch(e) {}
+};
+
+// ── Ders süresi takibi ──
+window.trackLessonTime = async function(lessonName, moduleKey, seconds) {
+  if (!window._currentUser || seconds < 5) return;
+  try {
+    const uid = window._currentUser.uid;
+    const key = `${moduleKey}_${lessonName}`.replace(/[^a-zA-Z0-9_]/g, '_');
+    const lRef = doc(db, "users", uid, "lessons", key);
+    await updateDoc(lRef, { totalLessonSeconds: increment(seconds) }).catch(() => {});
   } catch(e) {}
 };
 
@@ -170,7 +179,7 @@ window.setUserRole = async function(uid, role) {
 
 // ── Çıkış ──
 window.doSignOut = async function() {
-window.stopSessionTracking();
+  stopSessionTracking();
   await signOut(auth);
 };
 
@@ -584,7 +593,7 @@ body::before {
 </head>
 <body>
 
-<div class="v-tag" id="v-tag-el">V.7.8</div>
+<div class="v-tag" id="v-tag-el">V.7.9</div>
 
 <!-- ===================== LOGIN PAGE ===================== -->
 <div id="login-page">
@@ -918,7 +927,16 @@ function buildSnakeLayout(lessons){
   });
 }
 
-function goToModulePage(){saveProgress();window.stopSessionTracking();showPage('module-page');}
+function goToModulePage(){
+  saveProgress();
+  window.stopSessionTracking&&window.stopSessionTracking();
+  if(window._lessonStart&&activeLesson&&activeModuleKey){
+    const secs=Math.floor((Date.now()-window._lessonStart)/1000);
+    window.trackLessonTime&&window.trackLessonTime(activeLesson.name,activeModuleKey,secs);
+    window._lessonStart=null;
+  }
+  showPage('module-page');
+}
 
 if(autoTRVoice)document.getElementById('trVoiceToggle').classList.add('active');
 
@@ -1065,7 +1083,12 @@ function goBack(){initAudio();currentIndex=(currentIndex-1+cards.length)%cards.l
 
 function goHome(){
   saveProgress();
- window.stopSessionTracking();
+  window.stopSessionTracking&&window.stopSessionTracking();
+  if(window._lessonStart&&activeLesson&&activeModuleKey){
+    const secs=Math.floor((Date.now()-window._lessonStart)/1000);
+    window.trackLessonTime&&window.trackLessonTime(activeLesson.name,activeModuleKey,secs);
+    window._lessonStart=null;
+  }
   if(activeModuleKey&&allModulesData)buildSnakeLayout(allModulesData[activeModuleKey]);
   showPage('entry-page');
 }
@@ -1120,7 +1143,8 @@ function loadLesson(lesson){
     const notesBtn=document.getElementById('notes-btn');
     if(lesson.notes){notesBtn.style.display='flex';}else{notesBtn.style.display='none';}
     showPage('app-screen');show();
-if(window._currentUser) window.startSessionTracking(window._currentUser.uid);
+    if(window._currentUser) window.startSessionTracking&&window.startSessionTracking(window._currentUser.uid);
+    window._lessonStart=Date.now();
     window.trackLessonOpen&&window.trackLessonOpen(lesson.name,activeModuleKey);
   });
 }
@@ -1134,7 +1158,16 @@ function showCompletion(count){
   document.getElementById('completion-overlay').style.display='flex';
   createConfetti();
 }
-function closeCompletion(){window.stopSessionTracking();document.getElementById('completion-overlay').style.display='none';goHome();}
+function closeCompletion(){
+  window.stopSessionTracking&&window.stopSessionTracking();
+  if(window._lessonStart&&activeLesson&&activeModuleKey){
+    const secs=Math.floor((Date.now()-window._lessonStart)/1000);
+    window.trackLessonTime&&window.trackLessonTime(activeLesson.name,activeModuleKey,secs);
+    window._lessonStart=null;
+  }
+  document.getElementById('completion-overlay').style.display='none';
+  goHome();
+}
 function createConfetti(){
   const colors=['#a855f7','#06b6d4','#f472b6','#8b5cf6','#22d3ee','#ffffff'];
   const overlay=document.getElementById('completion-overlay');
@@ -1218,28 +1251,21 @@ async function openProfile(){
     // Profil başlığını kullanıcı adı yap
     document.getElementById('profile-sheet').querySelector('.sheet-title').innerText = '👤 ' + (window._userDisplayName||'Profil');
     // Sadece tamamlanan dersleri göster
-const tamamlanan=lessons.filter(l=>(l.completedCount||0)>0);
-    const mod3=tamamlanan.filter(l=>l.moduleKey==='module3').sort((a,b)=>(b.lastOpened?.seconds||0)-(a.lastOpened?.seconds||0));
-    const mod4=tamamlanan.filter(l=>l.moduleKey==='module4').sort((a,b)=>(b.lastOpened?.seconds||0)-(a.lastOpened?.seconds||0));
-    const makeLessonRow=l=>{
+    const tamamlanan=lessons.filter(l=>(l.completedCount||0)>0);
+    const lessonsHTML=tamamlanan.length>0?tamamlanan.sort((a,b)=>(b.lastOpened?.seconds||0)-(a.lastOpened?.seconds||0)).map(l=>{
       const count=Math.min(l.completedCount||0,3);
       const stars='⭐'.repeat(count);
       const last=l.lastOpened?.toDate?l.lastOpened.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit'}):'—';
       return `<div class="profile-lesson-row">
-        <div><div class="profile-lesson-name">${l.lessonName}</div><div class="profile-lesson-meta">${last}</div></div>
+        <div><div class="profile-lesson-name">${l.lessonName}</div><div class="profile-lesson-meta">${last}${Math.round((l.totalLessonSeconds||0)/60)>0?' · '+Math.round((l.totalLessonSeconds||0)/60)+' dk':''}</div></div>
         <div style="text-align:right"><div style="font-size:13px;">${stars}</div><div class="profile-lesson-meta">${l.completedCount}x tamamlandı</div></div>
       </div>`;
-    };
-    const lessonsHTML=`
-      ${mod3.length>0?`<div class="profile-section-title">📗 Module #3</div>${mod3.map(makeLessonRow).join('')}`:''}
-      ${mod4.length>0?`<div class="profile-section-title">📘 Module #4</div>${mod4.map(makeLessonRow).join('')}`:''}
-      ${tamamlanan.length===0?'<div style="padding:16px;color:#a78bfa;font-size:12px;text-align:center;">Henüz tamamlanan ders yok.</div>':''}
-    `;
+    }).join(''):'<div style="padding:16px;color:#a78bfa;font-size:12px;text-align:center;">Henüz tamamlanan ders yok.</div>';
     body.innerHTML=`
       <div class="profile-stat-grid">
-        <div class="profile-stat-card"><div class="profile-stat-val">${totalMins}</div><div class="profile-stat-lbl">Total Minutes</div></div>
-        <div class="profile-stat-card"><div class="profile-stat-val">${totalCompleted}</div><div class="profile-stat-lbl"> Completed Lessons</div></div>
-        <div class="profile-stat-card"><div class="profile-stat-val">${totalStars}</div><div class="profile-stat-lbl">Total Stars</div></div>
+        <div class="profile-stat-card"><div class="profile-stat-val">${totalMins}</div><div class="profile-stat-lbl">DAKİKA</div></div>
+        <div class="profile-stat-card"><div class="profile-stat-val">${totalCompleted}</div><div class="profile-stat-lbl">DERS</div></div>
+        <div class="profile-stat-card"><div class="profile-stat-val">${totalStars}</div><div class="profile-stat-lbl">YILDIZ</div></div>
       </div>
       <div style="padding:0 16px 10px;font-size:11px;color:#7c3aed;font-weight:600;">🕐 Son giriş: ${lastSeen}</div>
       <div class="profile-section-title">📚 Ders Geçmişi</div>
@@ -1328,22 +1354,17 @@ async function loadAdminPanel(){
     const mins=Math.round((u.totalStudySeconds||0)/60);
     const lastSeen=u.lastSeen?.toDate?u.lastSeen.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
     const createdAt=u.createdAt?.toDate?u.createdAt.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
-const mod3lessons=(u.lessons||[]).filter(l=>l.moduleKey==='module3');
-const mod4lessons=(u.lessons||[]).filter(l=>l.moduleKey==='module4');
-const makeLessonHTML=l=>`
-  <div class="admin-lesson-row">
-    <span class="admin-lesson-name">${l.lessonName}</span>
-    <div class="admin-lesson-stats">
-      <div class="admin-lesson-stat"><span>AÇILDI</span>${l.openCount||0}x</div>
-      <div class="admin-lesson-stat"><span>BİTİRDİ</span>${l.completedCount||0}x</div>
-      <div class="admin-lesson-stat"><span>KART</span>#${(l.lastCardIndex||0)+1}</div>
-      <div class="admin-lesson-stat"><span>YILDIZ</span>${'⭐'.repeat(l.lastStarCount||0)||'—'}</div>
-    </div>
-  </div>`;
-const lessonsHTML=`
-  ${mod3lessons.length>0?`<div style="font-size:10px;color:#a855f7;font-weight:800;padding:6px 0 4px;letter-spacing:0.5px;">📗 MODULE 3</div>${mod3lessons.map(makeLessonHTML).join('')}`:''}
-  ${mod4lessons.length>0?`<div style="font-size:10px;color:#06b6d4;font-weight:800;padding:6px 0 4px;letter-spacing:0.5px;">📘 MODULE 4</div>${mod4lessons.map(makeLessonHTML).join('')}`:''}
-`;
+    const lessonsHTML=(u.lessons||[]).map(l=>`
+      <div class="admin-lesson-row">
+        <span class="admin-lesson-name">${l.lessonName}</span>
+        <div class="admin-lesson-stats">
+          <div class="admin-lesson-stat"><span>AÇILDI</span>${l.openCount||0}x</div>
+          <div class="admin-lesson-stat"><span>BİTİRDİ</span>${l.completedCount||0}x</div>
+          <div class="admin-lesson-stat"><span>KART</span>#${(l.lastCardIndex||0)+1}</div>
+          <div class="admin-lesson-stat"><span>YıLDıZ</span>${'⭐'.repeat(l.lastStarCount||0)||'—'}</div>
+          <div class="admin-lesson-stat"><span>SÜRE</span>${Math.round((l.totalLessonSeconds||0)/60)} dk</div>
+        </div>
+      </div>`).join('');
     return `<div class="admin-user-card">
       <div class="admin-user-top">
         <div><div class="admin-user-name">${u.displayName||'—'}</div><div class="admin-user-email">${u.email}</div></div>
@@ -1360,7 +1381,6 @@ const lessonsHTML=`
         <div class="admin-user-stat"><span>BİTİRDİĞİ DERS</span>${u.totalLessonsCompleted||0}</div>
         <div class="admin-user-stat"><span>KAYIT</span>${createdAt}</div>
         <div class="admin-user-stat"><span>SON GİRİŞ</span>${lastSeen}</div>
-        <div class="admin-user-stat"><span>CİHAZ</span>${u.lastDevice==='mobile'?'📱 Mobil':'🖥️ Web'}</div>
       </div>
       ${u.lessons&&u.lessons.length>0?`<div onclick="event.stopPropagation();toggleLessons(this)" style="font-size:11px;color:#7c3aed;margin-top:8px;cursor:pointer;font-weight:700;">▸ ${u.lessons.length} ders detayı</div><div class="admin-lessons-list">${lessonsHTML}</div>`:''}
     </div>`;
@@ -1377,7 +1397,7 @@ function toggleLessons(el){
 
 
 // Version & init
-const APP_VERSION='7.8';
+const APP_VERSION='7.9';
 document.addEventListener('DOMContentLoaded',()=>{
   const vtag=document.getElementById('v-tag-el');
   if(vtag)vtag.innerText='V.'+APP_VERSION;
