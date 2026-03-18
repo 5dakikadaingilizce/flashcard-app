@@ -1368,16 +1368,16 @@ const startTime=l.lastLessonStart?.toDate?l.lastLessonStart.toDate().toLocaleTim
     const sure=Math.round((l.totalLessonSeconds||0)/60);
     const device=l.lastDevice==='mobile'?'📱 Mobil':'🖥️ Web';
  const kart='#'+((l.lastCardIndex||0)+1);
-return `<div style="display:grid;grid-template-columns:110px 90px 50px 50px 60px 60px 50px 50px;align-items:center;padding:5px 0;border-bottom:1px solid rgba(139,92,246,0.07);gap:4px;">
-      <span style="font-size:11px;color:#c4b5fd;font-weight:700;">${l.lessonName}</span>
-      <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">TARİH</div><div style="font-size:10px;color:#e2e8f0;">${lastDate}</div></div>
-      <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">GİRİŞ</div><div style="font-size:10px;color:#e2e8f0;">${startTime}</div></div>
-      <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">ÇIKIŞ</div><div style="font-size:10px;color:#e2e8f0;">${endTime}</div></div> 
-      <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">SÜRE</div><div style="font-size:10px;color:#e2e8f0;">${sure} dk</div></div>
-      <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">KART</div><div style="font-size:10px;color:#e2e8f0;">${kart}</div></div>
-      <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">YILDIZ</div><div style="font-size:10px;color:#e2e8f0;">${stars}</div></div>
-      <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">CİHAZ</div><div style="font-size:10px;color:#e2e8f0;">${device}</div></div>
-    </div>`;
+return `<div style="display:grid;grid-template-columns:80px 72px 40px 40px 42px 38px 38px 54px;align-items:center;padding:5px 0;border-bottom:1px solid rgba(139,92,246,0.07);gap:2px;">
+  <span style="font-size:9px;color:#c4b5fd;font-weight:700;">${l.lessonName}</span>
+  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">TARİH</div><div style="font-size:9px;color:#e2e8f0;">${lastDate}</div></div>
+  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">GİRİŞ</div><div style="font-size:9px;color:#e2e8f0;">${startTime}</div></div>
+  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">ÇIKIŞ</div><div style="font-size:9px;color:#e2e8f0;">${endTime}</div></div>
+  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">SÜRE</div><div style="font-size:9px;color:#e2e8f0;">${sure}dk</div></div>
+  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">KART</div><div style="font-size:9px;color:#e2e8f0;">${kart}</div></div>
+  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">YILDIZ</div><div style="font-size:9px;color:#e2e8f0;">${stars}</div></div>
+  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">CİHAZ</div><div style="font-size:9px;color:#e2e8f0;">${device}</div></div>
+</div>`;
   };
   return (mod3.length>0?`<div style="font-size:10px;color:#a855f7;font-weight:800;padding:6px 0 3px;letter-spacing:0.5px;">📗 MODULE 3</div>${mod3.map(mkRow).join('')}`:'')
        +(mod4.length>0?`<div style="font-size:10px;color:#06b6d4;font-weight:800;padding:6px 0 3px;letter-spacing:0.5px;">📘 MODULE 4</div>${mod4.map(mkRow).join('')}`:'');
