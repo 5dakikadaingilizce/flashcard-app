@@ -618,7 +618,7 @@ body::before {
 <div id="app-wrapper" style="display:none; flex-direction:column; align-items:center; width:100%; position:relative; z-index:1;">
 
   <!-- Kullanıcı bilgi barı -->
-  <div class="user-info-bar">
+  <div class="user-info-bar" id="user-info-bar-wrap">
     <div class="user-info-name" id="user-display-name">👤 Kullanıcı</div>
     <div class="user-info-right">
       <button class="signout-btn" style="background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.25);color:#c4b5fd;" onclick="openProfile()">
@@ -831,6 +831,8 @@ function showPage(pageId){
   const target=document.getElementById(pageId);
   if(target){target.style.display='flex';target.classList.remove('page-anim');void target.offsetWidth;target.classList.add('page-anim');}
   document.getElementById('v-tag-el').style.display=pageId==='app-screen'?'none':'block';
+  const ubar=document.getElementById('user-info-bar-wrap');
+  if(ubar) ubar.style.display=pageId==='app-screen'?'none':'flex';
 }
 
 // ── Firestore yıldız/ilerleme cache ──
@@ -1209,14 +1211,19 @@ async function openProfile(){
     const totalStars=lessons.reduce((s,l)=>s+Math.min(l.completedCount||0,3),0);
     const totalCompleted=uData.totalLessonsCompleted||0;
     const lastSeen=uData.lastSeen?.toDate?uData.lastSeen.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
-    const lessonsHTML=lessons.length>0?lessons.sort((a,b)=>(b.lastOpened?.seconds||0)-(a.lastOpened?.seconds||0)).map(l=>{
-      const stars='⭐'.repeat(Math.min(l.completedCount||0,3))||'☆☆☆';
+    // Profil başlığını kullanıcı adı yap
+    document.getElementById('profile-sheet').querySelector('.sheet-title').innerText = '👤 ' + (window._userDisplayName||'Profil');
+    // Sadece tamamlanan dersleri göster
+    const tamamlanan=lessons.filter(l=>(l.completedCount||0)>0);
+    const lessonsHTML=tamamlanan.length>0?tamamlanan.sort((a,b)=>(b.lastOpened?.seconds||0)-(a.lastOpened?.seconds||0)).map(l=>{
+      const count=Math.min(l.completedCount||0,3);
+      const stars='⭐'.repeat(count);
       const last=l.lastOpened?.toDate?l.lastOpened.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit'}):'—';
       return `<div class="profile-lesson-row">
-        <div><div class="profile-lesson-name">${l.lessonName}</div><div class="profile-lesson-meta">${l.moduleKey} · Son: ${last}</div></div>
-        <div style="text-align:right"><div style="font-size:13px;">${stars}</div><div class="profile-lesson-meta">${l.openCount||0}x açıldı</div></div>
+        <div><div class="profile-lesson-name">${l.lessonName}</div><div class="profile-lesson-meta">${l.moduleKey} · ${last}</div></div>
+        <div style="text-align:right"><div style="font-size:13px;">${stars}</div><div class="profile-lesson-meta">${l.completedCount}x tamamlandı</div></div>
       </div>`;
-    }).join(''):'<div style="padding:16px;color:#a78bfa;font-size:12px;text-align:center;">Henüz ders çalışılmadı.</div>';
+    }).join(''):'<div style="padding:16px;color:#a78bfa;font-size:12px;text-align:center;">Henüz tamamlanan ders yok.</div>';
     body.innerHTML=`
       <div class="profile-stat-grid">
         <div class="profile-stat-card"><div class="profile-stat-val">${totalMins}</div><div class="profile-stat-lbl">DAKİKA</div></div>
