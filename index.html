@@ -1378,7 +1378,8 @@ async function loadAdminPanel(){
   };
   return (mod3.length>0?`<div style="font-size:10px;color:#a855f7;font-weight:800;padding:6px 0 3px;letter-spacing:0.5px;">📗 MODULE 3</div>${mod3.map(mkRow).join('')}`:'')
        +(mod4.length>0?`<div style="font-size:10px;color:#06b6d4;font-weight:800;padding:6px 0 3px;letter-spacing:0.5px;">📘 MODULE 4</div>${mod4.map(mkRow).join('')}`:'');
-})()
+})();
+    const totalStars=(u.lessons||[]).reduce((s,l)=>s+Math.min(l.completedCount||0,3),0);
     return `<div class="admin-user-card">
       <div class="admin-user-top">
         <div><div class="admin-user-name">${u.displayName||'—'}</div><div class="admin-user-email">${u.email}</div></div>
