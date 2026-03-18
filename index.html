@@ -74,7 +74,7 @@ onAuthStateChanged(auth, async (user) => {
 
     // Login ekranını gizle, uygulamayı göster
     hideLoginPage();
-    startSessionTracking(user.uid);
+   
 
     // FIX 2: Kullanıcı adını göster (web/mobil aynı)
     const nameEl = document.getElementById('user-display-name');
@@ -916,7 +916,7 @@ function buildSnakeLayout(lessons){
   });
 }
 
-function goToModulePage(){saveProgress();showPage('module-page');}
+function goToModulePage(){saveProgress();stopSessionTracking();showPage('module-page');}
 
 if(autoTRVoice)document.getElementById('trVoiceToggle').classList.add('active');
 
@@ -1063,6 +1063,7 @@ function goBack(){initAudio();currentIndex=(currentIndex-1+cards.length)%cards.l
 
 function goHome(){
   saveProgress();
+  stopSessionTracking();
   if(activeModuleKey&&allModulesData)buildSnakeLayout(allModulesData[activeModuleKey]);
   showPage('entry-page');
 }
@@ -1117,6 +1118,7 @@ function loadLesson(lesson){
     const notesBtn=document.getElementById('notes-btn');
     if(lesson.notes){notesBtn.style.display='flex';}else{notesBtn.style.display='none';}
     showPage('app-screen');show();
+    if(window._currentUser) startSessionTracking(window._currentUser.uid);
     window.trackLessonOpen&&window.trackLessonOpen(lesson.name,activeModuleKey);
   });
 }
@@ -1130,7 +1132,7 @@ function showCompletion(count){
   document.getElementById('completion-overlay').style.display='flex';
   createConfetti();
 }
-function closeCompletion(){document.getElementById('completion-overlay').style.display='none';goHome();}
+function closeCompletion(){stopSessionTracking();document.getElementById('completion-overlay').style.display='none';goHome();}
 function createConfetti(){
   const colors=['#a855f7','#06b6d4','#f472b6','#8b5cf6','#22d3ee','#ffffff'];
   const overlay=document.getElementById('completion-overlay');
