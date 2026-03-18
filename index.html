@@ -118,7 +118,7 @@ window.trackLessonOpen = async function(lessonName, moduleKey) {
       await setDoc(lRef, { lessonName, moduleKey, openCount: 1, lastOpened: serverTimestamp(), completedCount: 0, lastCardIndex: 0, totalLessonSeconds: 0, lastLessonStart: serverTimestamp(), lastDevice: _dev2 });
     } else {
       const _dev=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent)?'mobile':'web';
-      await updateDoc(lRef, { openCount: increment(1), lastOpened: serverTimestamp(), lastLessonStart: serverTimestamp(), lastDevice: _dev });
+      await updateDoc(lRef, { openCount: increment(1), lastOpened: serverTimestamp(), lastLessonStart: serverTimestamp(), lastDevice: _dev, lastLessonEnd: null });
     }
   } catch(e) {}
 };
@@ -1246,7 +1246,7 @@ async function openProfile(){
     const uData=uSnap.data()||{};
     const lessonsSnap=await getDocs(collection(db,'users',uid,'lessons'));
     const lessons=lessonsSnap.docs.map(d=>d.data());
-    const totalMins=Math.round((uData.totalStudySeconds||0)/60);
+    const totalMins=Math.ceil(lessons.reduce((s,l)=>s+(l.totalLessonSeconds||0),0)/60);
     const totalStars=lessons.reduce((s,l)=>s+Math.min(l.completedCount||0,3),0);
     const totalCompleted=uData.totalLessonsCompleted||0;
     const lastSeen=uData.lastSeen?.toDate?uData.lastSeen.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
@@ -1353,7 +1353,7 @@ async function loadAdminPanel(){
   document.getElementById('a-total-hours').innerText=Math.round(totalSecs/3600)+'s';
 
   document.getElementById('admin-users-list').innerHTML=users.map(u=>{
-    const mins=Math.round((u.lessons||[]).reduce((s,l)=>s+(l.totalLessonSeconds||0),0)/60);
+    const totalSaniye=(u.lessons||[]).reduce((s,l)=>s+(l.totalLessonSeconds||0),0); const mins=Math.ceil(totalSaniye/60);
     const lastSeen=u.lastSeen?.toDate?u.lastSeen.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
     const createdAt=u.createdAt?.toDate?u.createdAt.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
     const lessonsHTML=(()=>{
