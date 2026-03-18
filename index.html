@@ -74,7 +74,10 @@ onAuthStateChanged(auth, async (user) => {
 
     // Login ekranını gizle, uygulamayı göster
     hideLoginPage();
-   
+   // Cihaz bilgisini kaydet
+const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+const device = isMobile ? 'mobile' : 'web';
+updateDoc(uRef, { lastDevice: device }).catch(()=>{});
 
     // FIX 2: Kullanıcı adını göster (web/mobil aynı)
     const nameEl = document.getElementById('user-display-name');
@@ -1325,16 +1328,22 @@ async function loadAdminPanel(){
     const mins=Math.round((u.totalStudySeconds||0)/60);
     const lastSeen=u.lastSeen?.toDate?u.lastSeen.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
     const createdAt=u.createdAt?.toDate?u.createdAt.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
-    const lessonsHTML=(u.lessons||[]).map(l=>`
-      <div class="admin-lesson-row">
-        <span class="admin-lesson-name">${l.lessonName} <span style="font-size:9px;background:rgba(139,92,246,0.2);color:#c4b5fd;padding:2px 6px;border-radius:6px;margin-left:4px;">${l.moduleKey||''}</span></span>
-        <div class="admin-lesson-stats">
-          <div class="admin-lesson-stat"><span>AÇILDI</span>${l.openCount||0}x</div>
-          <div class="admin-lesson-stat"><span>BİTİRDİ</span>${l.completedCount||0}x</div>
-          <div class="admin-lesson-stat"><span>KART</span>#${(l.lastCardIndex||0)+1}</div>
-          <div class="admin-lesson-stat"><span>YıLDıZ</span>${'⭐'.repeat(l.lastStarCount||0)||'—'}</div>
-        </div>
-      </div>`).join('');
+const mod3lessons=(u.lessons||[]).filter(l=>l.moduleKey==='module3');
+const mod4lessons=(u.lessons||[]).filter(l=>l.moduleKey==='module4');
+const makeLessonHTML=l=>`
+  <div class="admin-lesson-row">
+    <span class="admin-lesson-name">${l.lessonName}</span>
+    <div class="admin-lesson-stats">
+      <div class="admin-lesson-stat"><span>AÇILDI</span>${l.openCount||0}x</div>
+      <div class="admin-lesson-stat"><span>BİTİRDİ</span>${l.completedCount||0}x</div>
+      <div class="admin-lesson-stat"><span>KART</span>#${(l.lastCardIndex||0)+1}</div>
+      <div class="admin-lesson-stat"><span>YILDIZ</span>${'⭐'.repeat(l.lastStarCount||0)||'—'}</div>
+    </div>
+  </div>`;
+const lessonsHTML=`
+  ${mod3lessons.length>0?`<div style="font-size:10px;color:#a855f7;font-weight:800;padding:6px 0 4px;letter-spacing:0.5px;">📗 MODULE 3</div>${mod3lessons.map(makeLessonHTML).join('')}`:''}
+  ${mod4lessons.length>0?`<div style="font-size:10px;color:#06b6d4;font-weight:800;padding:6px 0 4px;letter-spacing:0.5px;">📘 MODULE 4</div>${mod4lessons.map(makeLessonHTML).join('')}`:''}
+`;
     return `<div class="admin-user-card">
       <div class="admin-user-top">
         <div><div class="admin-user-name">${u.displayName||'—'}</div><div class="admin-user-email">${u.email}</div></div>
@@ -1351,6 +1360,7 @@ async function loadAdminPanel(){
         <div class="admin-user-stat"><span>BİTİRDİĞİ DERS</span>${u.totalLessonsCompleted||0}</div>
         <div class="admin-user-stat"><span>KAYIT</span>${createdAt}</div>
         <div class="admin-user-stat"><span>SON GİRİŞ</span>${lastSeen}</div>
+        <div class="admin-user-stat"><span>CİHAZ</span>${u.lastDevice==='mobile'?'📱 Mobil':'🖥️ Web'}</div>
       </div>
       ${u.lessons&&u.lessons.length>0?`<div onclick="event.stopPropagation();toggleLessons(this)" style="font-size:11px;color:#7c3aed;margin-top:8px;cursor:pointer;font-weight:700;">▸ ${u.lessons.length} ders detayı</div><div class="admin-lessons-list">${lessonsHTML}</div>`:''}
     </div>`;
