@@ -78,7 +78,7 @@ onAuthStateChanged(auth, async (user) => {
 
     // FIX 2: Kullanıcı adını göster (web/mobil aynı)
     const nameEl = document.getElementById('user-display-name');
-    if (nameEl) nameEl.innerText = '👤 ' + window._userDisplayName;
+   if (nameEl) nameEl.innerText = '👋 Hoş Geldin, ' + window._userDisplayName + '!';
 
   } else {
     window._currentUser = null;
