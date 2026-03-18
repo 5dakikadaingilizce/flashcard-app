@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>5 Dakikada İngilizce Flash Card - V.7.5</title>
+<title>5 Dakikada İngilizce Flash Card - V.7.6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&family=Raleway:wght@700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -11,7 +11,7 @@
 <!-- ===================== FIREBASE SDK ===================== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, updateProfile } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, updateProfile, browserLocalPersistence, setPersistence } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -28,6 +28,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
+// ── FIX 1: Beni hatırla — oturumu kalıcı tut ──
+await setPersistence(auth, browserLocalPersistence);
+
 // ── Global erişim için window'a bağla ──
 window._fb = { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, updateProfile, doc, setDoc, getDoc, updateDoc, collection, getDocs, serverTimestamp, increment };
 
@@ -35,31 +38,52 @@ window._fb = { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassw
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     window._currentUser = user;
-    // Kullanıcı dokümanı yoksa oluştur
     const uRef = doc(db, "users", user.uid);
     const uSnap = await getDoc(uRef);
+
+    // FIX 2: displayName — her zaman Firestore'daki adı önce kullan
     if (!uSnap.exists()) {
+      // Yeni kullanıcı: Google'dan geldiyse displayName var, yoksa emailden al
+      const name = user.displayName || user.email.split('@')[0];
       await setDoc(uRef, {
         email: user.email,
-        displayName: user.displayName || user.email.split('@')[0],
+        displayName: name,
         role: "student",
         createdAt: serverTimestamp(),
         totalStudySeconds: 0,
         totalLessonsCompleted: 0,
         lastSeen: serverTimestamp()
       });
+      window._userDisplayName = name;
     } else {
+      // Mevcut kullanıcı: Firestore'daki adı kullan (web/mobil senkron)
+      const fsData = uSnap.data();
+      window._userDisplayName = fsData.displayName || user.displayName || user.email.split('@')[0];
+      // Eğer Google ile girip displayName güncellendiyse Firestore'a da yaz
+      if (user.displayName && !fsData.displayName) {
+        await updateDoc(uRef, { displayName: user.displayName });
+        window._userDisplayName = user.displayName;
+      }
       await updateDoc(uRef, { lastSeen: serverTimestamp() });
     }
-    // Admin mi?
-    const data = uSnap.exists() ? uSnap.data() : { role: "student" };
+
+    // Admin mi? — her zaman Firestore'dan oku (yeni kayıt için tekrar oku)
+    const freshSnap = await getDoc(uRef);
+    const data = freshSnap.exists() ? freshSnap.data() : { role: "student" };
     window._isAdmin = data.role === "admin";
+
     // Login ekranını gizle, uygulamayı göster
     hideLoginPage();
     startSessionTracking(user.uid);
+
+    // FIX 2: Kullanıcı adını göster (web/mobil aynı)
+    const nameEl = document.getElementById('user-display-name');
+    if (nameEl) nameEl.innerText = '👤 ' + window._userDisplayName;
+
   } else {
     window._currentUser = null;
     window._isAdmin = false;
+    window._userDisplayName = null;
     showLoginPage();
     stopSessionTracking();
   }
@@ -543,7 +567,7 @@ body::before {
 </head>
 <body>
 
-<div class="v-tag" id="v-tag-el">V.7.5</div>
+<div class="v-tag" id="v-tag-el">V.7.6</div>
 
 <!-- ===================== LOGIN PAGE ===================== -->
 <div id="login-page">
@@ -1216,21 +1240,10 @@ function toggleLessons(el){
   el.innerText=(isOpen?'▸':'▾')+el.innerText.slice(1);
 }
 
-// Auth state değişince kullanıcı adını göster
-const _origHideLogin = window._fb ? null : null;
-document.addEventListener('DOMContentLoaded', ()=>{
-  // user-display-name'i auth state'e göre güncelle
-  const checkUser = setInterval(()=>{
-    if(window._currentUser){
-      const name = window._currentUser.displayName || window._currentUser.email;
-      document.getElementById('user-display-name').innerText = '👤 ' + name;
-      clearInterval(checkUser);
-    }
-  }, 500);
-});
+
 
 // Version & init
-const APP_VERSION='7.5';
+const APP_VERSION='7.6';
 document.addEventListener('DOMContentLoaded',()=>{
   const vtag=document.getElementById('v-tag-el');
   if(vtag)vtag.innerText='V.'+APP_VERSION;
