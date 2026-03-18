@@ -359,7 +359,7 @@ body::before {
 .admin-user-stats { display:flex; gap:16px; flex-wrap:wrap; }
 .admin-user-stat { font-size:11px; color:#e2e8f0; display:flex; flex-direction:column; gap:1px; }
 .admin-user-stat span:first-child { color:#7c3aed; font-size:9px; font-weight:700; }
-.admin-lessons-list { margin-top:10px; display:none; border-top:1px solid rgba(139,92,246,0.15); padding-top:10px; }
+.admin-lessons-list { margin-top:10px; display:none; border-top:1px solid rgba(139,92,246,0.15); padding-top:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
 .admin-lesson-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(139,92,246,0.07); font-size:11px; }
 .admin-lesson-row:last-child { border-bottom:none; }
 .admin-lesson-name { color:#c4b5fd; font-weight:600; }
@@ -1387,11 +1387,7 @@ return `<div style="display:grid;grid-template-columns:110px 90px 50px 50px 60px
       <div class="admin-user-top">
         <div><div class="admin-user-name">${u.displayName||'—'}</div><div class="admin-user-email">${u.email}</div></div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-          <span class="admin-role-badge ${u.role==='admin'?'role-admin':'role-student'}">${u.role==='admin'?'ADMİN':'ÖĞRENCİ'}</span>
-          <select class="admin-role-select" onchange="window.setUserRole('${u.uid}',this.value)" onclick="event.stopPropagation()">
-            <option value="student" ${u.role!=='admin'?'selected':''}>Öğrenci</option>
-            <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
-          </select>
+   <span class="admin-role-badge ${u.role==='admin'?'role-admin':'role-student'}">${u.role==='admin'?'ADMİN':'ÖĞRENCİ'}</span>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0;padding:10px;background:rgba(139,92,246,0.08);border-radius:10px;border:1px solid rgba(139,92,246,0.15);">
