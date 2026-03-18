@@ -152,7 +152,7 @@ window.trackLessonTime = async function(lessonName, moduleKey, seconds) {
     const uid = window._currentUser.uid;
     const key = `${moduleKey}_${lessonName}`.replace(/[^a-zA-Z0-9_]/g, '_');
     const lRef = doc(db, "users", uid, "lessons", key);
-    await updateDoc(lRef, { totalLessonSeconds: increment(seconds) }).catch(() => {});
+   await updateDoc(lRef, { totalLessonSeconds: increment(seconds), lastLessonEnd: serverTimestamp() }).catch(() => {});
   } catch(e) {}
 };
 
@@ -1362,13 +1362,17 @@ const mod3=(u.lessons||[]).filter(l=>l.moduleKey==='module3'&&aktif(l));
 const mod4=(u.lessons||[]).filter(l=>l.moduleKey==='module4'&&aktif(l));
   const mkRow=l=>{
     const lastDate=l.lastOpened?.toDate?l.lastOpened.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
+    const endTime=l.lastLessonEnd?.toDate?l.lastLessonEnd.toDate().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}):'—';
+const startTime=l.lastLessonStart?.toDate?l.lastLessonStart.toDate().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}):'—';
     const stars=l.lastStarCount>0?'⭐'.repeat(l.lastStarCount):'—';
     const sure=Math.round((l.totalLessonSeconds||0)/60);
     const device=l.lastDevice==='mobile'?'📱 Mobil':'🖥️ Web';
-    const kart='#'+(l.lastCardIndex||0)+1;
-return `<div style="display:grid;grid-template-columns:110px 90px 50px 50px 60px 60px;align-items:center;padding:5px 0;border-bottom:1px solid rgba(139,92,246,0.07);gap:4px;">
+ const kart='#'+((l.lastCardIndex||0)+1);
+return `<div style="display:grid;grid-template-columns:110px 90px 50px 50px 60px 60px 50px 50px;align-items:center;padding:5px 0;border-bottom:1px solid rgba(139,92,246,0.07);gap:4px;">
       <span style="font-size:11px;color:#c4b5fd;font-weight:700;">${l.lessonName}</span>
       <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">TARİH</div><div style="font-size:10px;color:#e2e8f0;">${lastDate}</div></div>
+      <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">GİRİŞ</div><div style="font-size:10px;color:#e2e8f0;">${startTime}</div></div>
+      <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">ÇIKIŞ</div><div style="font-size:10px;color:#e2e8f0;">${endTime}</div></div> 
       <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">SÜRE</div><div style="font-size:10px;color:#e2e8f0;">${sure} dk</div></div>
       <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">KART</div><div style="font-size:10px;color:#e2e8f0;">${kart}</div></div>
       <div style="text-align:center;"><div style="font-size:8px;color:#7c3aed;font-weight:700;">YILDIZ</div><div style="font-size:10px;color:#e2e8f0;">${stars}</div></div>
@@ -1396,7 +1400,7 @@ return `<div style="display:grid;grid-template-columns:110px 90px 50px 50px 60px
         <div style="text-align:center"><div style="font-size:18px;font-weight:900;color:#22d3ee;">${totalStars}</div><div style="font-size:9px;color:#a78bfa;font-weight:700;">YILDIZ</div></div>
       </div>
       <div style="font-size:10px;color:#7c3aed;font-weight:600;margin-bottom:4px;">📅 ${createdAt} · 🕐 ${lastSeen} · ${u.lastDevice==='mobile'?'📱 Mobil':'🖥️ Web'}</div>
-      ${u.lessons&&u.lessons.length>0?`<div onclick="event.stopPropagation();toggleLessons(this)" style="font-size:11px;color:#7c3aed;margin-top:8px;cursor:pointer;font-weight:700;">▸ ${u.lessons.length} ders detayı</div><div class="admin-lessons-list">${lessonsHTML}</div>`:''}
+      ${u.lessons&&u.lessons.length>0?`<div onclick="event.stopPropagation();toggleLessons(this)" style="font-size:11px;color:#7c3aed;margin-top:8px;cursor:pointer;font-weight:700;">▸ ${mod3.length+mod4.length} ders detayı</div><div class="admin-lessons-list">${lessonsHTML}</div>`:''}
     </div>`;
   }).join('');
 }
