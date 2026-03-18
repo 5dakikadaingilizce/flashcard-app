@@ -1215,16 +1215,23 @@ async function openProfile(){
     // Profil başlığını kullanıcı adı yap
     document.getElementById('profile-sheet').querySelector('.sheet-title').innerText = '👤 ' + (window._userDisplayName||'Profil');
     // Sadece tamamlanan dersleri göster
-    const tamamlanan=lessons.filter(l=>(l.completedCount||0)>0);
-    const lessonsHTML=tamamlanan.length>0?tamamlanan.sort((a,b)=>(b.lastOpened?.seconds||0)-(a.lastOpened?.seconds||0)).map(l=>{
+const tamamlanan=lessons.filter(l=>(l.completedCount||0)>0);
+    const mod3=tamamlanan.filter(l=>l.moduleKey==='module3').sort((a,b)=>(b.lastOpened?.seconds||0)-(a.lastOpened?.seconds||0));
+    const mod4=tamamlanan.filter(l=>l.moduleKey==='module4').sort((a,b)=>(b.lastOpened?.seconds||0)-(a.lastOpened?.seconds||0));
+    const makeLessonRow=l=>{
       const count=Math.min(l.completedCount||0,3);
       const stars='⭐'.repeat(count);
       const last=l.lastOpened?.toDate?l.lastOpened.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit'}):'—';
       return `<div class="profile-lesson-row">
-        <div><div class="profile-lesson-name">${l.lessonName}</div><div class="profile-lesson-meta">${l.moduleKey} · ${last}</div></div>
+        <div><div class="profile-lesson-name">${l.lessonName}</div><div class="profile-lesson-meta">${last}</div></div>
         <div style="text-align:right"><div style="font-size:13px;">${stars}</div><div class="profile-lesson-meta">${l.completedCount}x tamamlandı</div></div>
       </div>`;
-    }).join(''):'<div style="padding:16px;color:#a78bfa;font-size:12px;text-align:center;">Henüz tamamlanan ders yok.</div>';
+    };
+    const lessonsHTML=`
+      ${mod3.length>0?`<div class="profile-section-title">📗 Module #3</div>${mod3.map(makeLessonRow).join('')}`:''}
+      ${mod4.length>0?`<div class="profile-section-title">📘 Module #4</div>${mod4.map(makeLessonRow).join('')}`:''}
+      ${tamamlanan.length===0?'<div style="padding:16px;color:#a78bfa;font-size:12px;text-align:center;">Henüz tamamlanan ders yok.</div>':''}
+    `;
     body.innerHTML=`
       <div class="profile-stat-grid">
         <div class="profile-stat-card"><div class="profile-stat-val">${totalMins}</div><div class="profile-stat-lbl">Total Minutes</div></div>
