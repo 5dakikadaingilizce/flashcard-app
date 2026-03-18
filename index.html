@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>5 Dakikada İngilizce Flash Card - V.7.7</title>
+<title>5 Dakikada İngilizce Flash Card - V.7.8</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&family=Inter:wght@400;700&family=Raleway:wght@700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -78,7 +78,7 @@ onAuthStateChanged(auth, async (user) => {
 
     // FIX 2: Kullanıcı adını göster (web/mobil aynı)
     const nameEl = document.getElementById('user-display-name');
-if (nameEl) nameEl.innerText = '👋 Hoş Geldin, ' + window._userDisplayName + '!';
+    if (nameEl) nameEl.innerText = '👤 ' + window._userDisplayName;
 
   } else {
     window._currentUser = null;
@@ -563,11 +563,26 @@ body::before {
 #admin-nav-btn { display:none; align-items:center; gap:4px; background:rgba(236,72,153,0.1); border:1px solid rgba(236,72,153,0.25); border-radius:10px; padding:5px 10px; color:#f472b6; font-size:11px; font-weight:700; cursor:pointer; transition:all 0.2s; }
 #admin-nav-btn:hover { background:rgba(236,72,153,0.2); }
 #admin-nav-btn .material-symbols-rounded { font-size:14px; }
+
+/* Profile Bottom Sheet */
+#profile-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9998;display:none;backdrop-filter:blur(6px);}
+#profile-overlay.show{display:block;}
+#profile-sheet{position:fixed;bottom:0;left:0;right:0;max-height:80vh;background:linear-gradient(180deg,#1a0a2e,#0c0118);border-radius:28px 28px 0 0;border-top:1px solid rgba(139,92,246,0.3);z-index:9999;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);box-shadow:0 -20px 60px rgba(139,92,246,0.3);}
+#profile-sheet.show{transform:translateY(0);}
+.profile-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px 16px;}
+.profile-stat-card{background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);border-radius:14px;padding:12px;text-align:center;}
+.profile-stat-val{font-size:22px;font-weight:900;font-family:'Poppins';background:var(--gradient-secondary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.profile-stat-lbl{font-size:9px;color:#a78bfa;font-weight:700;margin-top:2px;}
+.profile-lesson-row{display:flex;justify-content:space-between;align-items:center;padding:8px 16px;border-bottom:1px solid rgba(139,92,246,0.08);}
+.profile-lesson-row:last-child{border-bottom:none;}
+.profile-lesson-name{font-size:12px;color:#e2e8f0;font-weight:600;}
+.profile-lesson-meta{font-size:10px;color:#a78bfa;}
+.profile-section-title{font-size:11px;color:#c4b5fd;font-weight:800;padding:12px 16px 6px;letter-spacing:0.5px;font-family:'Raleway';}
 </style>
 </head>
 <body>
 
-<div class="v-tag" id="v-tag-el">V.7.7</div>
+<div class="v-tag" id="v-tag-el">V.7.8</div>
 
 <!-- ===================== LOGIN PAGE ===================== -->
 <div id="login-page">
@@ -603,9 +618,12 @@ body::before {
 <div id="app-wrapper" style="display:none; flex-direction:column; align-items:center; width:100%; position:relative; z-index:1;">
 
   <!-- Kullanıcı bilgi barı -->
-<div class="user-info-bar" id="user-info-bar-wrap">
+  <div class="user-info-bar">
     <div class="user-info-name" id="user-display-name">👤 Kullanıcı</div>
     <div class="user-info-right">
+      <button class="signout-btn" style="background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.25);color:#c4b5fd;" onclick="openProfile()">
+        <span class="material-symbols-rounded">bar_chart</span> Profil
+      </button>
       <button id="admin-nav-btn" onclick="openAdminPanel()">
         <span class="material-symbols-rounded">admin_panel_settings</span> ADMİN
       </button>
@@ -763,6 +781,18 @@ body::before {
   <div class="notes-body" id="notes-body"></div>
 </div>
 
+
+<!-- Profile Bottom Sheet -->
+<div id="profile-overlay" onclick="closeProfile()"></div>
+<div id="profile-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title">👤 Profilim</span>
+    <button class="sheet-close" onclick="closeProfile()">✕</button>
+  </div>
+  <div class="notes-body" id="profile-body"></div>
+</div>
+
 <script>
 // ===================== MEVCUT KOD (DOKUNULMADI) =====================
 let cards=[], startY=0, currentY=0, isDragging=false, hasMoved=false;
@@ -801,8 +831,6 @@ function showPage(pageId){
   const target=document.getElementById(pageId);
   if(target){target.style.display='flex';target.classList.remove('page-anim');void target.offsetWidth;target.classList.add('page-anim');}
   document.getElementById('v-tag-el').style.display=pageId==='app-screen'?'none':'block';
-    const ubar=document.getElementById('user-info-bar-wrap');
-  if(ubar) ubar.style.display=pageId==='app-screen'?'none':'flex';
 }
 
 // ── Firestore yıldız/ilerleme cache ──
@@ -1163,6 +1191,48 @@ function openNotes(){
   });
 }
 function closeNotes(){document.getElementById('notes-overlay').classList.remove('show');document.getElementById('notes-sheet').classList.remove('show');}
+
+async function openProfile(){
+  const body=document.getElementById('profile-body');
+  body.innerHTML='<div style="padding:20px;text-align:center;color:#a78bfa;">Yükleniyor...</div>';
+  document.getElementById('profile-overlay').classList.add('show');
+  document.getElementById('profile-sheet').classList.add('show');
+  if(!window._currentUser){body.innerHTML='<div style="padding:20px;color:#f472b6;">Giriş yapılmadı.</div>';return;}
+  const uid=window._currentUser.uid;
+  const {db,doc,getDoc,collection,getDocs}=window._fb;
+  try{
+    const uSnap=await getDoc(doc(db,'users',uid));
+    const uData=uSnap.data()||{};
+    const lessonsSnap=await getDocs(collection(db,'users',uid,'lessons'));
+    const lessons=lessonsSnap.docs.map(d=>d.data());
+    const totalMins=Math.round((uData.totalStudySeconds||0)/60);
+    const totalStars=lessons.reduce((s,l)=>s+Math.min(l.completedCount||0,3),0);
+    const totalCompleted=uData.totalLessonsCompleted||0;
+    const lastSeen=uData.lastSeen?.toDate?uData.lastSeen.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+    const lessonsHTML=lessons.length>0?lessons.sort((a,b)=>(b.lastOpened?.seconds||0)-(a.lastOpened?.seconds||0)).map(l=>{
+      const stars='⭐'.repeat(Math.min(l.completedCount||0,3))||'☆☆☆';
+      const last=l.lastOpened?.toDate?l.lastOpened.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit'}):'—';
+      return `<div class="profile-lesson-row">
+        <div><div class="profile-lesson-name">${l.lessonName}</div><div class="profile-lesson-meta">${l.moduleKey} · Son: ${last}</div></div>
+        <div style="text-align:right"><div style="font-size:13px;">${stars}</div><div class="profile-lesson-meta">${l.openCount||0}x açıldı</div></div>
+      </div>`;
+    }).join(''):'<div style="padding:16px;color:#a78bfa;font-size:12px;text-align:center;">Henüz ders çalışılmadı.</div>';
+    body.innerHTML=`
+      <div class="profile-stat-grid">
+        <div class="profile-stat-card"><div class="profile-stat-val">${totalMins}</div><div class="profile-stat-lbl">DAKİKA</div></div>
+        <div class="profile-stat-card"><div class="profile-stat-val">${totalCompleted}</div><div class="profile-stat-lbl">DERS</div></div>
+        <div class="profile-stat-card"><div class="profile-stat-val">${totalStars}</div><div class="profile-stat-lbl">YILDIZ</div></div>
+      </div>
+      <div style="padding:0 16px 10px;font-size:11px;color:#7c3aed;font-weight:600;">🕐 Son giriş: ${lastSeen}</div>
+      <div class="profile-section-title">📚 Ders Geçmişi</div>
+      ${lessonsHTML}`;
+  }catch(e){body.innerHTML='<div style="padding:20px;color:#f472b6;font-size:13px;">Veri yüklenemedi.</div>';}
+}
+function closeProfile(){
+  document.getElementById('profile-overlay').classList.remove('show');
+  document.getElementById('profile-sheet').classList.remove('show');
+}
+
 function buildNotesTabs(data){
   const tabsEl=document.getElementById('notes-tabs');
   tabsEl.innerHTML=(data.tabs||[]).map((tab,i)=>`<div class="notes-tab${i===0?' active':''}" onclick="switchNotesTab(${i})">${tab.label}</div>`).join('');
@@ -1282,7 +1352,7 @@ function toggleLessons(el){
 
 
 // Version & init
-const APP_VERSION='7.7';
+const APP_VERSION='7.8';
 document.addEventListener('DOMContentLoaded',()=>{
   const vtag=document.getElementById('v-tag-el');
   if(vtag)vtag.innerText='V.'+APP_VERSION;
