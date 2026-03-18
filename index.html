@@ -1363,18 +1363,16 @@ async function loadAdminPanel(){
     const lastDate=l.lastOpened?.toDate?l.lastOpened.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
     const stars=l.lastStarCount>0?'⭐'.repeat(l.lastStarCount):'—';
     const sure=Math.round((l.totalLessonSeconds||0)/60);
-    const device=l.lastDevice==='mobile'?'📱':'🖥️';
-    return `<div class="admin-lesson-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
-      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
-        <span class="admin-lesson-name">${l.lessonName}</span>
-        <span style="font-size:9px;color:#a78bfa;">${lastDate} ${device}</span>
-      </div>
-      <div class="admin-lesson-stats">
-        <div class="admin-lesson-stat"><span>AÇILDI</span>${l.openCount||0}x</div>
-        <div class="admin-lesson-stat"><span>BİTİRDİ</span>${l.completedCount||0}x</div>
-        <div class="admin-lesson-stat"><span>KART</span>#${(l.lastCardIndex||0)+1}</div>
-        <div class="admin-lesson-stat"><span>YILDIZ</span>${stars}</div>
-        <div class="admin-lesson-stat"><span>SÜRE</span>${sure} dk</div>
+    const device=l.lastDevice==='mobile'?'📱 Mobil':'🖥️ Web';
+    const kart='#'+(l.lastCardIndex||0)+1;
+    return `<div style="padding:6px 0;border-bottom:1px solid rgba(139,92,246,0.07);">
+      <div style="font-size:11px;color:#c4b5fd;font-weight:700;margin-bottom:4px;">${l.lessonName}</div>
+      <div style="display:flex;gap:0;flex-wrap:wrap;">
+        <div style="flex:1;min-width:90px;text-align:center;padding:3px 4px;"><div style="font-size:9px;color:#7c3aed;font-weight:700;margin-bottom:2px;">TARİH</div><div style="font-size:10px;color:#e2e8f0;">${lastDate}</div></div>
+        <div style="flex:1;min-width:50px;text-align:center;padding:3px 4px;"><div style="font-size:9px;color:#7c3aed;font-weight:700;margin-bottom:2px;">SÜRE</div><div style="font-size:10px;color:#e2e8f0;">${sure} dk</div></div>
+        <div style="flex:1;min-width:50px;text-align:center;padding:3px 4px;"><div style="font-size:9px;color:#7c3aed;font-weight:700;margin-bottom:2px;">KART</div><div style="font-size:10px;color:#e2e8f0;">${kart}</div></div>
+        <div style="flex:1;min-width:50px;text-align:center;padding:3px 4px;"><div style="font-size:9px;color:#7c3aed;font-weight:700;margin-bottom:2px;">YILDIZ</div><div style="font-size:10px;color:#e2e8f0;">${stars}</div></div>
+        <div style="flex:1;min-width:60px;text-align:center;padding:3px 4px;"><div style="font-size:9px;color:#7c3aed;font-weight:700;margin-bottom:2px;">CİHAZ</div><div style="font-size:10px;color:#e2e8f0;">${device}</div></div>
       </div>
     </div>`;
   };
@@ -1392,12 +1390,12 @@ async function loadAdminPanel(){
           </select>
         </div>
       </div>
-      <div class="admin-user-stats">
-        <div class="admin-user-stat"><span>ÇALIŞMA</span>${mins} dk</div>
-        <div class="admin-user-stat"><span>BİTİRDİĞİ DERS</span>${u.totalLessonsCompleted||0}</div>
-        <div class="admin-user-stat"><span>KAYIT</span>${createdAt}</div>
-        <div class="admin-user-stat"><span>SON GİRİŞ</span>${lastSeen}</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0;padding:10px;background:rgba(139,92,246,0.08);border-radius:10px;border:1px solid rgba(139,92,246,0.15);">
+        <div style="text-align:center"><div style="font-size:18px;font-weight:900;color:#22d3ee;">${mins}</div><div style="font-size:9px;color:#a78bfa;font-weight:700;">DAKİKA</div></div>
+        <div style="text-align:center"><div style="font-size:18px;font-weight:900;color:#22d3ee;">${u.totalLessonsCompleted||0}</div><div style="font-size:9px;color:#a78bfa;font-weight:700;">TAMAMLANAN</div></div>
+        <div style="text-align:center"><div style="font-size:18px;font-weight:900;color:#22d3ee;">${totalStars}</div><div style="font-size:9px;color:#a78bfa;font-weight:700;">YILDIZ</div></div>
       </div>
+      <div style="font-size:10px;color:#7c3aed;font-weight:600;margin-bottom:4px;">📅 ${createdAt} · 🕐 ${lastSeen} · ${u.lastDevice==='mobile'?'📱 Mobil':'🖥️ Web'}</div>
       ${u.lessons&&u.lessons.length>0?`<div onclick="event.stopPropagation();toggleLessons(this)" style="font-size:11px;color:#7c3aed;margin-top:8px;cursor:pointer;font-weight:700;">▸ ${u.lessons.length} ders detayı</div><div class="admin-lessons-list">${lessonsHTML}</div>`:''}
     </div>`;
   }).join('');
