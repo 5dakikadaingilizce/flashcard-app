@@ -78,17 +78,32 @@ onAuthStateChanged(auth, async (user) => {
 
     // FIX 2: Kullanıcı adını göster (web/mobil aynı)
     const nameEl = document.getElementById('user-display-name');
-if (nameEl) nameEl.innerText = '👋 Hoş Geldin, ' + window._userDisplayName + '!';
+    if (nameEl) nameEl.innerText = '👋 Hoş Geldin, ' + window._userDisplayName + '!';
 
   } else {
     window._currentUser = null;
     window._isAdmin = false;
     window._userDisplayName = null;
     showLoginPage();
+    stopSessionTracking();
   }
 });
 
-
+// ── Oturum süresi takibi ──
+let _sessionStart = null;
+let _sessionInterval = null;
+function startSessionTracking(uid) {
+  _sessionStart = Date.now();
+  _sessionInterval = setInterval(async () => {
+    const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
+    const uRef = doc(db, "users", uid);
+    await updateDoc(uRef, { totalStudySeconds: increment(30) }).catch(() => {});
+  }, 30000); // Her 30 saniyede bir güncelle
+}
+function stopSessionTracking() {
+  if (_sessionInterval) clearInterval(_sessionInterval);
+  _sessionStart = null;
+}
 
 // ── Ders analytics ──
 window.trackLessonOpen = async function(lessonName, moduleKey) {
@@ -103,7 +118,7 @@ window.trackLessonOpen = async function(lessonName, moduleKey) {
       await setDoc(lRef, { lessonName, moduleKey, openCount: 1, lastOpened: serverTimestamp(), completedCount: 0, lastCardIndex: 0, totalLessonSeconds: 0, lastLessonStart: serverTimestamp(), lastDevice: _dev2 });
     } else {
       const _dev=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent)?'mobile':'web';
-      await updateDoc(lRef, { openCount: increment(1), lastOpened: serverTimestamp(), lastLessonStart: serverTimestamp(), lastDevice: _dev, lastLessonEnd: null });
+      await updateDoc(lRef, { openCount: increment(1), lastOpened: serverTimestamp(), lastLessonStart: serverTimestamp(), lastDevice: _dev });
     }
   } catch(e) {}
 };
@@ -137,7 +152,7 @@ window.trackLessonTime = async function(lessonName, moduleKey, seconds) {
     const uid = window._currentUser.uid;
     const key = `${moduleKey}_${lessonName}`.replace(/[^a-zA-Z0-9_]/g, '_');
     const lRef = doc(db, "users", uid, "lessons", key);
-   await updateDoc(lRef, { totalLessonSeconds: increment(seconds), lastLessonEnd: serverTimestamp() }).catch(() => {});
+    await updateDoc(lRef, { totalLessonSeconds: increment(seconds) }).catch(() => {});
   } catch(e) {}
 };
 
@@ -166,6 +181,7 @@ window.setUserRole = async function(uid, role) {
 
 // ── Çıkış ──
 window.doSignOut = async function() {
+  stopSessionTracking();
   await signOut(auth);
 };
 
@@ -343,7 +359,7 @@ body::before {
 .admin-user-stats { display:flex; gap:16px; flex-wrap:wrap; }
 .admin-user-stat { font-size:11px; color:#e2e8f0; display:flex; flex-direction:column; gap:1px; }
 .admin-user-stat span:first-child { color:#7c3aed; font-size:9px; font-weight:700; }
-.admin-lessons-list { margin-top:10px; display:none; border-top:1px solid rgba(139,92,246,0.15); padding-top:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.admin-lessons-list { margin-top:10px; display:none; border-top:1px solid rgba(139,92,246,0.15); padding-top:10px; }
 .admin-lesson-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(139,92,246,0.07); font-size:11px; }
 .admin-lesson-row:last-child { border-bottom:none; }
 .admin-lesson-name { color:#c4b5fd; font-weight:600; }
@@ -915,6 +931,7 @@ function buildSnakeLayout(lessons){
 
 function goToModulePage(){
   saveProgress();
+  window.stopSessionTracking&&window.stopSessionTracking();
   if(window._lessonStart&&activeLesson&&activeModuleKey){
     const secs=Math.floor((Date.now()-window._lessonStart)/1000);
     window.trackLessonTime&&window.trackLessonTime(activeLesson.name,activeModuleKey,secs);
@@ -1068,6 +1085,7 @@ function goBack(){initAudio();currentIndex=(currentIndex-1+cards.length)%cards.l
 
 function goHome(){
   saveProgress();
+  window.stopSessionTracking&&window.stopSessionTracking();
   if(window._lessonStart&&activeLesson&&activeModuleKey){
     const secs=Math.floor((Date.now()-window._lessonStart)/1000);
     window.trackLessonTime&&window.trackLessonTime(activeLesson.name,activeModuleKey,secs);
@@ -1127,6 +1145,7 @@ function loadLesson(lesson){
     const notesBtn=document.getElementById('notes-btn');
     if(lesson.notes){notesBtn.style.display='flex';}else{notesBtn.style.display='none';}
     showPage('app-screen');show();
+    if(window._currentUser) window.startSessionTracking&&window.startSessionTracking(window._currentUser.uid);
     window._lessonStart=Date.now();
     window.trackLessonOpen&&window.trackLessonOpen(lesson.name,activeModuleKey);
   });
@@ -1142,6 +1161,7 @@ function showCompletion(count){
   createConfetti();
 }
 function closeCompletion(){
+  window.stopSessionTracking&&window.stopSessionTracking();
   if(window._lessonStart&&activeLesson&&activeModuleKey){
     const secs=Math.floor((Date.now()-window._lessonStart)/1000);
     window.trackLessonTime&&window.trackLessonTime(activeLesson.name,activeModuleKey,secs);
@@ -1226,7 +1246,7 @@ async function openProfile(){
     const uData=uSnap.data()||{};
     const lessonsSnap=await getDocs(collection(db,'users',uid,'lessons'));
     const lessons=lessonsSnap.docs.map(d=>d.data());
-    const totalMins=Math.ceil(lessons.reduce((s,l)=>s+(l.totalLessonSeconds||0),0)/60);
+
     const totalStars=lessons.reduce((s,l)=>s+Math.min(l.completedCount||0,3),0);
     const totalCompleted=uData.totalLessonsCompleted||0;
     const lastSeen=uData.lastSeen?.toDate?uData.lastSeen.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
@@ -1244,12 +1264,11 @@ async function openProfile(){
       </div>`;
     }).join(''):'<div style="padding:16px;color:#a78bfa;font-size:12px;text-align:center;">Henüz tamamlanan ders yok.</div>';
     body.innerHTML=`
-      <div class="profile-stat-grid">
-        <div class="profile-stat-card"><div class="profile-stat-val">${totalMins}</div><div class="profile-stat-lbl">DAKİKA</div></div>
-        <div class="profile-stat-card"><div class="profile-stat-val">${totalCompleted}</div><div class="profile-stat-lbl">DERS</div></div>
+      <div class="profile-stat-grid" style="grid-template-columns:repeat(2,1fr);">
+        <div class="profile-stat-card"><div class="profile-stat-val">${totalCompleted}</div><div class="profile-stat-lbl">TAMAMLANAN DERS</div></div>
         <div class="profile-stat-card"><div class="profile-stat-val">${totalStars}</div><div class="profile-stat-lbl">YILDIZ</div></div>
       </div>
-      <div style="padding:0 16px 10px;font-size:11px;color:#7c3aed;font-weight:600;">🕐 Son giriş: ${lastSeen}</div>
+
       <div class="profile-section-title">📚 Ders Geçmişi</div>
       ${lessonsHTML}`;
   }catch(e){body.innerHTML='<div style="padding:20px;color:#f472b6;font-size:13px;">Veri yüklenemedi.</div>';}
@@ -1333,31 +1352,28 @@ async function loadAdminPanel(){
   document.getElementById('a-total-hours').innerText=Math.round(totalSecs/3600)+'s';
 
   document.getElementById('admin-users-list').innerHTML=users.map(u=>{
-    const totalSaniye=(u.lessons||[]).reduce((s,l)=>s+(l.totalLessonSeconds||0),0); const mins=Math.ceil(totalSaniye/60);
+    const mins=Math.round((u.totalStudySeconds||0)/60);
     const lastSeen=u.lastSeen?.toDate?u.lastSeen.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
     const createdAt=u.createdAt?.toDate?u.createdAt.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
     const lessonsHTML=(()=>{
-const aktif=l=>(l.lastCardIndex||0)>0||(l.completedCount||0)>0||(l.totalLessonSeconds||0)>30;
-const mod3=(u.lessons||[]).filter(l=>l.moduleKey==='module3'&&aktif(l));
-const mod4=(u.lessons||[]).filter(l=>l.moduleKey==='module4'&&aktif(l));
+  const mod3=(u.lessons||[]).filter(l=>l.moduleKey==='module3');
+  const mod4=(u.lessons||[]).filter(l=>l.moduleKey==='module4');
   const mkRow=l=>{
     const lastDate=l.lastOpened?.toDate?l.lastOpened.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
-    const endTime=l.lastLessonEnd?.toDate?l.lastLessonEnd.toDate().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}):'—';
-const startTime=l.lastLessonStart?.toDate?l.lastLessonStart.toDate().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}):'—';
     const stars=l.lastStarCount>0?'⭐'.repeat(l.lastStarCount):'—';
     const sure=Math.round((l.totalLessonSeconds||0)/60);
     const device=l.lastDevice==='mobile'?'📱 Mobil':'🖥️ Web';
- const kart='#'+((l.lastCardIndex||0)+1);
-return `<div style="display:grid;grid-template-columns:80px 72px 40px 40px 42px 38px 38px 54px;align-items:center;padding:5px 0;border-bottom:1px solid rgba(139,92,246,0.07);gap:2px;">
-  <span style="font-size:9px;color:#c4b5fd;font-weight:700;">${l.lessonName}</span>
-  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">TARİH</div><div style="font-size:9px;color:#e2e8f0;">${lastDate}</div></div>
-  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">GİRİŞ</div><div style="font-size:9px;color:#e2e8f0;">${startTime}</div></div>
-  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">ÇIKIŞ</div><div style="font-size:9px;color:#e2e8f0;">${endTime}</div></div>
-  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">SÜRE</div><div style="font-size:9px;color:#e2e8f0;">${sure}dk</div></div>
-  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">KART</div><div style="font-size:9px;color:#e2e8f0;">${kart}</div></div>
-  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">YILDIZ</div><div style="font-size:9px;color:#e2e8f0;">${stars}</div></div>
-  <div style="text-align:center;"><div style="font-size:7px;color:#7c3aed;font-weight:700;">CİHAZ</div><div style="font-size:9px;color:#e2e8f0;">${device}</div></div>
-</div>`;
+    const kart='#'+(l.lastCardIndex||0)+1;
+    return `<div style="padding:6px 0;border-bottom:1px solid rgba(139,92,246,0.07);">
+      <div style="font-size:11px;color:#c4b5fd;font-weight:700;margin-bottom:4px;">${l.lessonName}</div>
+      <div style="display:flex;gap:0;flex-wrap:wrap;">
+        <div style="flex:1;min-width:90px;text-align:center;padding:3px 4px;"><div style="font-size:9px;color:#7c3aed;font-weight:700;margin-bottom:2px;">TARİH</div><div style="font-size:10px;color:#e2e8f0;">${lastDate}</div></div>
+        <div style="flex:1;min-width:50px;text-align:center;padding:3px 4px;"><div style="font-size:9px;color:#7c3aed;font-weight:700;margin-bottom:2px;">SÜRE</div><div style="font-size:10px;color:#e2e8f0;">${sure} dk</div></div>
+        <div style="flex:1;min-width:50px;text-align:center;padding:3px 4px;"><div style="font-size:9px;color:#7c3aed;font-weight:700;margin-bottom:2px;">KART</div><div style="font-size:10px;color:#e2e8f0;">${kart}</div></div>
+        <div style="flex:1;min-width:50px;text-align:center;padding:3px 4px;"><div style="font-size:9px;color:#7c3aed;font-weight:700;margin-bottom:2px;">YILDIZ</div><div style="font-size:10px;color:#e2e8f0;">${stars}</div></div>
+        <div style="flex:1;min-width:60px;text-align:center;padding:3px 4px;"><div style="font-size:9px;color:#7c3aed;font-weight:700;margin-bottom:2px;">CİHAZ</div><div style="font-size:10px;color:#e2e8f0;">${device}</div></div>
+      </div>
+    </div>`;
   };
   return (mod3.length>0?`<div style="font-size:10px;color:#a855f7;font-weight:800;padding:6px 0 3px;letter-spacing:0.5px;">📗 MODULE 3</div>${mod3.map(mkRow).join('')}`:'')
        +(mod4.length>0?`<div style="font-size:10px;color:#06b6d4;font-weight:800;padding:6px 0 3px;letter-spacing:0.5px;">📘 MODULE 4</div>${mod4.map(mkRow).join('')}`:'');
@@ -1367,16 +1383,16 @@ return `<div style="display:grid;grid-template-columns:80px 72px 40px 40px 42px 
       <div class="admin-user-top">
         <div><div class="admin-user-name">${u.displayName||'—'}</div><div class="admin-user-email">${u.email}</div></div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-   <span class="admin-role-badge ${u.role==='admin'?'role-admin':'role-student'}">${u.role==='admin'?'ADMİN':'ÖĞRENCİ'}</span>
+          <span class="admin-role-badge ${u.role==='admin'?'role-admin':'role-student'}">${u.role==='admin'?'ADMİN':'ÖĞRENCİ'}</span>
+          <select class="admin-role-select" onchange="window.setUserRole('${u.uid}',this.value)" onclick="event.stopPropagation()">
+            <option value="student" ${u.role!=='admin'?'selected':''}>Öğrenci</option>
+            <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
+          </select>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0;padding:10px;background:rgba(139,92,246,0.08);border-radius:10px;border:1px solid rgba(139,92,246,0.15);">
-        <div style="text-align:center"><div style="font-size:18px;font-weight:900;color:#22d3ee;">${mins}</div><div style="font-size:9px;color:#a78bfa;font-weight:700;">DAKİKA</div></div>
-        <div style="text-align:center"><div style="font-size:18px;font-weight:900;color:#22d3ee;">${u.totalLessonsCompleted||0}</div><div style="font-size:9px;color:#a78bfa;font-weight:700;">TAMAMLANAN</div></div>
-        <div style="text-align:center"><div style="font-size:18px;font-weight:900;color:#22d3ee;">${totalStars}</div><div style="font-size:9px;color:#a78bfa;font-weight:700;">YILDIZ</div></div>
-      </div>
+
       <div style="font-size:10px;color:#7c3aed;font-weight:600;margin-bottom:4px;">📅 ${createdAt} · 🕐 ${lastSeen} · ${u.lastDevice==='mobile'?'📱 Mobil':'🖥️ Web'}</div>
-      ${u.lessons&&u.lessons.length>0?`<div onclick="event.stopPropagation();toggleLessons(this)" style="font-size:11px;color:#7c3aed;margin-top:8px;cursor:pointer;font-weight:700;">▸ ${(u.lessons||[]).filter(l=>(l.lastCardIndex||0)>0||(l.completedCount||0)>0||(l.totalLessonSeconds||0)>30).length} ders detayı</div><div class="admin-lessons-list">${lessonsHTML}</div>`:''}
+      ${u.lessons&&u.lessons.length>0?`<div onclick="event.stopPropagation();toggleLessons(this)" style="font-size:11px;color:#7c3aed;margin-top:8px;cursor:pointer;font-weight:700;">▸ ${u.lessons.length} ders detayı</div><div class="admin-lessons-list">${lessonsHTML}</div>`:''}
     </div>`;
   }).join('');
 }
