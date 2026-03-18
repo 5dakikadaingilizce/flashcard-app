@@ -1357,8 +1357,9 @@ async function loadAdminPanel(){
     const lastSeen=u.lastSeen?.toDate?u.lastSeen.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
     const createdAt=u.createdAt?.toDate?u.createdAt.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
     const lessonsHTML=(()=>{
-  const mod3=(u.lessons||[]).filter(l=>l.moduleKey==='module3');
-  const mod4=(u.lessons||[]).filter(l=>l.moduleKey==='module4');
+const aktif=l=>(l.lastCardIndex||0)>0||(l.completedCount||0)>0||(l.totalLessonSeconds||0)>30;
+const mod3=(u.lessons||[]).filter(l=>l.moduleKey==='module3'&&aktif(l));
+const mod4=(u.lessons||[]).filter(l=>l.moduleKey==='module4'&&aktif(l));
   const mkRow=l=>{
     const lastDate=l.lastOpened?.toDate?l.lastOpened.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
     const stars=l.lastStarCount>0?'⭐'.repeat(l.lastStarCount):'—';
