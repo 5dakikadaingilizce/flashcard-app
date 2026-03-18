@@ -11,7 +11,7 @@
 <!-- ===================== FIREBASE SDK ===================== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, updateProfile, browserLocalPersistence, setPersistence } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, updateProfile, browserLocalPersistence, setPersistence, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -181,8 +181,16 @@ window.setUserRole = async function(uid, role) {
 
 // ── Çıkış ──
 window.doSignOut = async function() {
-  stopSessionTracking();
   await signOut(auth);
+};
+
+window.doPasswordReset = async function(email) {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return true;
+  } catch(e) {
+    return e.code;
+  }
 };
 
 // ── Google ile giriş ──
@@ -611,6 +619,9 @@ body::before {
       <input class="auth-input" id="login-email" type="email" placeholder="Email adresi" autocomplete="email">
       <input class="auth-input" id="login-password" type="password" placeholder="Şifre" autocomplete="current-password">
       <button class="auth-btn-main" onclick="handleLogin()">Giriş Yap</button>
+      <div style="text-align:right;margin-top:-4px;margin-bottom:8px;">
+        <span onclick="handlePasswordReset()" style="font-size:11px;color:#a78bfa;cursor:pointer;font-weight:600;">Şifremi unuttum</span>
+      </div>
     </div>
     <div id="auth-register-form" style="display:none">
       <input class="auth-input" id="reg-name" type="text" placeholder="Adın" autocomplete="name">
@@ -1315,6 +1326,15 @@ function handleLogin(){
   const password=document.getElementById('login-password').value;
   if(!email||!password){document.getElementById('auth-error').innerText='Email ve şifre gerekli.';document.getElementById('auth-error').style.display='block';return;}
   window.doEmailLogin(email,password);
+}
+async function handlePasswordReset(){
+  const email=document.getElementById('login-email').value.trim();
+  const el=document.getElementById('auth-error');
+  if(!email){el.style.color='#f472b6';el.innerText='Lütfen önce email adresini gir.';el.style.display='block';return;}
+  const result=await window.doPasswordReset(email);
+  if(result===true){el.style.color='#22d3ee';el.innerText='Şifre sıfırlama emaili gönderildi! 📧';}
+  else{el.style.color='#f472b6';el.innerText='Email bulunamadı veya hata oluştu.';}
+  el.style.display='block';
 }
 function handleRegister(){
   const name=document.getElementById('reg-name').value.trim();
