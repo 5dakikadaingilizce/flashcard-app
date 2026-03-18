@@ -92,15 +92,14 @@ onAuthStateChanged(auth, async (user) => {
 // ── Oturum süresi takibi ──
 let _sessionStart = null;
 let _sessionInterval = null;
-function startSessionTracking(uid) {
+window.startSessionTracking = function(uid) {
   _sessionStart = Date.now();
   _sessionInterval = setInterval(async () => {
-    const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
     const uRef = doc(db, "users", uid);
     await updateDoc(uRef, { totalStudySeconds: increment(30) }).catch(() => {});
-  }, 30000); // Her 30 saniyede bir güncelle
+  }, 30000);
 }
-function stopSessionTracking() {
+window.stopSessionTracking = function() {
   if (_sessionInterval) clearInterval(_sessionInterval);
   _sessionStart = null;
 }
@@ -168,7 +167,7 @@ window.setUserRole = async function(uid, role) {
 
 // ── Çıkış ──
 window.doSignOut = async function() {
-  stopSessionTracking();
+window.stopSessionTracking();
   await signOut(auth);
 };
 
@@ -916,7 +915,7 @@ function buildSnakeLayout(lessons){
   });
 }
 
-function goToModulePage(){saveProgress();stopSessionTracking();showPage('module-page');}
+function goToModulePage(){saveProgress();window.stopSessionTracking();showPage('module-page');}
 
 if(autoTRVoice)document.getElementById('trVoiceToggle').classList.add('active');
 
@@ -1063,7 +1062,7 @@ function goBack(){initAudio();currentIndex=(currentIndex-1+cards.length)%cards.l
 
 function goHome(){
   saveProgress();
-  stopSessionTracking();
+ window.stopSessionTracking();
   if(activeModuleKey&&allModulesData)buildSnakeLayout(allModulesData[activeModuleKey]);
   showPage('entry-page');
 }
@@ -1118,7 +1117,7 @@ function loadLesson(lesson){
     const notesBtn=document.getElementById('notes-btn');
     if(lesson.notes){notesBtn.style.display='flex';}else{notesBtn.style.display='none';}
     showPage('app-screen');show();
-    if(window._currentUser) startSessionTracking(window._currentUser.uid);
+if(window._currentUser) window.startSessionTracking(window._currentUser.uid);
     window.trackLessonOpen&&window.trackLessonOpen(lesson.name,activeModuleKey);
   });
 }
@@ -1132,7 +1131,7 @@ function showCompletion(count){
   document.getElementById('completion-overlay').style.display='flex';
   createConfetti();
 }
-function closeCompletion(){stopSessionTracking();document.getElementById('completion-overlay').style.display='none';goHome();}
+function closeCompletion(){window.stopSessionTracking();document.getElementById('completion-overlay').style.display='none';goHome();}
 function createConfetti(){
   const colors=['#a855f7','#06b6d4','#f472b6','#8b5cf6','#22d3ee','#ffffff'];
   const overlay=document.getElementById('completion-overlay');
