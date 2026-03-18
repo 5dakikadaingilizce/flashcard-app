@@ -1353,7 +1353,7 @@ async function loadAdminPanel(){
   document.getElementById('a-total-hours').innerText=Math.round(totalSecs/3600)+'s';
 
   document.getElementById('admin-users-list').innerHTML=users.map(u=>{
-    const mins=Math.round((u.totalStudySeconds||0)/60);
+    const mins=Math.round((u.lessons||[]).reduce((s,l)=>s+(l.totalLessonSeconds||0),0)/60);
     const lastSeen=u.lastSeen?.toDate?u.lastSeen.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
     const createdAt=u.createdAt?.toDate?u.createdAt.toDate().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
     const lessonsHTML=(()=>{
