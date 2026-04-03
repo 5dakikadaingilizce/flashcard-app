@@ -1682,7 +1682,7 @@ function makeMorpher(id1, id2) {
   step();
 }
 makeMorpher('morphText1','morphText2');
-makeMorpher('morphText1b','morphText2b');
+if(document.getElementById('morphText1b')) makeMorpher('morphText1b','morphText2b');
   
   initChangelog();
 </script>
