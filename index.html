@@ -66,6 +66,58 @@ body::before {
   100% { filter: hue-rotate(60deg); }
 }
 
+  @keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(300%) rotate(45deg); }
+}
+
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+  background: rgba(139,92,246,0.15);
+  border: 1px solid rgba(139,92,246,0.25);
+  padding: 14px;
+  border-radius: 14px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  backdrop-filter: blur(10px);
+  flex: 1;
+}
+
+.shimmer-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,0.15) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%) rotate(45deg);
+  animation: shimmer 2.5s infinite;
+}
+
+.shimmer-btn:hover {
+  background: rgba(139,92,246,0.25);
+  border-color: rgba(139,92,246,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139,92,246,0.3);
+}
+
+
+
+
+  
 .aurora-text {
   display: inline-block;
   background: linear-gradient(90deg, #FF0080, #7928CA, #0070F3, #38bdf8) !important;
@@ -1066,8 +1118,8 @@ body::before {
       </div>
     </div>
     <div class="controls-row">
-      <button class="control-btn" onclick="goBack()"><span class="material-symbols-rounded">arrow_back_ios_new</span> BACK</button>
-      <button class="control-btn" onclick="goNext()">NEXT <span class="material-symbols-rounded">arrow_forward_ios</span></button>
+     <button class="shimmer-btn" onclick="goBack()"><span class="material-symbols-rounded">arrow_back_ios_new</span> BACK</button>
+<button class="shimmer-btn" onclick="goNext()">NEXT <span class="material-symbols-rounded">arrow_forward_ios</span></button>
     </div>
     <div class="listen-row">
       <button class="btn-main" onclick="speakEN()"><span class="material-symbols-outlined">voice_selection</span> LISTEN EN</button>
