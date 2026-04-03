@@ -1664,7 +1664,12 @@ let lastTime = new Date();
 function makeMorpher(id1, id2) {
   const t1 = document.getElementById(id1);
   const t2 = document.getElementById(id2);
+  if(!t1 || !t2) return;
   let mi = 0, mo = 0, cd = cooldownTime, lt = new Date();
+  t1.textContent = morphTexts[0];
+  t2.textContent = morphTexts[1];
+  t1.style.opacity = "100%";
+  t2.style.opacity = "0%";
   function step() {
     const dt = (new Date() - lt) / 1000; lt = new Date();
     cd -= dt;
@@ -1672,17 +1677,20 @@ function makeMorpher(id1, id2) {
       mo -= cd; cd = 0;
       let f = mo / morphTime;
       if (f > 1) { cd = cooldownTime; f = 1; }
-      t2.style.filter = `blur(${Math.min(8/f-8,100)}px)`;
-      t2.style.opacity = `${Math.pow(f,0.4)*100}%`;
-      t1.style.filter = `blur(${Math.min(8/(1-f)-8,100)}px)`;
-      t1.style.opacity = `${Math.pow(1-f,0.4)*100}%`;
+      const f2 = Math.max(f, 0.001);
+      const f1 = Math.max(1 - f, 0.001);
+      t2.style.filter = `blur(${Math.min(8/f2-8, 100)}px)`;
+      t2.style.opacity = `${Math.pow(f, 0.4) * 100}%`;
+      t1.style.filter = `blur(${Math.min(8/f1-8, 100)}px)`;
+      t1.style.opacity = `${Math.pow(1-f, 0.4) * 100}%`;
       t1.textContent = morphTexts[mi % morphTexts.length];
       t2.textContent = morphTexts[(mi+1) % morphTexts.length];
       if (f === 1) { mi++; mo = 0; }
     } else {
       mo = 0;
-      t2.style.filter="none"; t2.style.opacity="100%";
-      t1.style.filter="none"; t1.style.opacity="0%";
+      t2.style.filter = "none"; t2.style.opacity = "0%";
+      t1.style.filter = "none"; t1.style.opacity = "100%";
+      t1.textContent = morphTexts[mi % morphTexts.length];
     }
     requestAnimationFrame(step);
   }
