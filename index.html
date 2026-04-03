@@ -1076,6 +1076,24 @@ body::before {
   white-space: pre-line;
 }
 
+  .card-shimmer-wrap {
+  position: relative;
+  border-radius: 30px;
+  padding: 2px;
+  background: conic-gradient(
+    transparent 0deg,
+    transparent 270deg,
+    rgba(168, 85, 247, 0.8) 300deg,
+    white 330deg,
+    rgba(168, 85, 247, 0.8) 360deg
+  );
+  animation: card-shimmer-spin 3s linear infinite;
+}
+
+.card-shimmer-wrap .card-container {
+  border-radius: 28px;
+  overflow: hidden;
+}
 /* Renk sınıfları */
 .nc-purple { background: rgba(139,92,246,0.08); border-color: #a855f7; }
 .nc-purple .ntc-heading, .nc-purple .nec-tag { color: #a855f7; }
@@ -1178,7 +1196,7 @@ body::before {
     <div id="lessonContent" class="lesson-content-desc"></div>
     <div id="note-know" class="swipe-note">I KNOW ✅</div>
     <div id="note-dont" class="swipe-note">I DON'T KNOW ❌</div>
-    <div class="card-container" id="swipeArea">
+    <div class="card-shimmer-wrap">   <div class="card-container" id="swipeArea">
       <div class="guide-container" id="guideLayer">
         <div id="guide-up" class="guide-item"><span class="material-symbols-rounded">keyboard_double_arrow_up</span></div>
         <div id="guide-down" class="guide-item"><span class="material-symbols-rounded">keyboard_double_arrow_down</span></div>
@@ -1187,8 +1205,13 @@ body::before {
         <div class="face front"><div id="tagFront" class="status-tag"></div><span id="trDisplay">...</span></div>
         <div class="face back"><div id="tagBack" class="status-tag"></div><span id="engDisplay"></span></div>
       </div>
-    </div>
-    <div class="controls-row">
+
+</div>
+  </div>
+</div>
+<div class="controls-row">
+
+      
      <button class="shimmer-btn" onclick="goBack()"><span class="material-symbols-rounded">arrow_back_ios_new</span> BACK</button>
 <button class="shimmer-btn" onclick="goNext()">NEXT <span class="material-symbols-rounded">arrow_forward_ios</span></button>
     </div>
