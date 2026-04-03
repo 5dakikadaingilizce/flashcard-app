@@ -23,7 +23,27 @@
   --gradient-primary: linear-gradient(135deg, #7c3aed, #a855f7, #c084fc);
   --gradient-secondary: linear-gradient(135deg, #06b6d4, #22d3ee, #67e8f9);
   --gradient-accent: linear-gradient(135deg, #ec4899, #f472b6, #f9a8d4);
+
+
+@keyframes aurora {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
+
+.aurora-text {
+  background: linear-gradient(
+    135deg,
+    #FF0080, #7928CA, #0070F3, #38bdf8,
+    #a855f7, #FF0080
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: aurora 6s ease-in-out infinite alternate;
+}
+
 
 body { 
   margin: 0; 
@@ -963,8 +983,10 @@ body::before {
     </button>
   </div>
   <img src="logo.png" style="width:80px;margin-bottom:10px;filter:drop-shadow(0 10px 30px rgba(139,92,246,0.4));" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
-  <div class="main-title-white">5 Dakikada İngilizce</div>
-  <div class="select-lesson-title" style="margin-bottom:24px;">Select Module</div>
+  
+<div class="main-title-white"><span class="aurora-text">5 Dakikada İngilizce</span></div>
+<div class="select-lesson-title" style="margin-bottom:24px;"><span class="aurora-text">Select Module</span></div>
+  
   <div class="module-grid">
     <div class="module-card" onclick="selectModule('module3')">
       <div class="module-icon" onclick="selectModule('module3')">
@@ -993,7 +1015,7 @@ body::before {
   </div>
   <div class="entry-module-header">
     <img id="entryModuleLogo" class="entry-module-logo" src="" alt="" onerror="this.style.display='none'">
-    <div class="main-title-white">5 Dakikada İngilizce</div>
+<div class="main-title-white"><span class="aurora-text">5 Dakikada İngilizce</span></div>
   </div>
   <div id="moduleTitle" class="select-lesson-title">Module Flash Cards</div>
   <button class="back-to-modules-btn" onclick="goToModulePage()">
