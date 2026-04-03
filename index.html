@@ -66,16 +66,17 @@ body::before {
   100% { filter: hue-rotate(60deg); }
 }
 
-  @keyframes shimmer {
-  0% { transform: translateX(-100%) rotate(45deg); }
-  100% { transform: translateX(300%) rotate(45deg); }
+ 
+@keyframes shimmer-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .shimmer-btn {
   position: relative;
   overflow: hidden;
-  background: rgba(139,92,246,0.15);
-  border: 1px solid rgba(139,92,246,0.25);
+  background: rgba(20, 10, 40, 0.9);
+  border: none;
   padding: 14px;
   border-radius: 14px;
   color: white;
@@ -86,34 +87,43 @@ body::before {
   font-weight: 700;
   font-size: 13px;
   transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-  backdrop-filter: blur(10px);
   flex: 1;
 }
 
 .shimmer-btn::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 40%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(255,255,255,0.15) 50%,
-    transparent 100%
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent 0deg,
+    transparent 270deg,
+    rgba(168, 85, 247, 0.8) 300deg,
+    white 330deg,
+    rgba(168, 85, 247, 0.8) 360deg
   );
-  transform: translateX(-100%) rotate(45deg);
-  animation: shimmer 2.5s infinite;
+  animation: shimmer-spin 2.5s linear infinite;
+  z-index: 0;
+}
+
+.shimmer-btn::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: rgba(20, 10, 40, 0.95);
+  border-radius: 12px;
+  z-index: 1;
+}
+
+.shimmer-btn span, .shimmer-btn .material-symbols-rounded {
+  position: relative;
+  z-index: 2;
 }
 
 .shimmer-btn:hover {
-  background: rgba(139,92,246,0.25);
-  border-color: rgba(139,92,246,0.4);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(139,92,246,0.3);
+  box-shadow: 0 8px 25px rgba(139,92,246,0.4);
 }
-
 
 
 
