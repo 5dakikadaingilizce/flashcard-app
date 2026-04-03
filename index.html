@@ -26,16 +26,6 @@
 }
 
 
-.aurora-text {
-  display: inline-block;
-  background: linear-gradient(90deg, #FF0080, #7928CA, #0070F3, #38bdf8, #FF0080, #7928CA, #0070F3) !important;
-  background-size: 400% 100% !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
-  animation: aurora 3s linear infinite;
-}
-
 
 body { 
   margin: 0; 
@@ -985,22 +975,22 @@ body::before {
   </div>
   <img src="logo.png" style="width:80px;margin-bottom:10px;filter:drop-shadow(0 10px 30px rgba(139,92,246,0.4));" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3898/3898082.png'">
   
-<div class="main-title-white"><span class="aurora-text">5 Dakikada İngilizce</span></div>
-<div class="select-lesson-title" style="margin-bottom:24px;"><span class="aurora-text">Select Module</span></div>
+<div class="main-title-white">5 Dakikada İngilizce</div>
+<div class="select-lesson-title" style="margin-bottom:24px;">Select Module</div>
   
   <div class="module-grid">
     <div class="module-card" onclick="selectModule('module3')">
       <div class="module-icon" onclick="selectModule('module3')">
         <img src="module3logo.png" alt="Module 3" onerror="this.outerHTML='<div style=\'font-size:62px;animation:float3d 3s ease-in-out infinite\'>📗</div>'">
       </div>
-      <h2>Module #3</h2>
+     <h2><span class="aurora-text">Module #3</span></h2>
       <p>Yükleniyor...</p>
     </div>
     <div class="module-card" onclick="selectModule('module4')">
       <div class="module-icon" onclick="selectModule('module4')">
         <img src="module4logo.png" alt="Module 4" onerror="this.outerHTML='<div style=\'font-size:62px;animation:float3d 3s ease-in-out infinite\'>📘</div>'">
       </div>
-      <h2>Module #4</h2>
+  <h2><span class="aurora-text">Module #4</span></h2>
       <p>Yükleniyor...</p>
     </div>
   </div>
