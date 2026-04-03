@@ -90,6 +90,27 @@ body::before {
   flex: 1;
 }
 
+  @keyframes ripple-anim {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+}
+
+.ripple-container {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  animation: ripple-anim 3s linear infinite;
+  pointer-events: none;
+}
 .shimmer-btn::before {
   content: '';
   position: absolute;
@@ -1091,7 +1112,13 @@ body::before {
   <span class="morphing-span" id="morphText2"></span>
 </div>
   </div>
-  <div id="moduleTitle" class="select-lesson-title">Module Flash Cards</div>
+<div style="position:relative;text-align:center;margin:5px 0 20px 0;">
+  <div class="ripple-circle" style="width:120px;height:120px;animation-delay:0s;"></div>
+  <div class="ripple-circle" style="width:120px;height:120px;animation-delay:0.5s;"></div>
+  <div class="ripple-circle" style="width:120px;height:120px;animation-delay:1s;"></div>
+  <div class="ripple-circle" style="width:120px;height:120px;animation-delay:1.5s;"></div>
+  <div id="moduleTitle" class="select-lesson-title" style="margin:0;position:relative;z-index:1;">Module Flash Cards</div>
+</div>
   <button class="back-to-modules-btn" onclick="goToModulePage()">
     <span class="material-symbols-rounded">arrow_back_ios_new</span> Select Module
   </button>
