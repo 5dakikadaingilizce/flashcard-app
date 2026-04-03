@@ -156,7 +156,6 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: url(#threshold) blur(0.6px);
   margin-bottom: 5px;
 }
 .morphing-span {
@@ -973,19 +972,7 @@ body::before {
 .nc-green  .ntc-heading, .nc-green  .nec-tag { color: #22c55e; }
   
 </style>
-<svg id="filters" style="position:fixed;height:0;width:0;">
-  <defs>
-    <filter id="threshold">
-      <feColorMatrix in="SourceGraphic" type="matrix"
-        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/>
-    </filter>
-  </defs>
-</svg>
-
-
-
-
-  
+ 
 </head>
 <body>
 
@@ -1658,48 +1645,45 @@ fetchNoCache('data.json').then(res=>res.json()).then(data=>{
 });
 const morphTexts = ["5 Dakikada", "İngilizce", "5 Dakikada İngilizce"];
 const morphTime = 1.5, cooldownTime = 0.5;
-let morphIndex = 0, morph = 0, cooldown = cooldownTime;
-let lastTime = new Date();
 
 function makeMorpher(id1, id2) {
   const t1 = document.getElementById(id1);
   const t2 = document.getElementById(id2);
   if(!t1 || !t2) return;
-  let mi = 0, mo = 0, cd = cooldownTime, lt = new Date();
+  let mi = 0, mo = 0, cd = cooldownTime, lt = Date.now();
   t1.textContent = morphTexts[0];
   t2.textContent = morphTexts[1];
-  t1.style.opacity = "100%";
-  t2.style.opacity = "0%";
+  t1.style.cssText = "opacity:1;filter:none;";
+  t2.style.cssText = "opacity:0;filter:none;";
   function step() {
-    const dt = (new Date() - lt) / 1000; lt = new Date();
+    const now = Date.now();
+    const dt = (now - lt) / 1000; lt = now;
     cd -= dt;
     if (cd <= 0) {
-      mo -= cd; cd = 0;
-      let f = mo / morphTime;
-      if (f > 1) { cd = cooldownTime; f = 1; }
-      const f2 = Math.max(f, 0.001);
-      const f1 = Math.max(1 - f, 0.001);
-      t2.style.filter = `blur(${Math.min(8/f2-8, 100)}px)`;
-      t2.style.opacity = `${Math.pow(f, 0.4) * 100}%`;
-      t1.style.filter = `blur(${Math.min(8/f1-8, 100)}px)`;
-      t1.style.opacity = `${Math.pow(1-f, 0.4) * 100}%`;
+      mo += dt; cd = 0;
+      let f = Math.min(mo / morphTime, 1);
       t1.textContent = morphTexts[mi % morphTexts.length];
       t2.textContent = morphTexts[(mi+1) % morphTexts.length];
-      if (f === 1) { mi++; mo = 0; }
+      t1.style.opacity = (1 - f);
+      t2.style.opacity = f;
+      t1.style.filter = `blur(${f * 6}px)`;
+      t2.style.filter = `blur(${(1-f) * 6}px)`;
+      if (f >= 1) { mi++; mo = 0; cd = cooldownTime; }
     } else {
-      mo = 0;
-      t2.style.filter = "none"; t2.style.opacity = "0%";
-      t1.style.filter = "none"; t1.style.opacity = "100%";
       t1.textContent = morphTexts[mi % morphTexts.length];
+      t1.style.opacity = 1;
+      t1.style.filter = "none";
+      t2.style.opacity = 0;
     }
     requestAnimationFrame(step);
   }
   step();
 }
-makeMorpher('morphText1','morphText2');
-if(document.getElementById('morphText1b')) makeMorpher('morphText1b','morphText2b');
-  
-  initChangelog();
+
+makeMorpher('morphText1', 'morphText2');
+makeMorpher('morphText1b', 'morphText2b');
+
+initChangelog();
 </script>
 </body>
 </html>
