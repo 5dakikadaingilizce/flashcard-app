@@ -32,16 +32,13 @@
 }
 
 .aurora-text {
-  background: linear-gradient(
-    135deg,
-    #FF0080, #7928CA, #0070F3, #38bdf8,
-    #a855f7, #FF0080
-  );
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: aurora 6s ease-in-out infinite alternate;
+  display: inline-block; /* transform çalışması için şart */
+  background: linear-gradient(135deg, #FF0080, #7928CA, #0070F3, #38bdf8, #FF0080) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  animation: aurora 8s ease-in-out infinite alternate;
 }
 
 
@@ -79,10 +76,12 @@ body::before {
   z-index: 0;
 }
 
-@keyframes orbFloat {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  33% { transform: translate(30px, -30px) rotate(120deg); }
-  66% { transform: translate(-20px, 20px) rotate(240deg); }
+@keyframes aurora {
+  0%   { background-position: 0% 50%;   transform: rotate(-5deg) scale(0.9);  }
+  25%  { background-position: 50% 100%; transform: rotate(5deg)  scale(1.1);  }
+  50%  { background-position: 100% 50%; transform: rotate(-3deg) scale(0.95); }
+  75%  { background-position: 50% 0%;   transform: rotate(3deg)  scale(1.05); }
+  100% { background-position: 0% 50%;   transform: rotate(-5deg) scale(0.9);  }
 }
 
 /* MODULE PAGE */
