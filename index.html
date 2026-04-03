@@ -91,26 +91,22 @@ body::before {
 }
 
 @keyframes ripple-anim {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
-  50%       { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
-}
-
-.ripple-container {
-  position: relative;
-  display: inline-block;
-  text-align: center;
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%       { transform: translate(-50%, -50%) scale(0.9); }
 }
 
 .ripple-circle {
   position: absolute;
   border-radius: 50%;
-  border: 1px solid rgba(168, 85, 247, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: rgba(168, 85, 247, 0.05);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(1);
-  animation: ripple-anim 3s linear infinite;
+  animation: ripple-anim 2s ease infinite;
   pointer-events: none;
 }
+  
 .shimmer-btn::before {
   content: '';
   position: absolute;
@@ -1113,10 +1109,11 @@ body::before {
 </div>
   </div>
 <div style="position:relative;text-align:center;margin:5px 0 20px 0;">
-  <div class="ripple-circle" style="width:120px;height:120px;animation-delay:0s;"></div>
-  <div class="ripple-circle" style="width:120px;height:120px;animation-delay:0.5s;"></div>
-  <div class="ripple-circle" style="width:120px;height:120px;animation-delay:1s;"></div>
-  <div class="ripple-circle" style="width:120px;height:120px;animation-delay:1.5s;"></div>
+  <div class="ripple-circle" style="width:80px;height:80px;animation-delay:0s;"></div>
+  <div class="ripple-circle" style="width:150px;height:150px;animation-delay:0.2s;"></div>
+  <div class="ripple-circle" style="width:220px;height:220px;animation-delay:0.4s;"></div>
+  <div class="ripple-circle" style="width:290px;height:290px;animation-delay:0.6s;"></div>
+  <div class="ripple-circle" style="width:360px;height:360px;animation-delay:0.8s;"></div>
   <div id="moduleTitle" class="select-lesson-title" style="margin:0;position:relative;z-index:1;">Module Flash Cards</div>
 </div>
   <button class="back-to-modules-btn" onclick="goToModulePage()">
