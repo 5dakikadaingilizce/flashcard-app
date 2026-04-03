@@ -27,13 +27,13 @@
 
 
 .aurora-text {
-  display: inline-block; /* transform çalışması için şart */
-  background: linear-gradient(135deg, #FF0080, #7928CA, #0070F3, #38bdf8, #FF0080) !important;
-  background-size: 200% auto !important;
+  display: inline-block;
+  background: linear-gradient(90deg, #FF0080, #7928CA, #0070F3, #38bdf8, #FF0080, #7928CA, #0070F3) !important;
+  background-size: 400% 100% !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  animation: aurora 8s ease-in-out infinite alternate;
+  animation: aurora 3s linear infinite;
 }
 
 
@@ -73,10 +73,7 @@ body::before {
 
 @keyframes aurora {
   0%   { background-position: 0% 50%;   }
-  25%  { background-position: 50% 100%; }
-  50%  { background-position: 100% 50%; }
-  75%  { background-position: 50% 0%;   }
-  100% { background-position: 0% 50%;   }
+  100% { background-position: 100% 50%; }
 }
 
 /* MODULE PAGE */
