@@ -150,15 +150,27 @@ body::before {
 #entry-page { display: none; flex-direction: column; align-items: center; width: 100%; max-height: 95vh; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; position: relative; z-index: 1; }
 #entry-page::-webkit-scrollbar { display: none; }
 
-.main-title-white { 
-  font-family: 'Poppins'; 
-  font-size: 24px; 
-  font-weight: 900; 
-  background: var(--white-grad); 
-  -webkit-background-clip: text; 
-  -webkit-text-fill-color: transparent; 
-  margin-bottom: 5px; 
+.morphing-text-container {
+  position: relative;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: url(#threshold) blur(0.6px);
+  margin-bottom: 5px;
 }
+.morphing-span {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-family: 'Poppins';
+  font-size: 24px;
+  font-weight: 900;
+  background: var(--white-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+  
 .select-lesson-title {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
@@ -959,6 +971,16 @@ body::before {
 .nc-amber  .ntc-heading, .nc-amber  .nec-tag { color: #fbbf24; }
 .nc-green  { background: rgba(34,197,94,0.08);   border-color: #22c55e; }
 .nc-green  .ntc-heading, .nc-green  .nec-tag { color: #22c55e; }
+
+<svg id="filters" style="position:fixed;height:0;width:0;">
+  <defs>
+    <filter id="threshold">
+      <feColorMatrix in="SourceGraphic" type="matrix"
+        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/>
+    </filter>
+  </defs>
+</svg>
+  
 </style>
 </head>
 <body>
@@ -1006,7 +1028,11 @@ body::before {
   </div>
   <div class="entry-module-header">
     <img id="entryModuleLogo" class="entry-module-logo" src="" alt="" onerror="this.style.display='none'">
-<div class="main-title-white"><span class="aurora-text">5 Dakikada İngilizce</span></div>
+
+    <div class="morphing-text-container">
+  <span class="morphing-span" id="morphText1"></span>
+  <span class="morphing-span" id="morphText2"></span>
+</div>
   </div>
   <div id="moduleTitle" class="select-lesson-title">Module Flash Cards</div>
   <button class="back-to-modules-btn" onclick="goToModulePage()">
@@ -1623,7 +1649,42 @@ fetchNoCache('data.json').then(res=>res.json()).then(data=>{
   const keys=['module3','module4'];
   moduleCards.forEach((card,i)=>{const p=card.querySelector('p');if(p&&keys[i])p.innerText=`${counts[keys[i]]||0} Ders`;});
 });
-initChangelog();
+const morphTexts = ["5 Dakikada", "İngilizce", "5 Dakikada İngilizce"];
+const morphTime = 1.5, cooldownTime = 0.5;
+let morphIndex = 0, morph = 0, cooldown = cooldownTime;
+let lastTime = new Date();
+
+function makeMorpher(id1, id2) {
+  const t1 = document.getElementById(id1);
+  const t2 = document.getElementById(id2);
+  let mi = 0, mo = 0, cd = cooldownTime, lt = new Date();
+  function step() {
+    const dt = (new Date() - lt) / 1000; lt = new Date();
+    cd -= dt;
+    if (cd <= 0) {
+      mo -= cd; cd = 0;
+      let f = mo / morphTime;
+      if (f > 1) { cd = cooldownTime; f = 1; }
+      t2.style.filter = `blur(${Math.min(8/f-8,100)}px)`;
+      t2.style.opacity = `${Math.pow(f,0.4)*100}%`;
+      t1.style.filter = `blur(${Math.min(8/(1-f)-8,100)}px)`;
+      t1.style.opacity = `${Math.pow(1-f,0.4)*100}%`;
+      t1.textContent = morphTexts[mi % morphTexts.length];
+      t2.textContent = morphTexts[(mi+1) % morphTexts.length];
+      if (f === 1) { mi++; mo = 0; }
+    } else {
+      mo = 0;
+      t2.style.filter="none"; t2.style.opacity="100%";
+      t1.style.filter="none"; t1.style.opacity="0%";
+    }
+    requestAnimationFrame(step);
+  }
+  step();
+}
+makeMorpher('morphText1','morphText2');
+makeMorpher('morphText1b','morphText2b');
+  
+  initChangelog();
 </script>
 </body>
 </html>
